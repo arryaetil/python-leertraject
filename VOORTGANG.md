@@ -1,7 +1,7 @@
 # Voortgang
 
 **Huidige fase:** Niveau 1, fundament
-**Volgende stap:** Dag 1–4 snel doorlezen, daarna dag 5
+**Volgende stap:** Dag 5 (Lists), alle oefeningen zelf typen
 
 Legenda: ⬜ nog niet · 🟡 bezig · ✅ af (oefeningen gedaan) · ⏭️ bewust overgeslagen
 
@@ -9,10 +9,10 @@ Legenda: ⬜ nog niet · 🟡 bezig · ✅ af (oefeningen gedaan) · ⏭️ bewu
 
 | Dag | Onderwerp | Status | Aanpak | Datum af |
 |---|---|---|---|---|
-| 1 | Introduction | ⬜ | snel lezen | |
-| 2 | Variables, Built-in Functions | ⬜ | snel lezen | |
-| 3 | Operators | ⬜ | snel lezen | |
-| 4 | Strings | ⬜ | snel lezen | |
+| 1 | Introduction | ✅ | snel lezen | 06-10-2026 |
+| 2 | Variables, Built-in Functions | ✅ | snel lezen | 06-10-2026 |
+| 3 | Operators | ✅ | snel lezen | 06-10-2026 |
+| 4 | Strings | ✅ | snel lezen | 06-10-2026 |
 | 5 | Lists | ⬜ | **zelf typen + alle oefeningen** | |
 | 6 | Tuples | ⬜ | **zelf typen + alle oefeningen** | |
 | 7 | Sets | ⬜ | **zelf typen + alle oefeningen** | |
