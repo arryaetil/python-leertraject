@@ -1,7 +1,47 @@
 # Voortgang
 
-**Huidige fase:** Niveau 1, fundament
-**Volgende stap:** Dag 5 (Lists), alle oefeningen zelf typen
+**Huidige fase:** Python voor AI-103 (examen **7 november 2026**)
+**Volgende stap:** 7 okt: dag 5 (Lists)
+
+## Tijdsbudget tot het examen
+
+| Periode | Python | AI-103 (Azure/Foundry) | Totaal per dag |
+|---|---|---|---|
+| 7–24 okt (18 dagen) | 1 u | 1,5 u | **2,5 u** |
+| 25 okt–6 nov (13 dagen) | (af) | 2,5 u | **2,5 u** |
+| **Totaal** | **~18 u** | **~58 u** | **~76 u** |
+
+AI-103 (~58 u) = Learn-leerpad ~28 u + labs in Foundry ~18 u + oefenexamens en gaten ~12 u.
+**Controlemoment 28 okt:** oefenexamen (practice assessment). Onder de 60% → examen verzetten.
+
+## Python-planning per dag (1 uur)
+
+| Datum | Onderwerp | Dag | Status |
+|---|---|---|---|
+| di 7 okt | Lists: les meetypen | 5 | ⬜ |
+| wo 8 okt | Lists: oefeningen + tuples en sets snel lezen | 5–7 | ⬜ |
+| do 9 okt | Dictionaries: les meetypen | 8 | ⬜ |
+| vr 10 okt | Dictionaries: geneste dicts + oefeningen | 8 | ⬜ |
+| za 11 okt | If/else | 9 | ⬜ |
+| zo 12 okt | Loops, ook door een list met dicts lopen | 10 | ⬜ |
+| ma 13 okt | Functies: parameters en return | 11 | ⬜ |
+| di 14 okt | Functies: keyword arguments en defaults | 11 | ⬜ |
+| wo 15 okt | Imports en modules | 12 | ⬜ |
+| do 16 okt | Try/except | 17 | ⬜ |
+| vr 17 okt | Bestanden lezen en schrijven | 19 | ⬜ |
+| za 18 okt | JSON | 19 | ⬜ |
+| zo 19 okt | Classes: les meetypen | 21 | ⬜ |
+| ma 20 okt | Objecten en methodes (`client.iets.doe_iets()`) | 21 | ⬜ |
+| di 21 okt | Environment variables (`os.environ`) en `with` | extra | ⬜ |
+| wo 22 okt | `async`/`await` leren lezen | extra | ⬜ |
+| do 23 okt | Echte Foundry-voorbeeldcode lezen en uitleggen | extra | ⬜ |
+| vr 24 okt | Foundry-code deel 2 + niveautest opnieuw | extra | ⬜ |
+
+Overgeslagen tot na het examen: dag 13–16, 18, 20, 22–30 (staan hieronder op ⬜, komen na 7 nov).
+
+---
+
+# Volledige cursus
 
 Legenda: ⬜ nog niet · 🟡 bezig · ✅ af (oefeningen gedaan) · ⏭️ bewust overgeslagen
 

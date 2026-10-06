@@ -4,6 +4,14 @@ Nieuwste sessie bovenaan. Per sessie: wat gedaan, wat lastig was, volgende stap.
 
 ---
 
+## 6 oktober 2026: Examendatum en planning
+
+- **Besluit:** AI-103-examen staat op **7 november 2026**. Het Python-deel is daarop gericht: ~18 uur, 1 uur per dag van 7 tot en met 24 oktober (planning in `VOORTGANG.md`).
+- **Totaal tijdsbudget:** ~2,5 uur per dag tot het examen (Python + AI-103).
+- **Coach:** 80 uur in 32 dagen kan, maar alleen zonder gemiste dagen. Controlemoment op 28 oktober.
+
+---
+
 ## 6 oktober 2026: Dag 1–4 gelezen en gecontroleerd
 
 - **Gedaan:** dag 1–4 gelezen. Daarna controle met drie vragen uit het hoofd.
