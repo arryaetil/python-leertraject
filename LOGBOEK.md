@@ -4,6 +4,16 @@ Nieuwste sessie bovenaan. Per sessie: wat gedaan, wat lastig was, volgende stap.
 
 ---
 
+## 6 oktober 2026: Mini-oefening negatieve index (10 min)
+
+- **Gedaan:** voorspellen wat `bedrijven[0]`, `[-1]`, `[-2]`, `[-5]` en `[-6]` geven bij een list van 5 bedrijven.
+- **Uitslag:** 0/5. Er kwamen **letters** uit als antwoord in plaats van hele elementen.
+- **Kern van het misverstand:** list en string door elkaar gehaald. Een index op een **list** geeft het hele element (`'IBM'`), een index op een **string** geeft een letter. Letter uit een element: `bedrijven[0][0]` → `'M'`.
+- **Ook gemist:** `[-6]` geeft een `IndexError` (buiten de list). Typfout `Äpple"` zou een `SyntaxError` geven.
+- **Coach:** goed dat dit nu bovenkomt en niet op het examen. Dit is precies het gat uit de niveautest (vraag 2). Morgen eerst deze oefening opnieuw, echt in de REPL getypt.
+
+---
+
 ## 6 oktober 2026: Examendatum en planning
 
 - **Besluit:** AI-103-examen staat op **7 november 2026**. Het Python-deel is daarop gericht: ~18 uur, 1 uur per dag van 7 tot en met 24 oktober (planning in `VOORTGANG.md`).
