@@ -14,7 +14,9 @@ Nieuwste sessie bovenaan. Per sessie: wat gedaan, wat lastig was, volgende stap.
 - **Daarna zelf getypt** in `oefeningen/learn.py`. Eerst zonder `print()`, waardoor er niets zichtbaar was. Uitgelegd: de REPL toont uitkomsten automatisch, een bestand alleen met `print()`. Daarna alle vier de prints zelf toegevoegd: uitkomst **Microsoft, IBM, Amazon, Microsoft** en daarna de verwachte `IndexError`. ✅
 - **Geleerd:** het verschil tussen de REPL en een bestand, een traceback van onder naar boven lezen, en dat Python na een fout stopt.
 - **Coach:** de bedoelde error als mislukking gezien ("wat ben ik hier slecht in"). Afspraak: een terminal lees je van boven naar beneden, eerst kijken wat wél werkte. Nieuw zijn is niet slecht zijn.
-- **Morgen:** `learn.py` verplaatsen naar `oefeningen/dag-05/negatieve_index.py`, daarna dag 5.
+- **Zelf ingezien:** "ik telde alsof het een string was, maar het is een list, dus je telt per element." ✅
+- **Controlevraag `bedrijven[2][0]`:** antwoord "apple microsoft" ❌. Juist: `'A'`. De tweede index werkt op de **uitkomst** van de eerste (`"Apple"[0]`), niet opnieuw op de list. Dit geketend indexeren is hetzelfde patroon als `klant["adressen"][1]` en geneste API-data, en dus examenstof.
+- **Morgen:** start met `bedrijven[2][0]` opnieuw (verwacht: `A` zonder twijfel). Daarna `learn.py` verplaatsen naar `oefeningen/dag-05/negatieve_index.py` en dan dag 5.
 
 ---
 
