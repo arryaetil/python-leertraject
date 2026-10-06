@@ -10,7 +10,11 @@ Nieuwste sessie bovenaan. Per sessie: wat gedaan, wat lastig was, volgende stap.
 - **Uitslag:** 0/5. Er kwamen **letters** uit als antwoord in plaats van hele elementen.
 - **Kern van het misverstand:** list en string door elkaar gehaald. Een index op een **list** geeft het hele element (`'IBM'`), een index op een **string** geeft een letter. Letter uit een element: `bedrijven[0][0]` → `'M'`.
 - **Ook gemist:** `[-6]` geeft een `IndexError` (buiten de list). Typfout `Äpple"` zou een `SyntaxError` geven.
-- **Coach:** goed dat dit nu bovenkomt en niet op het examen. Dit is precies het gat uit de niveautest (vraag 2). Morgen eerst deze oefening opnieuw, echt in de REPL getypt.
+- **Coach:** goed dat dit nu bovenkomt en niet op het examen. Dit is precies het gat uit de niveautest (vraag 2).
+- **Daarna zelf getypt** in `oefeningen/learn.py`. Eerst zonder `print()`, waardoor er niets zichtbaar was. Uitgelegd: de REPL toont uitkomsten automatisch, een bestand alleen met `print()`. Daarna alle vier de prints zelf toegevoegd: uitkomst **Microsoft, IBM, Amazon, Microsoft** en daarna de verwachte `IndexError`. ✅
+- **Geleerd:** het verschil tussen de REPL en een bestand, een traceback van onder naar boven lezen, en dat Python na een fout stopt.
+- **Coach:** de bedoelde error als mislukking gezien ("wat ben ik hier slecht in"). Afspraak: een terminal lees je van boven naar beneden, eerst kijken wat wél werkte. Nieuw zijn is niet slecht zijn.
+- **Morgen:** `learn.py` verplaatsen naar `oefeningen/dag-05/negatieve_index.py`, daarna dag 5.
 
 ---
 
