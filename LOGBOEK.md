@@ -4,6 +4,25 @@ Nieuwste sessie bovenaan. Per sessie: wat gedaan, wat lastig was, volgende stap.
 
 ---
 
+## 7 oktober 2026: Herhaling geketend indexeren + start dag 5
+
+- **`bedrijven[2][0]`:** `A`, met de juiste uitleg (eerst de list, dan de string). ✅ Gisteren fout, vandaag zonder hulp goed.
+- **`bedrijven[-1][-1]`:** antwoord `B` ❌. Juist: `M`. `[-1]` is het laatste element zelf, er bestaat geen `-0`.
+- **`bedrijven[-2][-1]`:** `n` ✅, maar zonder de twee stappen uit te schrijven (de tweede keer).
+- **Afspraak:** vanaf nu bij elke codevraag de stappen opschrijven. Een antwoord zonder stappen telt niet.
+- **Bestand verplaatst:** eerst per ongeluk naar `oefeningen_dag5\` (underscore in plaats van `\`), daarna rechtgezet naar `oefeningen/dag-05/learn.py`. Naam `learn.py` bewust zo gelaten.
+- **Les dag 5 doorgewerkt** in `oefeningen/dag-05/list.py`. Werkwijze aangepast: coach geeft korte uitleg, de les is naslag (scheelt tijd). Per onderdeel eerst voorspellen, dan zelf typen en ▶️.
+  - Unpacking: goed, maar eerst "de rest" als antwoord. Na doorvragen: `rest` is een list ✅
+  - Slicing: 2/3. `[0:2]` gaf 3 elementen ❌ (eind doet niet mee), terwijl het bij `[-3:-1]` wél goed ging. Controle `[1:3]` goed ✅
+  - Modifying, `in`, `append`/`insert`/`remove`/`pop`: goed. `in` eerst gezien als "zoeken en tonen" in plaats van `True`/`False` ❌, na uitleg goed.
+  - Copy/join/count/index/sort/reverse: goed, maar eerst beschreven *wat* het doet in plaats van *de uitkomst*. Na doorvragen alles concreet goed ✅
+  - De laatste twee blokken eerst niet getypt (alleen voorspeld), daarna wel. Alle uitkomsten kloppen met de voorspellingen.
+- **Patroon:** begrippen gaan snel, precisie niet. Vage antwoorden, fouten van één plek, en stappen overslaan (3× vandaag). Blijft het aandachtspunt.
+- **Doel aangescherpt:** geen apps bouwen zonder AI, wel sterke fundamentals voor samenwerking met AI (lezen, beoordelen, fouten zien, sturen). Zelf typen blijft de regel tijdens het leren. Na het examen komen er review-oefeningen bij ("vind de fout in deze AI-code").
+- **Volgende stap (8 okt):** oefeningen dag 5 (level 1–2) in `oefeningen/dag-05/`, daarna tuples en sets snel lezen (dag 6–7).
+
+---
+
 ## 6 oktober 2026: Mini-oefening negatieve index (10 min)
 
 - **Gedaan:** voorspellen wat `bedrijven[0]`, `[-1]`, `[-2]`, `[-5]` en `[-6]` geven bij een list van 5 bedrijven.
