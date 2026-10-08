@@ -1,7 +1,7 @@
 # Voortgang
 
 **Huidige fase:** Python voor AI-103 (examen **7 november 2026**)
-**Volgende stap:** 8 okt: dag 5 oefeningen + tuples en sets
+**Volgende stap:** 9 okt: tuples en sets kort, daarna dictionaries (dag 8)
 
 ## Tijdsbudget tot het examen
 
@@ -19,7 +19,7 @@ AI-103 (~58 u) = Learn-leerpad ~28 u + labs in Foundry ~18 u + oefenexamens en g
 | Datum | Onderwerp | Dag | Status |
 |---|---|---|---|
 | di 7 okt | Lists: les meetypen | 5 | ✅ |
-| wo 8 okt | Lists: oefeningen + tuples en sets snel lezen | 5–7 | ⬜ |
+| wo 8 okt | Lists: oefeningen + tuples en sets snel lezen | 5–7 | 🟡 lists af, tuples/sets → 9 okt |
 | do 9 okt | Dictionaries: les meetypen | 8 | ⬜ |
 | vr 10 okt | Dictionaries: geneste dicts + oefeningen | 8 | ⬜ |
 | za 11 okt | If/else | 9 | ⬜ |
@@ -53,7 +53,7 @@ Legenda: ⬜ nog niet · 🟡 bezig · ✅ af (oefeningen gedaan) · ⏭️ bewu
 | 2 | Variables, Built-in Functions | ✅ | snel lezen | 06-10-2026 |
 | 3 | Operators | ✅ | snel lezen | 06-10-2026 |
 | 4 | Strings | ✅ | snel lezen | 06-10-2026 |
-| 5 | Lists | 🟡 | **zelf typen + alle oefeningen** | |
+| 5 | Lists | ✅ | **zelf typen + alle oefeningen** | 08-10-2026 |
 | 6 | Tuples | ⬜ | **zelf typen + alle oefeningen** | |
 | 7 | Sets | ⬜ | **zelf typen + alle oefeningen** | |
 | 8 | Dictionaries | ⬜ | **zelf typen + alle oefeningen** | |

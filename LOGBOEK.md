@@ -4,6 +4,22 @@ Nieuwste sessie bovenaan. Per sessie: wat gedaan, wat lastig was, volgende stap.
 
 ---
 
+## 8 oktober 2026: Oefeningen dag 5 (lists afgerond)
+
+- **Controlevraag slicing:** 1/3. `landen[2:5]` gaf 2 in plaats van 3 elementen ❌, bij `landen[-2:]` gedacht dat slicing rondloopt naar het begin ❌, de lastige `landen[:1][0][-1]` → `d` ✅. Daarna `[1:4]` met stappen goed ✅. Begrip is er, de fouten komen uit haast.
+- **Oefeningen** in `oefeningen/dag-05/oefeningen.py`: level 1, gebundeld tot 3 blokken. Level 2 overgeslagen (rekenwerk dat loops nodig heeft).
+  - Fouten onderweg: `[1]` voor het eerste element, `[3] =` (vervangen) in plaats van `insert`, `print(lijst.sort)` zonder `()`, `[0:2]` voor 3 elementen, `[-1:-3]` en `[-2:0]` → lege list, `remove(1)` op plek in plaats van naam (ValueError). Twee keer vergeten op te slaan.
+  - Alles uiteindelijk zelf opgelost na een hint. Eindresultaat draait en klopt. ✅
+  - Spatie in `" Deepseek"` laten staan. Wel gezien wat het doet: hij komt bij het sorteren vooraan.
+  - Blok 3 ingekort (14 en 16 geschrapt), op verzoek wegens energie. `pop()` nog niet zelf gebruikt.
+  - Comments door de coach toegevoegd op verzoek. De code zelf is niet aangepast.
+- **Patroon:** haast. Bijna elke fout was slordigheid, geen onbegrip. Zelf gezegd: "ik heb zo'n haast, ik wil echt naar een hoger niveau." Afspraak: langzaam is soepel, soepel is snel.
+- **Geleerd:** functie uitvoeren = `()`, `remove` (naam) tegenover `pop` (plek), vervangen tegenover invoegen, traceback lezen bij een ValueError.
+- **Niet gedaan:** tuples en sets (dag 6–7). Die schuiven naar morgen.
+- **Volgende stap (9 okt):** opwarmer `pop(0)`/`pop()`, met stappen. Daarna tuples en sets kort (10 min) en dan dictionaries (dag 8).
+
+---
+
 ## 7 oktober 2026: Herhaling geketend indexeren + start dag 5
 
 - **`bedrijven[2][0]`:** `A`, met de juiste uitleg (eerst de list, dan de string). ✅ Gisteren fout, vandaag zonder hulp goed.
