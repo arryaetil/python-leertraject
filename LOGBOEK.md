@@ -15,8 +15,11 @@ Nieuwste sessie bovenaan. Per sessie: wat gedaan, wat lastig was, volgende stap.
   - Comments door de coach toegevoegd op verzoek. De code zelf is niet aangepast.
 - **Patroon:** haast. Bijna elke fout was slordigheid, geen onbegrip. Zelf gezegd: "ik heb zo'n haast, ik wil echt naar een hoger niveau." Afspraak: langzaam is soepel, soepel is snel.
 - **Geleerd:** functie uitvoeren = `()`, `remove` (naam) tegenover `pop` (plek), vervangen tegenover invoegen, traceback lezen bij een ValueError.
-- **Niet gedaan:** tuples en sets (dag 6–7). Die schuiven naar morgen.
-- **Volgende stap (9 okt):** opwarmer `pop(0)`/`pop()`, met stappen. Daarna tuples en sets kort (10 min) en dan dictionaries (dag 8).
+- **Tuples en sets (dag 6–7), toch nog vandaag gedaan,** op eigen initiatief ("ik wil op schema zijn"). Korte uitleg, daarna 6 prints voorspeld in `oefeningen/dag-06/tuples_sets.py`: 6/6 goed (bij één print eerst overgeslagen, op de vraag meteen `5`). Stappen stonden er dit keer bij. ✅
+  - Zelf een regel geschreven die een tuple probeert te veranderen. Die gaf de verwachte `TypeError`, in één keer goed. ✅
+  - Bewust licht gehouden: voor het examen zijn tuples en sets het minst belangrijk.
+- **Coach:** na de haast van vanochtend was dit rustig en precies. Zo wil ik het morgen bij dictionaries zien.
+- **Volgende stap (9 okt):** opwarmer `pop(0)`/`pop()`, met stappen. Daarna dictionaries (dag 8). Weer op schema.
 
 ---
 
