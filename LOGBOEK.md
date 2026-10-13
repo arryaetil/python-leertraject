@@ -4,6 +4,23 @@ Nieuwste sessie bovenaan. Per sessie: wat gedaan, wat lastig was, volgende stap.
 
 ---
 
+## 13 oktober 2026: Dictionaries (dag 8)
+
+- **Gat:** 9 t/m 12 oktober geen Python-sessies, commits of logregels. 4 dagen achter op de planning. AI-103: de volledige overzichtsvideo van 2 uur bekeken en samengevat ✅ (volgens Arrya, de samenvatting staat niet in deze map).
+- **8 okt 's avonds (kort, moe):** eerste dict-voorspelling 2/5. Fout: `[1]` als eerste element, `.get()` gezien als error (is `None`), `"Tesla" in auto` → True (is False, `in` zoekt alleen bij keys).
+- **Vandaag** in `oefeningen/dag-08/dicts.py`:
+  - Code uit 8 okt getypt en gedraaid, output klopt. ✅
+  - Controlevragen: `"kleuren" in auto` en `.get("merk")` goed ✅. `auto["kleuren"][0][-1]` eerst "wit zwart" ❌, met de stappentabel meteen `t` ✅. Hetzelfde gat als 6 okt: na een index werkt de volgende op de uitkomst.
+  - Toevoegen, `len`, `del`, `keys()`, `get`: interactief, één voor één. Bij `del` eerlijk "geen idee" gezegd in plaats van te gokken (goed). Twee keer `auto` als key gezien ❌: de dict is de kast, de keys zijn de laatjes. `45000` als `4500` geschreven.
+  - **Geneste API-response:** `response["choices"][0]["message"]["content"]` in vier stappen goed uitgelegd ✅ ("het eerste bericht"). Daarna **zelf geschreven**: `role` en `model` ophalen, allebei in één keer goed. ✅
+  - Overtypen gaf een SyntaxError: een komma vergeten na `"gpt-4o"` en twee ontbrekende `"`. Geleerd: Python wijst de regel **na** de fout aan. De regel kon Arrya zelf correct uitleggen ("komma na een key-value-paar, string afsluiten"). De fix heeft de coach gedaan, omdat het toetsenbord dwarslag: overschrijfmodus (Insert) en `"` als dode toets (VS-internationaal).
+  - `"Model"` → `"model"` en de comments gedaan door de coach, op verzoek.
+- **Patroon:** begrip is duidelijk gegroeid (een geneste API-response lezen ging goed). Precisie is nog steeds het punt: typfouten en aanhalingstekens. Haast was minder dan op 8 okt.
+- **Planning opnieuw gemaakt** (VOORTGANG.md): ingedikt om op 24 okt klaar te zijn. Dat werkt alleen zonder gemiste dagen.
+- **Volgende stap (14 okt):** SyntaxError in `dicts.py` fixen, dict-oefeningen, daarna if/else.
+
+---
+
 ## 8 oktober 2026: Oefeningen dag 5 (lists afgerond)
 
 - **Controlevraag slicing:** 1/3. `landen[2:5]` gaf 2 in plaats van 3 elementen ❌, bij `landen[-2:]` gedacht dat slicing rondloopt naar het begin ❌, de lastige `landen[:1][0][-1]` → `d` ✅. Daarna `[1:4]` met stappen goed ✅. Begrip is er, de fouten komen uit haast.

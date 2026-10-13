@@ -1,7 +1,8 @@
 # Voortgang
 
 **Huidige fase:** Python voor AI-103 (examen **7 november 2026**)
-**Volgende stap:** 9 okt: dictionaries (dag 8)
+**Volgende stap:** 14 okt: dicts afronden + if/else
+**Let op:** planning ingedikt na 4 gemiste dagen (9–12 okt). Geen speling meer tot 24 okt.
 
 ## Tijdsbudget tot het examen
 
@@ -20,22 +21,19 @@ AI-103 (~58 u) = Learn-leerpad ~28 u + labs in Foundry ~18 u + oefenexamens en g
 |---|---|---|---|
 | di 7 okt | Lists: les meetypen | 5 | ✅ |
 | wo 8 okt | Lists: oefeningen + tuples en sets snel lezen | 5–7 | ✅ |
-| do 9 okt | Dictionaries: les meetypen | 8 | ⬜ |
-| vr 10 okt | Dictionaries: geneste dicts + oefeningen | 8 | ⬜ |
-| za 11 okt | If/else | 9 | ⬜ |
-| zo 12 okt | Loops, ook door een list met dicts lopen | 10 | ⬜ |
-| ma 13 okt | Functies: parameters en return | 11 | ⬜ |
-| di 14 okt | Functies: keyword arguments en defaults | 11 | ⬜ |
-| wo 15 okt | Imports en modules | 12 | ⬜ |
-| do 16 okt | Try/except | 17 | ⬜ |
-| vr 17 okt | Bestanden lezen en schrijven | 19 | ⬜ |
-| za 18 okt | JSON | 19 | ⬜ |
-| zo 19 okt | Classes: les meetypen | 21 | ⬜ |
-| ma 20 okt | Objecten en methodes (`client.iets.doe_iets()`) | 21 | ⬜ |
-| di 21 okt | Environment variables (`os.environ`) en `with` | extra | ⬜ |
-| wo 22 okt | `async`/`await` leren lezen | extra | ⬜ |
-| do 23 okt | Echte Foundry-voorbeeldcode lezen en uitleggen | extra | ⬜ |
-| vr 24 okt | Foundry-code deel 2 + niveautest opnieuw | extra | ⬜ |
+| do 9 – zo 12 okt | *(gemist, 4 dagen)* | – | ❌ |
+| ma 13 okt | Dictionaries: les + geneste API-response | 8 | ✅ |
+| di 14 okt | Dicts: SyntaxError fixen + oefeningen, daarna if/else | 8–9 | ⬜ |
+| wo 15 okt | Loops, ook door een list met dicts lopen | 10 | ⬜ |
+| do 16 okt | Functies: parameters, return, defaults | 11 | ⬜ |
+| vr 17 okt | Imports en modules + try/except | 12, 17 | ⬜ |
+| za 18 okt | Bestanden (`with`) + JSON | 19 | ⬜ |
+| zo 19 okt | Classes en objecten | 21 | ⬜ |
+| ma 20 okt | Methodes (`client.iets.doe_iets()`) + `os.environ` | 21, extra | ⬜ |
+| di 21 okt | `async`/`await` leren lezen | extra | ⬜ |
+| wo 22 okt | Echte Foundry-voorbeeldcode lezen en uitleggen | extra | ⬜ |
+| do 23 okt | Foundry-code deel 2 | extra | ⬜ |
+| vr 24 okt | Niveautest opnieuw | extra | ⬜ |
 
 Overgeslagen tot na het examen: dag 13–16, 18, 20, 22–30 (staan hieronder op ⬜, komen na 7 nov).
 
@@ -56,7 +54,7 @@ Legenda: ⬜ nog niet · 🟡 bezig · ✅ af (oefeningen gedaan) · ⏭️ bewu
 | 5 | Lists | ✅ | **zelf typen + alle oefeningen** | 08-10-2026 |
 | 6 | Tuples | ✅ | kort (examenversie), volledige oefeningen na 7 nov | 08-10-2026 |
 | 7 | Sets | ✅ | kort (examenversie), volledige oefeningen na 7 nov | 08-10-2026 |
-| 8 | Dictionaries | ⬜ | **zelf typen + alle oefeningen** | |
+| 8 | Dictionaries | 🟡 | **zelf typen + alle oefeningen** | |
 | 9 | Conditionals | ⬜ | **zelf typen + alle oefeningen** | |
 | 10 | Loops | ⬜ | **zelf typen + alle oefeningen** | |
 | 11 | Functions | ⬜ | **zelf typen + alle oefeningen** | |
