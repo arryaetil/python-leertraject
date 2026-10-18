@@ -4,6 +4,38 @@ Nieuwste sessie bovenaan. Per sessie: wat gedaan, wat lastig was, volgende stap.
 
 ---
 
+## 15 oktober 2026: if/else (dag 9) + start loops (dag 10)
+
+- **14 okt gemist**, geen sessie. Vandaag dus twee dagen in één geprobeerd.
+- **if/else** in `oefeningen/dag-09/conditionals.py`:
+  - Opwarmer `tokens = 42` door een `if/elif/else`: `gemiddeld` met stappen ✅. Eerst "langs alle statements gelegd" gezegd, maar Python stopt bij het eerste True. Daarna zelf: "hij stopt bij de eerste true" ✅.
+  - **Bug in de volgorde** (`> 10` bovenaan): 3/3 in één keer goed ✅. Bij 42 en 500 allebei `goedkoop`, en de oorzaak gezien.
+  - `and`/`or`/`not`: 4/4 ✅, maar zelf gezegd: "eerder op gevoel dan dat ik het kan uitleggen" (eerlijk, regel 2). Daarna met stappen goed: `tokens > 100 and not actief` → False ✅.
+- **Loops** in `oefeningen/dag-09/loops.py` (hoort in `dag-10/`):
+  - `for model in modellen`: eerst vaag ("alle modellen worden geprint"), op de vraag de exacte output ✅.
+  - Loop door een list met dicts: `berichten[0]` is de eerste dict ✅. Daarna "hoi en hallo" voor één ronde (dat is de hele loop).
+  - Loop + `if`: per ronde goed uitgelegd ✅ ("eerste ronde gebeurt er niks").
+  - **Vraag 5 van de niveautest zelf geschreven:** de output goed voorspeld (`Sanne`, `Fatima`), maar de code niet gedraaid. Er zaten 5 fouten in: een komma vergeten, `berichten` ingesprongen, een `:` vergeten, `"assistent"`, `"actief" == True` en `klanten["naam"]`. De komma zelf gefixt ✅. Twee keer "kijk eens" gezegd zonder dat er iets veranderd was. **De `:` en de inspringing heeft de coach gedaan, op verzoek** ("kan jij het even fixen").
+  - De 3 denkfouten: eerst "moe", daarna toch zelf afgemaakt ✅. Eerst nog een keer "gefixt" gezegd zonder opgeslagen wijziging. Na een uitleg ronde voor ronde en fout/goed naast elkaar zelf getypt: `if klant["actief"]:` en `print(klant["naam"])` ✅. Het verschil tussen `klant` (de dict) en `klant["naam"]` (de waarde) was eerst nog vaag ("gewoon print klant").
+  - **Vraag 5 van de niveautest zelf geschreven en draaiend.** Output klopt ✅.
+  - ⚠️ `"assistent"`: de **data** (regel 8) aangepast aan de fout in de code, in plaats van de code te fixen. Bewust zo gelaten ("dit is mierenneuken"). Aandachtspunt: bij echte API-data kun je de data niet aanpassen, dan doet de code stil niks.
+- **Patroon:** wil tempo, en "je hoeft niet 10 keer de vraag te stellen" (terecht, de coach vroeg één keer te veel). Begrip gaat snel. Het eigen werk controleren niet: niet gedraaid, niet opgeslagen, aanpassingen niet gecheckt. Wel doorgezet na "ik ben moe" ✅.
+- **Planning:** dag 9 af, dag 10 de kern af (examenversie). **Weer op schema.**
+- **Volgende stap (16 okt):** `loops.py` verplaatsen naar `dag-10/`. Daarna functies (dag 11). Opwarmer: één `"assistant"`-check voorspellen met echte API-data.
+
+---
+
+## 13 oktober 2026 (tweede sessie): Dag 8 afgerond (examenversie)
+
+- **Opwarmer** `response["choices"][0]["message"]`: eerst `Hallo Arrya!` ❌ (één laatje te ver, geen stappen). Daarna met stappen goed: een dict met `role` en `content` ✅. Wel beschreven *waar* er gekeken wordt, niet *wat* elke stap oplevert (list → dict → dict).
+- **Dog-oefening:** eerst in het verkeerde bestand (`dicts.py`), `legs` vergeten, `"4"` als string, alles in één keer in plaats van één voor één. `"4"` → `4` zelf gefixt ✅. Daarna `dog["legs"] = 4` getypt, output klopt ✅. De voorspelling van `print(dog)` bleef vaag ("de hele dictionary"), en een keer is de coderegel zelf als voorspelling gegeven.
+- **Ingekort op verzoek** ("dit duurt me echt te lang", "we hebben een deadline"). Dag 8 in de examenversie, net als dag 6–7: de kern (geneste API-response, key toevoegen) zit er. De volledige oefeningen na 7 nov. `4500` → `45000` laten zitten.
+- **Wil zo snel mogelijk naar FastAPI en Pydantic.** Coach: een FastAPI-voorbeeld laten zien waarin elke regel aan een dag uit de planning hangt. De planning is de kortste weg, en FastAPI helpt niet voor AI-103. Na 7 nov komt FastAPI als eerste.
+- **Patroon:** haast en ongeduld, sterker dan op 8 okt. Begrip is er ("maar ik snap dit"), de precisie niet: opdrachten half gelezen, de coach moest drie keer terugsturen.
+- **Volgende stap:** if/else (dag 9), examenversie. Een dag voor op schema.
+
+---
+
 ## 13 oktober 2026: Dictionaries (dag 8)
 
 - **Gat:** 9 t/m 12 oktober geen Python-sessies, commits of logregels. 4 dagen achter op de planning. AI-103: de volledige overzichtsvideo van 2 uur bekeken en samengevat ✅ (volgens Arrya, de samenvatting staat niet in deze map).

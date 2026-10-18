@@ -1,22 +1,48 @@
-# Python-leertraject
+# AI Engineer-leertraject · Arrya Willems
 
-**Doel:** AI solutions engineer worden.
-**Gestart:** 6 oktober 2026
-**Cursus:** [30 Days Of Python](https://github.com/Asabeneh/30-Days-Of-Python), plus een eigen niveau 3 voor AI-werk
+Mijn traject naar **AI solutions engineer**: van Python-basis naar AI-apps en agents bouwen op Azure en Microsoft Foundry. Deze repo laat eerlijk zien waar ik sta, wat ik heb gedaan en wat nog moet.
 
-## Hoe deze map werkt
+**Gestart:** 6 oktober 2026 · **Bijgewerkt:** 17 oktober 2026
 
-| Bestand/map | Waarvoor |
+## In één oogopslag
+
+| Onderdeel | Stand | Volgende mijlpaal |
+|---|---|---|
+| **Python** | Fundament dag 1–10 van 30 af, dag 11 (functies) bezig | Niveautest opnieuw op 24 okt 2026 |
+| **AI-103** *Developing AI Apps and Agents on Azure* | Niveautest 13/15 (8 met zekerheid) | Examen op **7 nov 2026** |
+
+## Huidig niveau
+
+**Wat ik kan**
+- Python-code lezen en uitleggen, met lists, dictionaries, if/else en loops, ook geneste API-responses (`response["choices"][0]["message"]`)
+- De kernprincipes van AI-oplossingen uitleggen en kiezen: RAG vs. fine-tuning, hybrid search, agent-tools, structured outputs, managed identity, human-in-the-loop
+- Diensten koppelen aan een probleem: Content Understanding, Azure AI Search, Azure Language, Speech
+
+**Waar ik nu aan werk**
+- Zelf Python schrijven: functies, modules, foutafhandeling, JSON en classes
+- Beheer van AI-oplossingen: deploymenttypes, quota, monitoring en tracing
+- Foundry SDK-code lezen en schrijven
+
+## Progressie
+
+| Datum | Mijlpaal |
 |---|---|
-| [`VOORTGANG.md`](VOORTGANG.md) | Overzicht: welke dag is af, waar sta ik |
-| [`LOGBOEK.md`](LOGBOEK.md) | Per sessie: wat gedaan, wat lastig was, wat de coach zei |
-| [`COACH.md`](COACH.md) | De regels van het traject |
-| [`niveautests/`](niveautests/) | Uitslagen van niveautests, met datum |
-| [`oefeningen/`](oefeningen/) | Mijn eigen code, één map per dag (`dag-05/`, `dag-06/`, ...) |
-| [`notities/`](notities/) | Eigen uitleg van begrippen, in mijn eigen woorden |
+| 6 okt 2026 | Start. Python-niveautest: code lezen en API-begrippen goed, zelf schrijven nog zwak |
+| 8 okt 2026 | Lists, tuples en sets af (dag 5–7) |
+| 13 okt 2026 | Dictionaries af, inclusief geneste API-data (dag 8) |
+| 15 okt 2026 | Conditionals en loops af (dag 9–10), loop door API-data zelf geschreven en werkend |
+| 17 okt 2026 | AI-103-niveautest: 13/15. Studieplan tot het examen gemaakt |
 
-## De drie niveaus
+Volledig verslag per sessie, ook wat niet goed ging, staat in de logboeken.
 
-1. **Fundament:** datatypes, lists, dictionaries, loops, functies, modules, try/except, JSON (dag 1–19)
-2. **Werkniveau:** pip, venv, classes, API's aanroepen en bouwen, environment variables, type hints, Pydantic (dag 20–29 + extra)
-3. **AI-specifiek:** LLM-SDK's, RAG, async, pytest, Docker/Azure (eigen traject na de cursus)
+## Structuur
+
+| Map | Inhoud |
+|---|---|
+| [`python-leertraject/`](python-leertraject/) | Python via [30 Days Of Python](https://github.com/Asabeneh/30-Days-Of-Python), gericht op AI-werk. [Voortgang](python-leertraject/VOORTGANG.md) · [Logboek](python-leertraject/LOGBOEK.md) · [eigen code](python-leertraject/oefeningen/) |
+| [`AI-103/`](AI-103/) | Voorbereiding Microsoft-examen AI-103. [Voortgang en planning](AI-103/VOORTGANG.md) · [Logboek](AI-103/LOGBOEK.md) · [examenregels](AI-103/notities/ai103-examenregels.md) |
+
+## Werkwijze
+
+- **Ik schrijf mijn code zelf.** Ik gebruik Claude (AI) als coach voor uitleg, overhoren en planning, niet om code te laten schrijven. Zie de [regels](python-leertraject/COACH.md).
+- **Ik meet mijn niveau regelmatig** met niveautests en houd per sessie eerlijk bij wat goed en fout ging.

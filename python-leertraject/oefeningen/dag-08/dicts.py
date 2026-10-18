@@ -48,3 +48,10 @@ print(response["choices"][0]["message"]["content"])     # dict → list → dict
 # Zelf geschreven:
 print(response["choices"][0]["message"]["role"])        # → 'assistant'
 print(response["model"])                                # → 'gpt-4o'
+
+
+dog = {"name": "Jeff", "color": "Brown" , "breed": "Caucasian" , "age": 4 }
+
+dog["legs"] = 4 
+
+print(dog)

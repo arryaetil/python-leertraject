@@ -1,7 +1,8 @@
 # Voortgang
 
 **Huidige fase:** Python voor AI-103 (examen **7 november 2026**)
-**Volgende stap:** 14 okt: dicts afronden + if/else
+**Volgende stap:** 16 okt: functies (dag 11). Op schema.
+**Werkwijze (vanaf 16 okt):** elke sessie ~10 min "lees en controleer deze AI-engineeringcode" in Python (API-responses, SDK-calls, RAG-chunks, tokens), met de stof van die dag.
 **Let op:** planning ingedikt na 4 gemiste dagen (9–12 okt). Geen speling meer tot 24 okt.
 
 ## Tijdsbudget tot het examen
@@ -14,6 +15,7 @@
 
 AI-103 (~58 u) = Learn-leerpad ~28 u + labs in Foundry ~18 u + oefenexamens en gaten ~12 u.
 **Controlemoment 28 okt:** oefenexamen (practice assessment). Onder de 60% → examen verzetten.
+**AI-103-planning per dag:** zie [`../AI-103/VOORTGANG.md`](../AI-103/VOORTGANG.md).
 
 ## Python-planning per dag (1 uur)
 
@@ -23,8 +25,8 @@ AI-103 (~58 u) = Learn-leerpad ~28 u + labs in Foundry ~18 u + oefenexamens en g
 | wo 8 okt | Lists: oefeningen + tuples en sets snel lezen | 5–7 | ✅ |
 | do 9 – zo 12 okt | *(gemist, 4 dagen)* | – | ❌ |
 | ma 13 okt | Dictionaries: les + geneste API-response | 8 | ✅ |
-| di 14 okt | Dicts: SyntaxError fixen + oefeningen, daarna if/else | 8–9 | ⬜ |
-| wo 15 okt | Loops, ook door een list met dicts lopen | 10 | ⬜ |
+| di 14 okt | Dicts: SyntaxError fixen + oefeningen, daarna if/else | 8–9 | ❌ gemist (dicts al af op 13 okt) |
+| wo 15 okt | if/else + loops, ook door een list met dicts lopen | 9–10 | ✅ |
 | do 16 okt | Functies: parameters, return, defaults | 11 | ⬜ |
 | vr 17 okt | Imports en modules + try/except | 12, 17 | ⬜ |
 | za 18 okt | Bestanden (`with`) + JSON | 19 | ⬜ |
@@ -54,9 +56,9 @@ Legenda: ⬜ nog niet · 🟡 bezig · ✅ af (oefeningen gedaan) · ⏭️ bewu
 | 5 | Lists | ✅ | **zelf typen + alle oefeningen** | 08-10-2026 |
 | 6 | Tuples | ✅ | kort (examenversie), volledige oefeningen na 7 nov | 08-10-2026 |
 | 7 | Sets | ✅ | kort (examenversie), volledige oefeningen na 7 nov | 08-10-2026 |
-| 8 | Dictionaries | 🟡 | **zelf typen + alle oefeningen** | |
-| 9 | Conditionals | ⬜ | **zelf typen + alle oefeningen** | |
-| 10 | Loops | ⬜ | **zelf typen + alle oefeningen** | |
+| 8 | Dictionaries | ✅ | kort (examenversie), volledige oefeningen na 7 nov | 13-10-2026 |
+| 9 | Conditionals | ✅ | kort (examenversie), volledige oefeningen na 7 nov | 15-10-2026 |
+| 10 | Loops | ✅ | kort (examenversie), volledige oefeningen na 7 nov | 15-10-2026 |
 | 11 | Functions | ⬜ | **zelf typen + alle oefeningen** | |
 | 12 | Modules | ⬜ | oefeningen | |
 | 13 | List Comprehension | ⬜ | oefeningen | |
