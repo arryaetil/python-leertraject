@@ -41,7 +41,7 @@ Volledig verslag per sessie, ook wat niet goed ging, staat in de logboeken.
 | Map | Inhoud |
 |---|---|
 | [`python-leertraject/`](python-leertraject/) | Python via [30 Days Of Python](https://github.com/Asabeneh/30-Days-Of-Python), gericht op AI-werk. [Voortgang](python-leertraject/VOORTGANG.md) · [Logboek](python-leertraject/LOGBOEK.md) · [eigen code](python-leertraject/oefeningen/) |
-| [`AI-103/`](AI-103/) | Voorbereiding Microsoft-examen AI-103. [Voortgang en planning](AI-103/VOORTGANG.md) · [Logboek](AI-103/LOGBOEK.md) · [examenregels](AI-103/notities/ai103-examenregels.md) |
+| [`AI-103/`](AI-103/) | Voorbereiding Microsoft-examen AI-103. [Voortgang en planning](AI-103/VOORTGANG.md) · [Logboek](AI-103/LOGBOEK.md) · [examenregels](AI-103/notities/ai103-examenregels.md) · [Foundry-kaart](AI-103/foundry-kaart.html) (studiekaart van alle diensten, gebouwd met Claude) |
 
 ## Werkwijze
 

@@ -4,6 +4,8 @@
 **Huidige stand:** officiële practice assessment 19 okt: **63%** (doel Microsoft: 80%). Zwakst: tekstanalyse (~13%) en GenAI & agents (~59%).
 **Volgende stap:** ma 20 okt: tekstanalyse (Azure Language + Translator).
 
+**Studiemiddel:** [`foundry-kaart.html`](foundry-kaart.html), een klikbare kaart van alle diensten met servicekiezer, code, configuratie en valkuilen. Open hem in je browser.
+
 ## Uitslagen
 
 | Datum | Test | Score | Plan & manage | GenAI & agents | Vision | Tekst | Info-extractie |

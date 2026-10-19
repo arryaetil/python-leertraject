@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Foundry-kaart AI-103</title>
+<style>
+:root{
+  --bg:#f6f7f9; --surface:#ffffff; --surface-2:#f1f3f6; --line:#e3e6eb; --line-strong:#cfd4dc;
+  --text:#16191f; --text-2:#4a5260; --text-3:#6b7382;
+  --accent:#2557d6; --accent-soft:#e8eefc; --accent-text:#1d47b3;
+  --ok:#1f7a4d; --ok-soft:#e5f4ec; --warn:#a14a12; --warn-soft:#fbefe4;
+  --d1:#2f62c9; --d2:#0f7f74; --d3:#a8620a; --d4:#b03a5b; --d5:#4a7a1f;
+  --code-bg:#f3f5f8; --code-text:#1e2430; --code-com:#6b7382;
+  --shadow:0 1px 2px rgba(22,25,31,.05),0 4px 16px rgba(22,25,31,.04);
+  --r:10px; --font:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --mono:"Cascadia Code","JetBrains Mono",Consolas,"SFMono-Regular",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111318; --surface:#181b21; --surface-2:#1f232a; --line:#2a2f38; --line-strong:#3a404b;
+  --text:#e8eaee; --text-2:#b4bac5; --text-3:#8a919e;
+  --accent:#6b95f2; --accent-soft:#1e2a45; --accent-text:#9db8f7;
+  --ok:#5cc28d; --ok-soft:#173326; --warn:#e79a5b; --warn-soft:#3a2617;
+  --d1:#6b95f2; --d2:#3dbcae; --d3:#e0a245; --d4:#e27a97; --d5:#8fbf5c;
+  --code-bg:#14171c; --code-text:#d9dde4; --code-com:#7d8592;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+}}
+:root[data-theme="dark"]{
+  --bg:#111318; --surface:#181b21; --surface-2:#1f232a; --line:#2a2f38; --line-strong:#3a404b;
+  --text:#e8eaee; --text-2:#b4bac5; --text-3:#8a919e;
+  --accent:#6b95f2; --accent-soft:#1e2a45; --accent-text:#9db8f7;
+  --ok:#5cc28d; --ok-soft:#173326; --warn:#e79a5b; --warn-soft:#3a2617;
+  --d1:#6b95f2; --d2:#3dbcae; --d3:#e0a245; --d4:#e27a97; --d5:#8fbf5c;
+  --code-bg:#14171c; --code-text:#d9dde4; --code-com:#7d8592;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--text);font:15px/1.6 var(--font);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+a{color:var(--accent-text)}
+code{font-family:var(--mono);font-size:.86em;background:var(--surface-2);border:1px solid var(--line);border-radius:5px;padding:.05em .35em}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+/* Top bar */
+.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-inner{display:flex;align-items:center;gap:14px;padding:10px 20px;max-width:1500px;margin:0 auto}
+.brand{display:flex;align-items:baseline;gap:10px;white-space:nowrap;cursor:pointer;background:none;border:0;padding:4px 2px}
+.brand b{font-size:16px;letter-spacing:-.01em}
+.brand span{color:var(--text-3);font-size:13px}
+.search{flex:1;max-width:520px;position:relative}
+.search input{width:100%;height:38px;border:1px solid var(--line-strong);background:var(--surface);color:var(--text);border-radius:9px;padding:0 64px 0 36px;font:inherit;font-size:14px}
+.search input::placeholder{color:var(--text-3)}
+.search svg{position:absolute;left:11px;top:11px;width:16px;height:16px;color:var(--text-3)}
+.search kbd{position:absolute;right:9px;top:8px;font:12px var(--mono);color:var(--text-3);border:1px solid var(--line-strong);border-radius:5px;padding:1px 6px;background:var(--surface-2)}
+.progress{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);white-space:nowrap}
+.progress .bar{width:90px;height:6px;border-radius:9px;background:var(--surface-2);overflow:hidden;border:1px solid var(--line)}
+.progress .bar i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
+.iconbtn{height:36px;min-width:36px;border:1px solid var(--line-strong);background:var(--surface);border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0 10px;font-size:13px;color:var(--text-2)}
+.iconbtn:hover{background:var(--surface-2)}
+.iconbtn svg{width:16px;height:16px}
+.menu-btn{display:none}
+
+.filters{display:flex;gap:8px;flex-wrap:wrap;padding:0 20px 10px;max-width:1500px;margin:0 auto;align-items:center}
+.filters .lbl{font-size:12px;color:var(--text-3);margin-right:2px}
+.chip{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;flex:none;height:28px;padding:0 11px;border-radius:99px;border:1px solid var(--line-strong);background:var(--surface);font-size:12.5px;cursor:pointer;color:var(--text-2)}
+.chip .sw{width:8px;height:8px;border-radius:2px}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-text)}
+.chip.clear{border-style:dashed}
+
+/* Layout */
+.layout{display:grid;grid-template-columns:300px minmax(0,1fr);max-width:1500px;margin:0 auto;min-height:calc(100vh - 110px)}
+.side{border-right:1px solid var(--line);padding:14px 10px 40px 14px;position:sticky;top:104px;align-self:start;max-height:calc(100vh - 104px);overflow:auto}
+.main{padding:28px 36px 80px;min-width:0}
+
+/* Tree */
+.tree,.tree ul{list-style:none;margin:0;padding:0}
+.tree ul{margin-left:13px;padding-left:9px;border-left:1px solid var(--line)}
+.tree li{margin:1px 0}
+.row{display:flex;align-items:center;gap:2px}
+.tog{width:22px;height:26px;border:0;background:none;cursor:pointer;color:var(--text-3);display:inline-flex;align-items:center;justify-content:center;flex:none;border-radius:5px}
+.tog:hover{background:var(--surface-2)}
+.tog svg{width:12px;height:12px;transition:transform .15s}
+.tog[aria-expanded="true"] svg{transform:rotate(90deg)}
+.tog.leaf{visibility:hidden}
+.node{flex:1;min-width:0;text-align:left;border:0;background:none;cursor:pointer;padding:4px 8px;border-radius:7px;font-size:13.5px;color:var(--text-2);display:flex;align-items:center;gap:8px}
+.node:hover{background:var(--surface-2);color:var(--text)}
+.node.active{background:var(--accent-soft);color:var(--accent-text);font-weight:600}
+.node .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.node .done{margin-left:auto;width:14px;height:14px;color:var(--ok);flex:none}
+.tree>li>.row .node{font-weight:600;color:var(--text);font-size:14px}
+.tree>li{margin-bottom:4px}
+
+/* Overview */
+.hero h1{font-size:28px;line-height:1.2;letter-spacing:-.02em;margin:0 0 8px}
+.hero p{color:var(--text-2);max-width:68ch;margin:0 0 6px}
+.domains{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:22px 0 28px}
+.dom{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;box-shadow:var(--shadow)}
+.dom .pct{font:600 13px var(--mono);color:var(--text-3)}
+.dom .nm{font-weight:600;font-size:14px;margin-top:2px}
+.dom .meter{height:4px;border-radius:4px;margin-top:10px;background:var(--surface-2);overflow:hidden}
+.dom .meter i{display:block;height:100%}
+.groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.gcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px 14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px}
+.gcard.feature{grid-column:1/-1;background:linear-gradient(180deg,var(--accent-soft),var(--surface) 70%)}
+.gcard h3{margin:0;font-size:16px;letter-spacing:-.01em}
+.gcard h3 button{all:unset;cursor:pointer}
+.gcard h3 button:hover{color:var(--accent-text)}
+.gcard h3 button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.gcard p{margin:0;color:var(--text-2);font-size:13.5px}
+.gcard .kids{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.kid{border:1px solid var(--line);background:var(--surface-2);border-radius:7px;padding:3px 9px;font-size:12.5px;cursor:pointer;color:var(--text-2)}
+.kid:hover{border-color:var(--accent);color:var(--accent-text)}
+.kid.done{border-color:color-mix(in srgb,var(--ok) 45%,var(--line));color:var(--ok)}
+.gfoot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:6px;font-size:12px;color:var(--text-3)}
+.dtags{display:flex;gap:5px}
+.dtag{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-2);border:1px solid var(--line);border-radius:99px;padding:1px 8px;background:var(--surface)}
+.dtag i{width:7px;height:7px;border-radius:2px;display:inline-block}
+
+/* Detail */
+.crumbs{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:var(--text-3);margin-bottom:10px}
+.crumbs button{border:0;background:none;padding:0;cursor:pointer;color:var(--text-3)}
+.crumbs button:hover{color:var(--accent-text);text-decoration:underline}
+.dhead{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:18px}
+.dhead h1{font-size:27px;line-height:1.2;letter-spacing:-.02em;margin:0 0 4px}
+.dhead .sub{color:var(--text-2);margin:0 0 10px}
+.know{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:9px;border:1px solid var(--line-strong);background:var(--surface);cursor:pointer;font-size:13.5px;color:var(--text-2);white-space:nowrap}
+.know svg{width:16px;height:16px}
+.know[aria-pressed="true"]{background:var(--ok-soft);border-color:color-mix(in srgb,var(--ok) 50%,var(--line));color:var(--ok);font-weight:600}
+.know:active,.iconbtn:active,.chip:active{transform:translateY(1px)}
+.sec{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin-bottom:14px;box-shadow:var(--shadow)}
+.sec>h2{font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin:0 0 10px;font-weight:600}
+.sec p{margin:0 0 10px;max-width:80ch}
+.sec p:last-child{margin-bottom:0}
+.sec ul,.sec ol{margin:0;padding-left:20px}
+.sec li{margin:4px 0}
+.sec table{width:100%;border-collapse:collapse;font-size:13.5px;margin:4px 0 2px}
+.sec th{text-align:left;font-weight:600;color:var(--text-2);background:var(--surface-2);padding:8px 10px;border-bottom:1px solid var(--line)}
+.sec td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.sec tr:last-child td{border-bottom:0}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+.sec.when{border-left:3px solid var(--accent)}
+.sec.cfg{border-left:3px solid var(--d2)}
+.sec.trap{border-left:3px solid var(--warn);background:linear-gradient(90deg,var(--warn-soft),var(--surface) 60%)}
+.sec.trap h2{color:var(--warn)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cols .sec{margin-bottom:0}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.tab{border:1px solid var(--line);background:var(--surface-2);border-radius:7px;padding:4px 10px;font-size:12.5px;cursor:pointer;color:var(--text-2)}
+.tab[aria-selected="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-text)}
+.codebox{position:relative}
+.codebox pre{margin:0;background:var(--code-bg);color:var(--code-text);border:1px solid var(--line);border-radius:9px;padding:14px 16px;overflow:auto;font:12.8px/1.6 var(--mono);tab-size:4}
+.codebox .com{color:var(--code-com);font-style:italic}
+.copy{position:absolute;top:8px;right:8px;height:28px;font-size:12px;padding:0 9px}
+.subgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.subcard{text-align:left;border:1px solid var(--line);background:var(--surface-2);border-radius:10px;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column;gap:3px}
+.subcard:hover{border-color:var(--accent)}
+.subcard b{font-size:14px}
+.subcard span{font-size:12.5px;color:var(--text-2)}
+.subcard .ok{color:var(--ok);font-size:12px;font-weight:600}
+.rel{display:flex;flex-wrap:wrap;gap:6px}
+.pager{display:flex;justify-content:space-between;gap:10px;margin-top:22px}
+.pager button{flex:1;max-width:48%;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 14px;cursor:pointer}
+.pager button:hover{border-color:var(--accent)}
+.pager small{display:block;color:var(--text-3);font-size:12px}
+.pager .next{text-align:right;margin-left:auto}
+
+/* Results */
+.results h1{font-size:22px;margin:0 0 14px}
+.res{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:12px 16px;margin-bottom:8px;cursor:pointer}
+.res:hover{border-color:var(--accent)}
+.res .path{font-size:12px;color:var(--text-3)}
+.res b{font-size:15px}
+.res p{margin:3px 0 0;font-size:13px;color:var(--text-2)}
+mark{background:color-mix(in srgb,var(--d3) 30%,transparent);color:inherit;border-radius:3px;padding:0 2px}
+.empty{border:1px dashed var(--line-strong);border-radius:12px;padding:28px;text-align:center;color:var(--text-2)}
+.empty b{display:block;color:var(--text);margin-bottom:4px}
+.foot{color:var(--text-3);font-size:12px;margin-top:40px;border-top:1px solid var(--line);padding-top:14px}
+
+@media (max-width:1100px){.domains{grid-template-columns:repeat(3,minmax(0,1fr))}.cols{grid-template-columns:1fr}}
+@media (max-width:860px){
+  .layout{grid-template-columns:1fr}
+  .menu-btn{display:inline-flex}
+  .side{position:fixed;inset:0 auto 0 0;width:min(320px,86vw);max-height:none;top:0;z-index:40;background:var(--surface);transform:translateX(-100%);transition:transform .2s;box-shadow:var(--shadow);padding-top:18px}
+  .side.open{transform:none}
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:30;display:none}
+  .scrim.open{display:block}
+  .main{padding:20px 16px 60px}
+  .top-inner{padding:10px 16px;flex-wrap:wrap}
+  .search{order:3;flex-basis:100%;max-width:none}
+  .brand span,.progress .bar{display:none}
+  .filters{padding:0 16px 10px;overflow-x:auto;flex-wrap:nowrap}
+  .domains{grid-template-columns:1fr 1fr}
+  .sec{padding:16px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <button class="iconbtn menu-btn" id="menuBtn" aria-label="Onderwerpen tonen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <button class="brand" id="home" aria-label="Naar overzicht"><b>Foundry-kaart</b><span>AI-103 · alles wat het examen vraagt</span></button>
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Zoek dienst, begrip of instelling (bijv. PTU, mask, phrase list)" aria-label="Zoeken" autocomplete="off">
+      <kbd>/</kbd>
+    </div>
+    <div class="progress" title="Onderwerpen die je als 'snap ik' hebt gemarkeerd"><div class="bar"><i id="pbar"></i></div><span id="ptxt">0/0</span></div>
+    <button class="iconbtn" id="theme" aria-label="Licht of donker thema"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  </div>
+  <div class="filters" id="filters" role="group" aria-label="Filter op examendomein"></div>
+</header>
+<div class="scrim" id="scrim"></div>
+<div class="layout">
+  <nav class="side" id="side" aria-label="Onderwerpen"><ul class="tree" id="tree"></ul></nav>
+  <main class="main" id="main" tabindex="-1"></main>
+</div>
+<script>
+const N=[];
+// ===== Groepen (laag 1) =====
+N.push(
+{id:"platform",p:null,t:"Foundry-platform",s:"Resource, projecten, modellen, deployments, security, monitoring",d:[1],ico:"▦",
+what:"Het fundament: hoe Microsoft Foundry in Azure is opgebouwd, hoe je modellen kiest en uitrolt, hoe je het beveiligt en hoe je het in de gaten houdt. Dit is examendomein 1 <b>Plan &amp; manage</b> (25-30%).",
+when:["Vragen over <b>welke resource</b>, <b>welk deploymenttype</b>, <b>welke rol</b>, <b>hoe monitoren</b> of <b>kosten verlagen</b>."]},
+{id:"rai",p:null,t:"Responsible AI & guardrails",s:"Content filters, Prompt Shields, evaluaties, governance",d:[1,3],ico:"⛨",
+what:"Alles om AI veilig, eerlijk en controleerbaar te maken: filters op input en output, aanvallen blokkeren, kwaliteit meten en mensen laten meekijken.",
+when:["Vragen met <b>harmful content</b>, <b>jailbreak</b>, <b>fabrications</b>, <b>audit</b>, <b>approval</b> of <b>evaluate</b>."]},
+{id:"genai",p:null,t:"Generatieve AI-apps",s:"SDK, parameters, prompts, structured output, RAG, fine-tuning",d:[2],ico:"✦",
+what:"Apps bouwen die een taalmodel aanroepen: via de Foundry SDK, met de juiste parameters, prompts en output-formaten, en met RAG voor eigen data. Examendomein 2 (30-35%, het zwaarst).",
+when:["Vragen over <b>model aanroepen</b>, <b>consistente output</b>, <b>eigen data</b>, <b>verzonnen antwoorden</b>."]},
+{id:"agents",p:null,t:"Agents",s:"Agent Service, tools, memory, multi-agent, approvals",d:[2],ico:"◈",
+what:"Een <b>agent</b> is een model met instructies, tools en geheugen dat zelf stappen kiest om een doel te bereiken. In Foundry bouw je die met de <b>Foundry Agent Service</b>.",
+when:["Vragen met <b>agent</b>, <b>tool</b>, <b>conversation</b>, <b>multi-agent</b>, <b>orchestration</b>, <b>approval</b>."]},
+{id:"search",p:null,t:"Azure AI Search",s:"Index, indexers, skills, vector/hybrid/semantic, agentic retrieval",d:[5,2],ico:"⌕",
+what:"De zoekmachine achter RAG. Haalt content binnen (ingest), verrijkt die (skills), slaat hem op in een <b>index</b> en zoekt erin op woorden, betekenis of allebei.",
+when:["Vragen over <b>indexeren</b>, <b>zoeken</b>, <b>grounding</b>, <b>vector/hybrid/semantic</b>, <b>OCR in een pipeline</b>."]},
+{id:"docs",p:null,t:"Documenten & Content Understanding",s:"Analyzers, velden, OCR, layout, Document Intelligence",d:[5,3],ico:"▤",
+what:"Ongestructureerde content (PDF's, scans, beeld, audio, video) omzetten naar <b>gestructureerde velden</b> of schone <b>markdown</b> voor agents en RAG.",
+when:["Vragen met <b>extract fields</b>, <b>invoices</b>, <b>forms</b>, <b>layout</b>, <b>structured output from documents</b>."]},
+{id:"vision",p:null,t:"Computer vision",s:"Multimodaal begrijpen, beeld/video genereren en bewerken, visuele RAI",d:[3],ico:"◐",
+what:"Beelden en video <b>begrijpen</b> (beschrijven, vragen beantwoorden, objecten vinden) en <b>maken</b> (genereren, bewerken). Examendomein 3 (10-15%).",
+when:["Vragen met <b>image</b>, <b>video</b>, <b>caption</b>, <b>alt-text</b>, <b>inpainting</b>, <b>mask</b>, <b>watermark</b>."]},
+{id:"text",p:null,t:"Tekst & taal",s:"LLM-tekstanalyse, Azure Language, Translator",d:[4],ico:"¶",
+what:"Tekst analyseren: entiteiten, sentiment, PII, samenvattingen, classificatie, vertaling. Met een LLM (via prompt) of met kant-en-klare <b>Foundry Tools</b> (Azure Language, Translator). Deel van domein 4 (10-15%).",
+when:["Vragen met <b>sentiment</b>, <b>entities</b>, <b>PII</b>, <b>summarize</b>, <b>translate</b>, <b>classify text</b>."]},
+{id:"speech",p:null,t:"Spraak",s:"Speech-to-text, text-to-speech, custom speech, vertaling, voice agents",d:[4],ico:"◉",
+what:"Spraak omzetten naar tekst en andersom, spraak vertalen en spraak gebruiken als <b>modaliteit</b> (manier van communiceren) van een agent. Deel van domein 4.",
+when:["Vragen met <b>transcribe</b>, <b>audio</b>, <b>voice</b>, <b>SSML</b>, <b>custom speech</b>, <b>real-time</b>."]},
+{id:"kompas",p:null,t:"Examenkompas",s:"Keuzeregels: welk antwoord bij welke situatie",d:[1,2,3,4,5],ico:"✓",
+what:"De snelle beslisregels per type vraag. Lees deze lijst elke dag. Elke regel linkt naar het onderwerp waar je de details vindt.",
+when:["Gebruik dit vlak voor een oefentoets of het examen."]}
+);
+
+// ===== Foundry-platform =====
+N.push(
+{id:"resource",p:"platform",t:"Foundry resource & projecten",s:"De hiërarchie: resource → project → deployments, agents, connecties",d:[1],
+what:"<p>De <b>Foundry resource</b> is de Azure-resource waarin alles draait (technisch: <code>Microsoft.CognitiveServices/accounts</code> met <code>kind: AIServices</code>). Eén resource geeft toegang tot modellen én alle <b>Foundry Tools</b> (de vroegere Azure AI services: Language, Speech, Vision, Translator, Content Understanding, Document Intelligence, Content Safety).</p><p>Binnen de resource maak je <b>projecten</b>: werkruimtes per team of app, met eigen agents, bestanden, evaluaties en connecties. Modellen deploy je op resourceniveau en ze zijn in alle projecten bruikbaar.</p><p><b>Hiërarchie:</b> subscription → resource group → Foundry resource → project(en).</p>",
+when:["Nieuwe AI-app of agent opzetten → Foundry resource + project.","Teams scheiden die wel dezelfde modellen delen → meerdere projecten in één resource.","Volledig gescheiden facturering, netwerk of regio → aparte resources."],
+code:[{l:"Project-endpoint (formaat)",src:"https://<resource-naam>.services.ai.azure.com/api/projects/<project-naam>"},
+{l:"Aanmaken met Azure CLI",src:"az cognitiveservices account create \\\n  --name mijn-foundry --resource-group rg-ai \\\n  --kind AIServices --sku S0 --location swedencentral \\\n  --custom-domain mijn-foundry --allow-project-management\n\naz cognitiveservices account project create \\\n  --name mijn-foundry --resource-group rg-ai \\\n  --project-name klantenservice"},
+{l:"Bicep (infrastructure as code)",src:"resource foundry 'Microsoft.CognitiveServices/accounts@2025-06-01' = {\n  name: 'mijn-foundry'\n  location: 'swedencentral'\n  kind: 'AIServices'\n  sku: { name: 'S0' }\n  identity: { type: 'SystemAssigned' }\n  properties: {\n    allowProjectManagement: true\n    customSubDomainName: 'mijn-foundry'\n    disableLocalAuth: true          // geen API-keys\n    publicNetworkAccess: 'Disabled' // alleen via private endpoint\n  }\n}\n\nresource project 'Microsoft.CognitiveServices/accounts/projects@2025-06-01' = {\n  parent: foundry\n  name: 'klantenservice'\n  location: 'swedencentral'\n  identity: { type: 'SystemAssigned' }\n  properties: {}\n}"}],
+cfg:["<b>Regio</b>: bepaalt welke modellen en features beschikbaar zijn.","<b>customSubDomainName</b>: nodig voor Entra ID-authenticatie (keyless).","<b>disableLocalAuth: true</b>: zet API-keys uit.","<b>Managed identity</b> op resource en project: voor toegang tot Storage, Search enz."],
+traps:["<b>Foundry (classic)</b> werkte met een <i>hub</i> + Azure ML-workspace. De nieuwe Foundry gebruikt de Foundry resource met projecten. Zie je 'hub' in een vraag, dan gaat het om de oude opzet.","Modellen deploy je op de <b>resource</b>, agents maak je in een <b>project</b>."],
+rel:["deployments","security","connections","sdk"]},
+
+{id:"modelkeuze",p:"platform",t:"Model kiezen",s:"LLM, SLM, multimodaal, reasoning, embeddings, Foundry Tools",d:[1,2],
+what:"<p>De <b>model catalog</b> in Foundry bevat duizenden modellen. Op het examen moet je per taak het juiste type kiezen:</p><ul><li><b>LLM</b> (large language model), zoals GPT-4.1 of GPT-5: breed, sterk, duurder.</li><li><b>SLM</b> (small language model), zoals Phi-4 of mini/nano-varianten: goedkoop, snel, goed genoeg voor eenvoudige taken zoals classificeren.</li><li><b>Reasoning model</b> (o-serie, GPT-5 met reasoning): denkt eerst na, voor complexe meerstapsproblemen. Trager en duurder.</li><li><b>Multimodaal model</b>: begrijpt tekst + beeld (+ audio).</li><li><b>Embeddingmodel</b> (text-embedding-3-small/large): zet tekst om in vectoren voor zoeken.</li><li><b>Beeld/video-modellen</b>: gpt-image-1, Sora.</li><li><b>Foundry Tools</b>: gespecialiseerde diensten (Speech, Language, ...) als die precies de taak doen.</li></ul><p><b>Herkomst:</b> modellen <i>sold directly by Azure</i> (OpenAI, Phi, DeepSeek, Mistral e.a., met Microsoft-voorwaarden) en <i>partner/community</i>-modellen (via Marketplace).</p>",
+when:["Eenvoudige taak, veel volume, kosten omlaag → <b>SLM</b>.","Complexe redenering, code, wiskunde, plannen → <b>reasoning model</b>.","Beeld + tekst samen → <b>multimodaal</b>.","Zoeken op betekenis → <b>embeddingmodel</b>.","Weet je niet welk model het beste is per vraag → <b>model router</b> (een deployment die per verzoek het passende model kiest).","Vergelijken → <b>benchmarks / leaderboards</b> in de catalog, daarna zelf evalueren op je eigen data."],
+cfg:["Reasoning models: <code>reasoning_effort</code> (low/medium/high) in plaats van temperature.","Modelversie en <b>auto-update</b>-beleid per deployment.","Let op <b>model retirement</b>-data: oude versies worden uitgefaseerd."],
+traps:["Groter is niet beter. Kost het te veel bij een simpele taak, dan is het antwoord vrijwel altijd een kleiner model.","Fine-tuning is zelden het eerste antwoord. Eerst promptengineering, dan RAG, dan pas fine-tuning."],
+rel:["deployments","finetuning","kosten","embeddings"]},
+
+{id:"deployments",p:"platform",t:"Deployments & deploymenttypes",s:"Standard, Global, Data Zone, Provisioned (PTU), Batch",d:[1],
+what:"<p>Een <b>deployment</b> is een uitgerold model met een eigen naam waarop je app verzoeken stuurt. Het <b>deploymenttype</b> bepaalt waar het verzoek verwerkt wordt en hoe je betaalt.</p><table><tr><th>Type</th><th>Wat</th><th>Wanneer</th></tr><tr><td><b>Global Standard</b></td><td>Pay-per-token, verwerkt in elk Azure-datacenter wereldwijd</td><td>Standaardkeuze, hoogste quota</td></tr><tr><td><b>Data Zone Standard</b></td><td>Pay-per-token, verwerkt binnen een zone (EU of VS)</td><td>Data moet binnen de EU blijven</td></tr><tr><td><b>Standard</b> (regionaal)</td><td>Pay-per-token, in één regio</td><td>Data strikt in één regio</td></tr><tr><td><b>Provisioned</b> (Global / Data Zone / Regional)</td><td>Gereserveerde capaciteit in <b>PTU's</b>, vast bedrag per uur</td><td>Hoog en stabiel volume, voorspelbare latency</td></tr><tr><td><b>Global / Data Zone Batch</b></td><td>Asynchroon, resultaat binnen 24 uur, ~50% goedkoper</td><td>Grote hoeveelheden die niet direct hoeven</td></tr><tr><td><b>Developer</b></td><td>Voor het testen van fine-tuned modellen</td><td>Evaluatie, geen productie</td></tr></table>",
+when:["Data mag de EU niet uit → <b>Data Zone</b> (EU).","Hoog stabiel verkeer + garantie / voorspelbare latency → <b>Provisioned (PTU)</b>.","Miljoenen documenten 's nachts verwerken, geen haast → <b>Batch</b>.","Wisselend of onvoorspelbaar verkeer → <b>Standard / Global Standard</b>."],
+code:[{l:"Deployment aanmaken (CLI)",src:"az cognitiveservices account deployment create \\\n  --name mijn-foundry --resource-group rg-ai \\\n  --deployment-name gpt-41 \\\n  --model-name gpt-4.1 --model-version 2025-04-14 --model-format OpenAI \\\n  --sku-name GlobalStandard --sku-capacity 100   # 100 = 100K TPM"}],
+cfg:["<b>SKU</b> = deploymenttype.","<b>Capacity</b>: bij Standard in eenheden van 1.000 TPM, bij Provisioned in PTU's.","<b>Deploymentnaam</b>: die gebruik je in je code als <code>model=</code>.","<b>Content filter / guardrail</b> wordt per deployment gekoppeld.","<b>Spillover</b>: bij Provisioned kun je overloop naar een Standard-deployment instellen voor pieken."],
+traps:["In code gebruik je de <b>deploymentnaam</b>, niet per se de modelnaam.","Global = data kan buiten je regio verwerkt worden. Staat er 'data residency', kies dan Data Zone of Regional."],
+rel:["quota","kosten","modelkeuze"]},
+
+{id:"quota",p:"platform",t:"Quota, rate limits & 429",s:"TPM, RPM, HTTP 429, retry, schalen",d:[1],
+what:"<p><b>Quota</b> = hoeveel capaciteit je per model, per regio, per subscription mag gebruiken. Gemeten in <b>TPM</b> (tokens per minute). Daaraan gekoppeld is <b>RPM</b> (requests per minute): ongeveer 6 RPM per 1.000 TPM.</p><p>Ga je over de limiet, dan krijg je <b>HTTP 429 Too Many Requests</b>, met een <code>retry-after</code>-header die zegt hoe lang je moet wachten.</p><p>Een <b>token</b> is een stukje tekst (ongeveer ¾ woord in het Engels, minder in het Nederlands). Zowel input als output telt mee, en ook <code>max_tokens</code> telt al mee bij de schatting.</p>",
+when:["Af en toe 429 → <b>retry met exponential backoff</b> (1 s, 2 s, 4 s...).","Structureel 429 → <b>quota verhogen</b> (aanvragen) of capaciteit van de deployment verhogen.","Meer capaciteit dan één regio geeft → meerdere deployments + <b>load balancing</b> (bijv. via API Management als AI gateway).","Garantie nodig → <b>Provisioned</b>."],
+code:[{l:"Retry met backoff (Python)",src:"import time\nfrom openai import RateLimitError\n\nfor poging in range(5):\n    try:\n        response = openai.responses.create(model=\"gpt-41\", input=vraag)\n        break\n    except RateLimitError:\n        time.sleep(2 ** poging)   # 1, 2, 4, 8, 16 seconden"}],
+cfg:["Response-headers: <code>x-ratelimit-remaining-tokens</code>, <code>x-ratelimit-remaining-requests</code>.","<code>max_tokens</code> / <code>max_output_tokens</code> laag houden: een te hoge waarde 'reserveert' quota.","Azure Monitor-metrics: <i>Processed tokens</i>, <i>Requests</i>, <i>Throttled requests</i>."],
+traps:["Een hogere <code>max_tokens</code> lost 429 niet op, maar maakt het erger.","Quota geldt per <b>subscription + regio + model</b>, niet per project."],
+rel:["deployments","kosten","monitoring"]},
+
+{id:"security",p:"platform",t:"Security & identiteit",s:"Managed identity, RBAC, keyless, netwerk, Key Vault",d:[1],
+what:"<p><b>Keyless</b> = zonder API-sleutels. Je app logt in via <b>Microsoft Entra ID</b> (het identiteitssysteem van Microsoft) met een <b>managed identity</b>: een identiteit die Azure zelf beheert voor je App Service, Function of container. Wat die identiteit mag, bepaal je met <b>RBAC</b> (role-based access control: rechten via rollen).</p><p><b>Belangrijke rollen:</b></p><ul><li><b>Azure AI User</b>: modellen en agents gebruiken in een project (data-acties). Standaardrol voor apps en ontwikkelaars.</li><li><b>Azure AI Project Manager</b>: projecten beheren en mensen toegang geven.</li><li><b>Azure AI Account Owner</b>: resource en projecten beheren.</li><li><b>Cognitive Services OpenAI User</b>: alleen OpenAI-modellen aanroepen.</li><li><b>Cognitive Services User</b>: Foundry Tools aanroepen (Language, Speech, ...).</li><li><b>Search Index Data Reader / Contributor</b>: index lezen / schrijven in AI Search.</li><li><b>Storage Blob Data Reader</b>: blobs lezen (bijv. voor indexers).</li></ul><p><b>Netwerk:</b> <b>private endpoint</b> = de resource krijgt een privé-IP in je virtuele netwerk (VNet). Met <code>publicNetworkAccess: Disabled</code> is hij niet meer via internet bereikbaar.</p>",
+when:["'No keys / keyless / no secrets' → <b>managed identity + RBAC</b>.","Alleen bereikbaar vanuit het bedrijfsnetwerk → <b>private endpoint</b> + public access uit.","Toch een geheim nodig (bijv. API van een derde) → <b>Key Vault</b> of een <b>project connection</b>.","Eigen encryptiesleutel verplicht → <b>customer-managed keys (CMK)</b> in Key Vault.","Principe: <b>least privilege</b> = zo min mogelijk rechten."],
+code:[{l:"Keyless inloggen in Python",src:"from azure.identity import DefaultAzureCredential\nfrom azure.ai.projects import AIProjectClient\n\n# Lokaal: gebruikt je 'az login'. In Azure: de managed identity.\nproject = AIProjectClient(\n    endpoint=\"https://mijn-foundry.services.ai.azure.com/api/projects/klantenservice\",\n    credential=DefaultAzureCredential(),\n)"},
+{l:"Rol toekennen (CLI)",src:"az role assignment create \\\n  --assignee <principal-id-van-managed-identity> \\\n  --role \"Azure AI User\" \\\n  --scope /subscriptions/<sub>/resourceGroups/rg-ai/providers/Microsoft.CognitiveServices/accounts/mijn-foundry"}],
+cfg:["Managed identity aanzetten: <b>system-assigned</b> (hoort bij één resource, verdwijnt mee) of <b>user-assigned</b> (los object, herbruikbaar door meerdere resources).","<code>disableLocalAuth: true</code> op de resource = keys uit.","Agent Service <b>standard setup</b>: eigen Storage, Cosmos DB en AI Search in je eigen netwerk (voor data-isolatie)."],
+traps:["Key Vault is veiliger dan app settings, maar is <b>niet keyless</b>.","SAS-tokens horen bij Storage, niet bij Foundry-modellen.","Managed identity werkt alleen met een <b>RBAC-rol</b> erbij. Zonder rol krijg je 401/403."],
+rel:["resource","connections","agentsetup"]},
+
+{id:"connections",p:"platform",t:"Connections",s:"Project koppelen aan AI Search, Storage, API's, MCP-servers",d:[1,2],
+what:"Een <b>connection</b> is een opgeslagen koppeling van je project naar een andere dienst: Azure AI Search, Storage, Application Insights, een externe API of MCP-server. De inloggegevens worden centraal en veilig bewaard. Tools van agents verwijzen naar een connection in plaats van zelf een sleutel te bevatten.",
+when:["Agent moet bij jouw AI Search-index → connection naar AI Search.","MCP-server of API met een sleutel → connection met die sleutel, tool verwijst naar de <code>project_connection_id</code>.","Tracing → connection met Application Insights."],
+code:[{l:"Connections opvragen",src:"for c in project.connections.list():\n    print(c.name, c.type)\n\nsearch_conn = project.connections.get(\"mijn-search\")"}],
+cfg:["Authenticatie per connection: <b>Entra ID</b> (voorkeur) of <b>API key</b>.","Gedeeld met alle projectleden of alleen met jou."],
+traps:["Zet nooit een sleutel in de instructies of code van een agent. Gebruik een connection."],
+rel:["security","tools","tracing"]},
+
+{id:"cicd",p:"platform",t:"CI/CD & infrastructure as code",s:"Bicep, azd, GitHub Actions / Azure DevOps, evaluatie als poort",d:[1],
+what:"<p><b>CI/CD</b> (continuous integration / continuous deployment) = automatisch testen en uitrollen bij elke wijziging. Voor Foundry betekent dat:</p><ul><li><b>Infrastructure as code (IaC)</b>: resource, project, deployments en rollen vastleggen in <b>Bicep</b> of <b>Terraform</b>, zodat elke omgeving (dev/test/prod) identiek is.</li><li><b>azd</b> (Azure Developer CLI): <code>azd up</code> zet een complete app + infra neer vanuit een template.</li><li><b>Pipeline</b> (GitHub Actions of Azure DevOps): bouwt, test, draait <b>evaluaties</b> en rolt uit.</li><li><b>Evaluation gate</b>: de pipeline stopt als de kwaliteitsscore (bijv. groundedness) onder een drempel zakt.</li><li><b>Agent versions</b>: elke wijziging van een agent is een nieuwe versie, zodat je kunt terugrollen.</li></ul>",
+when:["Zelfde omgeving opnieuw opbouwen in test en productie → <b>IaC (Bicep/Terraform)</b>.","Voorkomen dat een slechtere prompt live gaat → <b>evaluatie als stap in de pipeline</b>.","Pipeline moet in Azure inloggen zonder secrets → <b>workload identity federation (OIDC)</b>, een vertrouwensrelatie tussen GitHub/DevOps en Entra ID."],
+code:[{l:"GitHub Actions (schets)",src:"jobs:\n  deploy:\n    runs-on: ubuntu-latest\n    permissions: { id-token: write, contents: read }  # OIDC, geen secret\n    steps:\n      - uses: actions/checkout@v4\n      - uses: azure/login@v2\n        with:\n          client-id: ${{ vars.AZURE_CLIENT_ID }}\n          tenant-id: ${{ vars.AZURE_TENANT_ID }}\n          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}\n      - run: az deployment group create -g rg-ai -f infra/main.bicep\n      - run: python evals/run_eval.py   # faalt bij te lage score\n      - run: python deploy_agent.py     # nieuwe agentversie"}],
+cfg:["Aparte resources of projecten per omgeving (dev/test/prod).","Deploymentnamen gelijk houden tussen omgevingen, zodat code niet verandert.","Endpoint en namen via <b>omgevingsvariabelen</b>, niet hardcoded."],
+traps:["Een service principal met <b>client secret</b> werkt, maar <b>OIDC / workload identity federation</b> is het keyless antwoord."],
+rel:["evaluaties","resource","security"]},
+
+{id:"monitoring",p:"platform",t:"Monitoring",s:"Azure Monitor, metrics, diagnostic settings, alerts, drift",d:[1],
+what:"<p>Monitoring heeft drie lagen:</p><ul><li><b>Metrics</b> (Azure Monitor): getallen over tijd, zoals tokens, requests, latency, throttling en PTU-gebruik. Hierop zet je <b>alerts</b>.</li><li><b>Logs</b> via <b>diagnostic settings</b>: platformlogs (wie riep wat aan, wanneer) naar Log Analytics, Storage of Event Hub. Doorzoeken met <b>KQL</b> (Kusto Query Language).</li><li><b>Tracing</b> via Application Insights: per verzoek alle stappen binnen je app of agent (zie Tracing).</li></ul><p>Daarnaast: <b>continuous evaluation</b> (doorlopend steekproeven van live verkeer beoordelen op kwaliteit en veiligheid) om <b>drift</b> te zien: langzaam slechter wordende kwaliteit.</p>",
+when:["Hoeveel tokens/kosten per dag, alert bij piek → <b>metrics + alert</b>.","Auditlog bewaren van wie de API gebruikte → <b>diagnostic settings → Log Analytics</b>.","Per verzoek zien welke stap traag of fout was → <b>tracing</b>.","Kwaliteit van live antwoorden bewaken → <b>continuous evaluation</b> / online evaluatie.","Index-gezondheid → AI Search-metrics (query latency, throttled queries) en indexer-status."],
+cfg:["Metrics: <i>Processed Prompt Tokens</i>, <i>Generated Completion Tokens</i>, <i>Time to Response</i>, <i>Provisioned-managed Utilization</i>.","Safety-signalen: aantallen geblokkeerde verzoeken per filtercategorie."],
+traps:["CPU/geheugen zijn niet relevant bij Foundry: Microsoft beheert de servers.","Diagnostic settings tonen <b>niet</b> de stappen binnen een agent. Daarvoor heb je tracing nodig."],
+rel:["tracing","evaluaties","quota"]},
+
+{id:"tracing",p:"platform",t:"Tracing & observability",s:"Application Insights, OpenTelemetry, spans, tokens, latency",d:[1,2],
+what:"<p><b>Tracing</b> legt per verzoek de hele keten vast als <b>spans</b> (stappen): modelaanroep → tool-aanroep → resultaat → antwoord, elk met tijd, tokens en input/output. Je ziet het als tijdlijn in Foundry (<i>Tracing</i>) of in <b>Application Insights</b>.</p><p>Technisch gebeurt het met <b>OpenTelemetry</b> (open standaard voor meten in software) met de GenAI-conventies. <b>Observability</b> is het verzamelbegrip: met traces, logs en metrics begrijpen wat je systeem doet.</p>",
+when:["'Per request / each step / tool calls / latency breakdown / token analytics' → <b>tracing met Application Insights</b>.","Fouten in een agent analyseren (error analysis) → traces doorzoeken.","Kosten per gebruiker of feature → token-attributen in traces."],
+code:[{l:"Tracing aanzetten (schets)",src:"from azure.monitor.opentelemetry import configure_azure_monitor\nfrom opentelemetry.instrumentation.openai_v2 import OpenAIInstrumentor\n\n# Connection string van de Application Insights die aan het project hangt\nconfigure_azure_monitor(connection_string=os.environ[\"APPLICATIONINSIGHTS_CONNECTION_STRING\"])\nOpenAIInstrumentor().instrument()   # elke OpenAI-aanroep wordt een span\n\n# Ook prompts en antwoorden vastleggen (let op privacy!):\n# OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT=true"}],
+cfg:["Application Insights-resource <b>koppelen aan het Foundry-project</b> (portal: Tracing).","Message content standaard <b>uit</b> i.v.m. privacy. Bewust aanzetten.","Agents in de Agent Service worden server-side automatisch getraced zodra Application Insights gekoppeld is."],
+traps:["Niet verwarren met diagnostic settings (platformlogs) of metrics (totalen)."],
+rel:["monitoring","evaluaties","agenteval"]},
+
+{id:"kosten",p:"platform",t:"Kosten & schalen",s:"Tokens, PTU, batch, caching, kleinere modellen, AI gateway",d:[1],
+what:"<p>Kosten bij taalmodellen = <b>tokens in × prijs</b> + <b>tokens uit × prijs</b> (output is meestal duurder). Knoppen om te draaien:</p><ul><li><b>Kleiner model</b> (SLM, mini/nano) voor eenvoudige taken.</li><li><b>Model router</b>: kiest per vraag een goedkoop of zwaar model.</li><li><b>Batch</b>: ~50% korting als het niet direct hoeft.</li><li><b>Prompt caching</b>: herhaalde lange prompt-beginstukken (zoals de system prompt) zijn goedkoper. Zet vaste tekst daarom vooraan.</li><li><b>Korter</b>: compacte prompts, <code>max_output_tokens</code> begrenzen, minder RAG-chunks meesturen.</li><li><b>Provisioned</b> is goedkoper per token bij hoog, constant gebruik. Duurder bij weinig gebruik.</li><li><b>API Management als AI gateway</b>: token-limieten per app (<i>token limit policy</i>), load balancing, <i>semantic caching</i>.</li></ul>",
+when:["'Reduce cost' + eenvoudige taak → kleiner model.","'Reduce cost' + niet urgent → batch.","Per team een tokenbudget afdwingen → API Management token limit policy."],
+traps:["PTU is niet automatisch goedkoper. Alleen bij hoog en stabiel gebruik."],
+rel:["modelkeuze","deployments","quota"]}
+);
+
+// ===== Platform extra: CLI en containers =====
+N.push(
+{id:"cli",p:"platform",t:"Azure CLI & azd",s:"De commands die op het examen terugkomen, met welke waarden",d:[1],
+what:"<p>De <b>Azure CLI</b> (<code>az</code>) is de command-line tool om Azure te beheren. Op het examen moet je soms het juiste command of de juiste parameterwaarde kiezen. Patroon: <code>az &lt;dienst&gt; &lt;onderdeel&gt; &lt;actie&gt; --parameters</code>.</p><p><b>azd</b> (Azure Developer CLI) zet een complete app neer vanuit een template: infra (Bicep) + code + configuratie, met één command.</p>",
+when:["Inloggen → <code>az login</code> (daarna werkt <code>DefaultAzureCredential</code> lokaal).","Foundry/AI-resource maken → <code>az cognitiveservices account create</code>.","Endpoint of sleutels opvragen → <code>az cognitiveservices account show</code> / <code>keys list</code>.","Model uitrollen → <code>az cognitiveservices account deployment create</code>.","Rol geven → <code>az role assignment create</code>.","Hele AI-app uit een template → <code>azd init</code> + <code>azd up</code>."],
+code:[{l:"Veelgebruikte commands",src:"# Inloggen en subscription kiezen\naz login\naz account set --subscription \"<naam-of-id>\"\n\n# Foundry resource (kind = AIServices). Losse diensten: --kind TextAnalytics, SpeechServices,\n# ComputerVision, FormRecognizer, ContentSafety, TextTranslation\naz cognitiveservices account create -n mijn-foundry -g rg-ai \\\n  --kind AIServices --sku S0 -l swedencentral --custom-domain mijn-foundry\n\n# Endpoint en keys opvragen\naz cognitiveservices account show -n mijn-foundry -g rg-ai --query properties.endpoint\naz cognitiveservices account keys list -n mijn-foundry -g rg-ai\naz cognitiveservices account keys regenerate -n mijn-foundry -g rg-ai --key-name key1\n\n# Model deployen\naz cognitiveservices account deployment create -n mijn-foundry -g rg-ai \\\n  --deployment-name gpt-41 --model-name gpt-4.1 --model-version 2025-04-14 \\\n  --model-format OpenAI --sku-name GlobalStandard --sku-capacity 50\n\n# Azure AI Search\naz search service create -n mijn-search -g rg-ai --sku basic -l swedencentral\n\n# Managed identity + rol\naz webapp identity assign -n mijn-app -g rg-ai\naz role assignment create --assignee <principal-id> --role \"Azure AI User\" --scope <resource-id>\n\n# Azure Developer CLI\nazd init --template <template-naam>\nazd up        # provisionen + deployen\nazd down      # alles weer opruimen"}],
+cfg:["<b>--kind</b>: <code>AIServices</code> (Foundry, alles-in-één), of een losse dienst zoals <code>TextAnalytics</code> (Language), <code>SpeechServices</code>, <code>ComputerVision</code>, <code>FormRecognizer</code> (Document Intelligence), <code>ContentSafety</code>, <code>TextTranslation</code>.","<b>--sku</b>: <code>F0</code> = gratis (beperkt, één per subscription per dienst), <code>S0</code> = standaard betaald.","<b>--custom-domain</b>: vereist voor Entra ID-authenticatie en private endpoints.","<b>--sku-name</b> bij deployments: <code>GlobalStandard</code>, <code>Standard</code>, <code>DataZoneStandard</code>, <code>ProvisionedManaged</code>, <code>GlobalProvisionedManaged</code>, <code>GlobalBatch</code>."],
+traps:["<code>keys regenerate</code> roteert een sleutel. Er zijn er twee (key1 en key2), zodat je zonder downtime kunt wisselen: app op key2 zetten, key1 vernieuwen, terugzetten.","F0 bestaat niet voor alle diensten en heeft lage limieten. Niet voor productie."],
+rel:["resource","deployments","containers","security"]},
+
+{id:"containers",p:"platform",t:"Docker-containers (lokaal draaien)",s:"Foundry Tools on-premises of op de edge, met Eula, Billing en ApiKey",d:[1,4],
+what:"<p>Een aantal Foundry Tools kun je als <b>Docker-container</b> draaien: op je eigen server, in je eigen datacenter of op een apparaat aan de rand van het netwerk (<b>edge</b>). Het model draait dan <b>lokaal</b>, dus de data verlaat je netwerk niet en de latency is laag.</p><p><b>Beschikbaar als container</b> (selectie): Language (sentiment, key phrases, taaldetectie, NER, PII, samenvatten, CLU), Speech (speech-to-text, custom speech, neural text-to-speech, taal-identificatie), Translator, Document Intelligence (Read, Layout, prebuilt modellen), Vision Read (OCR).</p><p><b>Twee varianten:</b></p><ul><li><b>Connected containers</b>: draaien lokaal, maar sturen <b>factureringsgegevens</b> naar je Azure-resource. Ze hebben dus af en toe internet nodig. Data zelf gaat niet naar Azure.</li><li><b>Disconnected containers</b>: helemaal zonder internet (bijv. op een schip of in een beveiligde omgeving). Vereisen een <b>goedgekeurde aanvraag</b> en een <b>commitment tier</b>-contract (vooraf betaald volume).</li></ul>",
+when:["'Data mag het eigen netwerk / de fabriek niet verlaten' of 'lage latency on-premises' → <b>container</b>.","'Geen internetverbinding mogelijk' → <b>disconnected container</b> (met commitment tier).","Gewone cloud-app → geen container nodig, gewoon het endpoint aanroepen."],
+code:[{l:"Container starten (voorbeeld sentiment)",src:"docker run --rm -it -p 5000:5000 --memory 8g --cpus 1 \\\n  mcr.microsoft.com/azure-cognitive-services/textanalytics/sentiment:latest \\\n  Eula=accept \\\n  Billing=https://mijn-language.cognitiveservices.azure.com/ \\\n  ApiKey=<sleutel-van-die-resource>"},
+{l:"Daarna aanroepen: lokaal endpoint",src:"from azure.ai.textanalytics import TextAnalyticsClient\nfrom azure.core.credentials import AzureKeyCredential\n\n# Endpoint is nu je eigen container, niet Azure\nclient = TextAnalyticsClient(endpoint=\"http://localhost:5000\",\n                             credential=AzureKeyCredential(\"niet-gebruikt\"))\nprint(client.analyze_sentiment([\"De service was top!\"])[0].sentiment)"}],
+cfg:["Drie <b>verplichte</b> parameters bij <code>docker run</code>:<br><code>Eula=accept</code> (licentie accepteren)<br><code>Billing=&lt;endpoint-van-je-Azure-resource&gt;</code><br><code>ApiKey=&lt;sleutel-van-die-resource&gt;</code>","Images staan in <b>Microsoft Container Registry</b>: <code>mcr.microsoft.com/azure-cognitive-services/...</code>.","Standaardpoort in de container: <b>5000</b>. Met <code>-p 5000:5000</code> koppel je die aan je machine.","Geheugen en CPU volgens de minimumvereisten per container (<code>--memory</code>, <code>--cpus</code>).","Draaien op: Docker lokaal, Azure Container Instances, Azure Kubernetes Service, IoT Edge."],
+traps:["Billing en ApiKey moeten bij <b>dezelfde</b> Azure-resource horen, en van het <b>juiste type</b> (Language-container → Language- of Foundry-resource).","Zonder <code>Eula=accept</code> start de container niet.","Connected containers zijn niet offline: ze rapporteren gebruik voor facturering. Offline = disconnected.","Niet alle functies bestaan als container. Generatieve modellen (GPT) draai je niet zo in een Foundry Tools-container."],
+rel:["cli","language","speechstt","docintel"]}
+);
+
+// ===== Responsible AI =====
+N.push(
+{id:"guardrails",p:"rai",t:"Guardrails & content filters",s:"Categorieën, ernstniveaus, input/output, blocklists",d:[1,3],
+what:"<p>Elke modeldeployment en agent in Foundry heeft een <b>guardrail</b> (vroeger: content filter-configuratie). Die controleert de <b>input</b> (prompt) en de <b>output</b> (antwoord) en blokkeert of markeert schadelijke content.</p><p><b>Vier schadecategorieën</b>, elk met een ernstniveau (<b>severity</b>): <b>hate</b> (haat), <b>sexual</b> (seksueel), <b>violence</b> (geweld), <b>self-harm</b> (zelfbeschadiging). Ernst: safe, low, medium, high. Je stelt per categorie in vanaf welk niveau er geblokkeerd wordt.</p><p><b>Extra controles:</b> Prompt Shields (jailbreak en indirecte aanvallen), protected material (tekst en code), groundedness, PII-detectie, en <b>blocklists</b> (eigen lijsten met verboden woorden).</p>",
+when:["Strenger of soepeler filteren dan standaard → <b>eigen guardrail</b> maken en aan de deployment koppelen.","Specifieke termen (concurrentnamen, scheldwoorden) blokkeren → <b>blocklist</b>.","Niet blokkeren maar wel markeren voor review → <b>annotate-only</b> modus.","Filters volledig uit → alleen na goedkeuring door Microsoft (<i>modified content filtering</i>)."],
+cfg:["Drempel per categorie, apart voor <b>input</b> en <b>output</b>: blokkeer vanaf low / medium / high.","Standaard: blokkeert <b>medium en high</b>.","Actie: <b>block</b> of <b>annotate</b>.","Guardrail koppelen per <b>deployment</b> of per <b>agent</b>.","In de response: <code>content_filter_results</code> per categorie (filtered: true/false, severity). Geblokkeerde input geeft HTTP 400 met code <code>content_filter</code>."],
+traps:["Een lagere drempel (blokkeer vanaf <b>low</b>) is <b>strenger</b>, niet soepeler.","Filters gelden voor input én output. Een antwoord kan halverwege worden afgekapt met <code>finish_reason: content_filter</code>."],
+rel:["promptshields","contentsafety","visualrai"]},
+
+{id:"promptshields",p:"rai",t:"Prompt Shields",s:"Jailbreak (direct) en indirect prompt injection",d:[1,3],
+what:"<p><b>Prompt injection</b> = iemand probeert het model zijn regels te laten negeren.</p><ul><li><b>Direct (jailbreak / user prompt attack)</b>: de gebruiker typt het zelf, zoals 'Ignore all previous instructions'.</li><li><b>Indirect (document attack / XPIA)</b>: de aanval zit verstopt in content die het model leest: een webpagina, e-mail, document, tool-resultaat of <b>tekst in een afbeelding</b>.</li></ul><p><b>Prompt Shields</b> herkent beide en blokkeert ze vóórdat het model antwoordt. Aanzetten in de guardrail, zonder code te veranderen.</p><p>Extra techniek tegen indirecte aanvallen: <b>spotlighting</b>, het duidelijk markeren van externe content als 'data, geen instructies'.</p>",
+when:["'Ignore your instructions' / 'reveal system prompt' → <b>Prompt Shields</b> (user prompt attacks).","Agent leest e-mails/webpagina's/documenten met verborgen opdrachten → <b>Prompt Shields voor documenten</b> (indirect attacks).","Afbeelding met tekst die het model probeert te sturen → indirect attack, ook Prompt Shields."],
+code:[{l:"Los aanroepen via Content Safety (REST)",src:"POST {endpoint}/contentsafety/text:shieldPrompt?api-version=2024-09-01\n{\n  \"userPrompt\": \"Ignore all previous instructions and ...\",\n  \"documents\": [\"<tekst uit een e-mail of webpagina>\"]\n}\n\n# Antwoord:\n# { \"userPromptAnalysis\": { \"attackDetected\": true },\n#   \"documentsAnalysis\": [ { \"attackDetected\": false } ] }"}],
+traps:["Een extra zin in de system prompt is geen detectie en niet waterdicht.","Groundedness ≠ Prompt Shields. Groundedness gaat over verzonnen antwoorden, niet over aanvallen."],
+rel:["guardrails","contentsafety","visualrai"]},
+
+{id:"contentsafety",p:"rai",t:"Azure AI Content Safety",s:"Losse API: tekst/beeld analyseren, groundedness, protected material",d:[1,3],
+what:"<p>Dezelfde veiligheidsmodellen als in de guardrails, maar als <b>losse API</b> die je zelf aanroept. Handig voor content die <b>niet</b> door een Foundry-model gaat: berichten op een forum, door gebruikers geüploade foto's, of output van een ander systeem.</p><ul><li><b>Analyze text / Analyze image</b>: ernst per categorie (hate, sexual, violence, self-harm).</li><li><b>Prompt Shields</b>: <code>text:shieldPrompt</code>.</li><li><b>Groundedness detection</b>: is het antwoord gedekt door de meegegeven bronnen? Kan ook corrigeren.</li><li><b>Protected material detection</b>: bekende auteursrechtelijk beschermde tekst (songteksten, artikelen) of code (uit openbare repo's) in output.</li><li><b>Custom categories</b>: eigen categorie trainen met voorbeelden (bijv. 'reclame voor concurrenten').</li></ul>",
+when:["Door gebruikers geüploade content modereren (niet via een LLM) → <b>Content Safety API</b>.","Eigen soort ongewenste content herkennen → <b>custom categories</b>.","Controleren of RAG-antwoorden kloppen met de bronnen → <b>groundedness detection</b>."],
+code:[{l:"Tekst analyseren (Python)",src:"from azure.ai.contentsafety import ContentSafetyClient\nfrom azure.ai.contentsafety.models import AnalyzeTextOptions\nfrom azure.identity import DefaultAzureCredential\n\nclient = ContentSafetyClient(\"https://mijn-foundry.cognitiveservices.azure.com/\",\n                             DefaultAzureCredential())\nresult = client.analyze_text(AnalyzeTextOptions(text=\"tekst van gebruiker\"))\nfor c in result.categories_analysis:\n    print(c.category, c.severity)   # bijv. Hate 0, Violence 2"},
+{l:"Beeld analyseren",src:"from azure.ai.contentsafety.models import AnalyzeImageOptions, ImageData\n\nwith open(\"upload.jpg\", \"rb\") as f:\n    req = AnalyzeImageOptions(image=ImageData(content=f.read()))\nresult = client.analyze_image(req)"}],
+cfg:["Severity bij tekst: 0-7 (standaard teruggegeven als 0, 2, 4, 6). Bij beeld: 0, 2, 4, 6.","Eigen drempel kiezen in je code: bijv. blokkeren als severity ≥ 4.","Package: <code>azure-ai-contentsafety</code>."],
+traps:["Content Safety <b>verwijdert</b> geen content. Het geeft scores. Jouw code beslist wat er gebeurt."],
+rel:["guardrails","promptshields","evaluaties"]},
+
+{id:"evaluaties",p:"rai",t:"Evaluaties",s:"Kwaliteit, veiligheid en agentgedrag meten met evaluators",d:[1,2],
+what:"<p>Een <b>evaluator</b> geeft een score aan een antwoord. Je draait ze op een <b>testset</b> (vragen + verwachte antwoorden/context) vóór livegang, in je CI/CD-pipeline en doorlopend op live verkeer.</p><table><tr><th>Soort</th><th>Evaluators</th><th>Meet</th></tr><tr><td>RAG-kwaliteit</td><td><b>Groundedness</b>, <b>Relevance</b>, Retrieval, Response Completeness</td><td>Verzint het model iets? Beantwoordt het de vraag? Haalt het de goede stukken op?</td></tr><tr><td>Tekstkwaliteit</td><td><b>Coherence</b>, <b>Fluency</b></td><td>Logisch opgebouwd? Goed geschreven?</td></tr><tr><td>Vergelijken met referentie</td><td><b>Similarity</b>, F1, BLEU, ROUGE, GLEU, METEOR</td><td>Lijkt het antwoord op het verwachte antwoord?</td></tr><tr><td>Veiligheid</td><td>Violence, Sexual, Self-harm, Hate/Unfairness, <b>Indirect attack</b>, <b>Protected material</b>, Code vulnerability</td><td>Schadelijke output, kwetsbaarheden</td></tr><tr><td>Agents</td><td><b>Intent resolution</b>, <b>Task adherence</b>, <b>Tool call accuracy</b></td><td>Begreep de agent de vraag, volgde hij de opdracht, koos hij de juiste tools?</td></tr></table><p><b>AI-assisted</b> evaluators gebruiken zelf een LLM als beoordelaar (<i>LLM-as-a-judge</i>). <b>NLP-metrics</b> (F1, BLEU) rekenen woordovereenkomst uit en hebben een referentieantwoord nodig.</p><p><b>AI Red Teaming Agent</b>: valt je app automatisch aan (op basis van PyRIT) om zwaktes te vinden.</p>",
+when:["Detecteren van verzonnen antwoorden (fabrications) → <b>Groundedness</b>.","Beantwoordt het de vraag? → <b>Relevance</b>.","Agent kiest verkeerde tools → <b>Tool call accuracy</b>.","Twee modellen of prompts vergelijken → zelfde testset, zelfde evaluators, scores naast elkaar.","Zwaktes vinden vóór livegang → <b>red teaming</b>."],
+code:[{l:"Evalueren met azure-ai-evaluation",src:"from azure.ai.evaluation import GroundednessEvaluator, RelevanceEvaluator, evaluate\n\nmodel_config = {\n    \"azure_endpoint\": \"https://mijn-foundry.openai.azure.com/\",\n    \"azure_deployment\": \"gpt-41\",   # het 'jurymodel'\n}\ngroundedness = GroundednessEvaluator(model_config)\nrelevance = RelevanceEvaluator(model_config)\n\n# Eén antwoord beoordelen\nprint(groundedness(query=\"Hoeveel vakantiedagen?\",\n                   context=\"Medewerkers hebben 25 vakantiedagen.\",\n                   response=\"Je hebt 30 vakantiedagen.\"))   # lage score\n\n# Een hele testset (JSONL met query/context/response per regel)\nresult = evaluate(\n    data=\"testset.jsonl\",\n    evaluators={\"groundedness\": groundedness, \"relevance\": relevance},\n)"}],
+cfg:["Scores van AI-assisted evaluators: meestal 1-5, met een drempel (bijv. ≥ 3 = pass).","Veiligheidsevaluators hebben een Foundry-project nodig (<code>azure_ai_project</code>) in plaats van een eigen jurymodel.","Testdata als <b>JSONL</b> (één JSON-object per regel)."],
+traps:["BLEU/ROUGE/F1 hebben een <b>ground truth</b> (referentieantwoord) nodig. Groundedness heeft <b>context</b> nodig.","Fluency meet taal, niet juistheid. Een vloeiend antwoord kan volledig verzonnen zijn."],
+rel:["agenteval","cicd","monitoring","contentsafety"]},
+
+{id:"governance",p:"rai",t:"Agent governance & auditing",s:"Oversight, approvals, tool-toegang, trace-logs, provenance",d:[1,2],
+what:"<p>Hoe houd je controle over agents die zelf beslissingen nemen?</p><ul><li><b>Oversight modes</b>: hoeveel mag de agent zelf? Volledig autonoom, semi-autonoom (toestemming voor risicovolle acties) of alleen voorstellen doen.</li><li><b>Approval workflows / human-in-the-loop</b>: een mens keurt een tool-aanroep goed voordat die uitgevoerd wordt.</li><li><b>Tool-access controls</b>: per agent alleen de tools die nodig zijn (<b>least privilege</b>), met beperkte rechten per tool.</li><li><b>Constraints</b>: harde grenzen in code (bedragen, aantallen), niet alleen in de prompt.</li><li><b>Auditing</b>: <b>trace logging</b> van elke stap, <b>provenance metadata</b> (waar komt informatie vandaan, welke versie van model/agent), en wie wat goedkeurde.</li><li><b>Agent identity</b>: agents krijgen een eigen Entra-identiteit, zodat je hun rechten apart kunt beheren en zien wat ze deden.</li></ul>",
+when:["Geld, data verwijderen, e-mail versturen → <b>approval vóór uitvoering</b>.","Achteraf kunnen aantonen wat de agent deed en waarom → <b>tracing + audit logs + provenance</b>.","Agent mag alleen lezen, niet schrijven → <b>rechten van de tool/identiteit beperken</b>."],
+traps:["'Reliably enforce' betekent nooit 'zet het in de prompt'. Het antwoord is altijd code, configuratie of een approval flow."],
+rel:["hitl","tracing","agentidentity"]},
+
+{id:"raiprincipes",p:"rai",t:"Responsible AI-principes",s:"De 6 principes van Microsoft",d:[1],
+what:"<ul><li><b>Fairness</b> (eerlijkheid): geen ongelijke behandeling van groepen.</li><li><b>Reliability &amp; safety</b> (betrouwbaarheid en veiligheid): werkt zoals bedoeld, ook in uitzonderingen.</li><li><b>Privacy &amp; security</b>: data beschermd, PII zorgvuldig behandeld.</li><li><b>Inclusiveness</b> (inclusiviteit): bruikbaar voor iedereen, ook met een beperking (bijv. alt-text).</li><li><b>Transparency</b> (transparantie): duidelijk dat het AI is en hoe het werkt (transparency notes).</li><li><b>Accountability</b> (verantwoordelijkheid): mensen blijven verantwoordelijk, met toezicht.</li></ul><p>Werkwijze in vier stappen: <b>identify</b> (risico's vinden) → <b>measure</b> (evaluaties) → <b>mitigate</b> (filters, prompts, UX) → <b>operate</b> (monitoren, incidentplan).</p>",
+when:["Vraag welk principe geschonden wordt: let op het kernwoord (groepen → fairness, uitleg → transparency, mens verantwoordelijk → accountability)."],
+rel:["guardrails","evaluaties","governance"]}
+);
+
+// ===== Generatieve AI-apps =====
+N.push(
+{id:"sdk",p:"genai",t:"Foundry SDK & clients",s:"AIProjectClient, OpenAI-client, Responses API, endpoints",d:[2],
+what:"<p>Je app praat met Foundry via de <b>Foundry SDK</b>. In Python: het package <code>azure-ai-projects</code> (versie 2.x) met <code>azure-identity</code> voor inloggen.</p><ul><li><b>AIProjectClient</b>: de hoofdclient, verbonden met je <b>project-endpoint</b>. Geeft toegang tot agents, connections, deployments, evaluaties.</li><li><b>get_openai_client()</b>: geeft een OpenAI-compatibele client terug voor modelaanroepen.</li><li><b>Responses API</b> (<code>responses.create</code>): de moderne API voor modellen en agents, met ingebouwde tools en gespreksgeschiedenis.</li><li><b>Chat Completions API</b> (<code>chat.completions.create</code>): de oudere API met een lijst <code>messages</code>. Kom je nog veel tegen.</li></ul><p><b>Twee soorten endpoints:</b> het <b>project-endpoint</b> (<code>.services.ai.azure.com/api/projects/...</code>) voor de SDK, en het <b>resource-endpoint</b> (<code>.openai.azure.com</code> of <code>.cognitiveservices.azure.com</code>) voor directe API-aanroepen naar modellen of Foundry Tools.</p>",
+when:["App koppelen aan een Foundry-project → <b>AIProjectClient</b> met project-endpoint + <code>DefaultAzureCredential</code>.","Alleen een model aanroepen → <code>get_openai_client()</code> + <code>responses.create</code>.","Vervolgvraag met geheugen → <code>previous_response_id</code> of een <b>conversation</b>."],
+code:[{l:"Model aanroepen (actuele quickstart, SDK 2.x)",src:"# pip install \"azure-ai-projects>=2.3.0\" azure-identity\nfrom azure.identity import DefaultAzureCredential\nfrom azure.ai.projects import AIProjectClient\n\nproject = AIProjectClient(\n    endpoint=\"https://mijn-foundry.services.ai.azure.com/api/projects/klantenservice\",\n    credential=DefaultAzureCredential(),\n)\nopenai = project.get_openai_client()\n\nresponse = openai.responses.create(\n    model=\"gpt-5-mini\",            # = de DEPLOYMENTnaam\n    input=\"Wat is de hoofdstad van Frankrijk?\",\n)\nprint(response.output_text)\n\n# Vervolgvraag die de vorige onthoudt\nresponse2 = openai.responses.create(\n    model=\"gpt-5-mini\",\n    input=\"En hoeveel inwoners heeft die stad?\",\n    previous_response_id=response.id,\n)"},
+{l:"Chat Completions (oudere stijl)",src:"completion = openai.chat.completions.create(\n    model=\"gpt-41\",\n    messages=[\n        {\"role\": \"system\", \"content\": \"Je bent een behulpzame HR-assistent.\"},\n        {\"role\": \"user\", \"content\": \"Hoeveel vakantiedagen heb ik?\"},\n    ],\n    temperature=0.2,\n)\nprint(completion.choices[0].message.content)"},
+{l:"Direct met de OpenAI-library (keyless)",src:"from openai import OpenAI\nfrom azure.identity import DefaultAzureCredential, get_bearer_token_provider\n\ntoken_provider = get_bearer_token_provider(\n    DefaultAzureCredential(), \"https://cognitiveservices.azure.com/.default\")\n\nclient = OpenAI(base_url=\"https://mijn-foundry.openai.azure.com/openai/v1/\",\n                api_key=token_provider)"}],
+cfg:["Omgevingsvariabelen: project-endpoint en deploymentnaam niet hardcoden.","Scope voor tokens: <code>https://cognitiveservices.azure.com/.default</code> (resource) of <code>https://ai.azure.com/.default</code> (project-API).","Rol voor de app-identiteit: <b>Azure AI User</b> op het project of de resource."],
+traps:["<code>model=</code> is de <b>deploymentnaam</b>.","SDK 2.x is niet compatibel met 1.x. In 1.x maakte je agents met <code>create_agent</code> + threads + runs. In 2.x met <code>create_version</code> + conversations + responses.","<code>response.output_text</code> (Responses) vs. <code>choices[0].message.content</code> (Chat Completions)."],
+rel:["parameters","structured","agentservice","security"]},
+
+{id:"parameters",p:"genai",t:"Generatieparameters",s:"temperature, top_p, max tokens, seed, stop, penalties, reasoning_effort",d:[2],
+what:"<table><tr><th>Parameter</th><th>Wat het doet</th><th>Typische waarde</th></tr><tr><td><b>temperature</b></td><td>Willekeur. 0 = steeds het meest waarschijnlijke woord, hoger = creatiever</td><td>0-0.3 voor feiten/extractie, 0.7-1 voor creatief</td></tr><tr><td><b>top_p</b></td><td>Alleen de bovenste woorden tot samen p% kans doen mee</td><td>1 (standaard). Pas óf temperature óf top_p aan</td></tr><tr><td><b>max_tokens</b> / <b>max_output_tokens</b></td><td>Maximale lengte van het antwoord</td><td>Zo laag als redelijk</td></tr><tr><td><b>seed</b></td><td>Vast startgetal voor het toeval: (bijna) hetzelfde antwoord bij dezelfde input</td><td>bijv. 42</td></tr><tr><td><b>stop</b></td><td>Stopt zodra deze tekst verschijnt</td><td>bijv. <code>[\"\\n\\n\"]</code></td></tr><tr><td><b>frequency_penalty</b></td><td>Straft woorden die vaak herhaald worden</td><td>0-1 tegen herhaling</td></tr><tr><td><b>presence_penalty</b></td><td>Straft woorden die al voorkwamen, stimuleert nieuwe onderwerpen</td><td>0-1 voor meer variatie</td></tr><tr><td><b>reasoning_effort</b></td><td>Alleen reasoning models: hoeveel denkwerk</td><td>low / medium / high</td></tr><tr><td><b>tool_choice</b></td><td>Mag/moet het model een tool gebruiken</td><td>auto / required / none / specifieke tool</td></tr></table>",
+when:["Zelfde vraag → zelfde antwoord → <b>temperature 0</b> (+ <b>seed</b>).","Antwoorden te lang of te duur → <b>max_output_tokens</b> lager.","Model herhaalt zichzelf → <b>frequency_penalty</b> omhoog.","Complexe planning/wiskunde → reasoning model met <b>reasoning_effort: high</b>."],
+traps:["Hogere temperature = meer verzinsels, niet minder.","Reasoning models ondersteunen vaak geen temperature/top_p.","Parameters lossen geen kennisgebrek op. Ontbrekende feiten → RAG."],
+rel:["prompting","structured","modelkeuze"]},
+
+{id:"prompting",p:"genai",t:"Prompt engineering",s:"System message, few-shot, chain-of-thought, grounding-instructies",d:[2],
+what:"<ul><li><b>System message / instructions</b>: rol, toon, regels en grenzen. 'Je bent een HR-assistent. Antwoord alleen op basis van de bronnen. Weet je het niet, zeg dat.'</li><li><b>Zero-shot</b>: alleen de opdracht. <b>Few-shot</b>: 2-5 voorbeelden van input → gewenste output erbij. Helpt bij een vast format of een lastige classificatie.</li><li><b>Chain-of-thought (CoT)</b>: model eerst stap voor stap laten redeneren. Beter bij rekenen en logica.</li><li><b>Grounding-instructies</b>: 'Gebruik alleen de onderstaande context. Noem de bron.'</li><li><b>Scheidingstekens</b> (delimiters): context tussen bijv. <code>###</code> of XML-tags, zodat het model data en instructies uit elkaar houdt.</li><li><b>Output-instructie</b>: format, lengte, taal.</li></ul>",
+when:["Model antwoordt in het verkeerde format → <b>few-shot voorbeelden</b> of structured outputs.","Model verzint dingen buiten de bronnen → <b>grounding-instructie</b> + RAG + groundedness-evaluatie.","Rekenfouten in meerstapsproblemen → <b>chain-of-thought</b> of een reasoning model."],
+traps:["Prompt engineering is altijd de eerste en goedkoopste stap, vóór RAG en fine-tuning.","Een instructie in de prompt is geen beveiliging (zie Prompt Shields en approvals)."],
+rel:["parameters","rag","reflection"]},
+
+{id:"structured",p:"genai",t:"Structured outputs & function calling",s:"JSON schema afdwingen, model laat jouw code iets doen",d:[2,4],
+what:"<p><b>Structured outputs</b>: je geeft een <b>JSON schema</b> mee en het model geeft <b>gegarandeerd</b> JSON terug dat daaraan voldoet (met <code>strict: true</code>). Handig voor extractie en voor systemen die de output automatisch verwerken.</p><p><b>JSON mode</b> (<code>{\"type\": \"json_object\"}</code>) garandeert alleen geldige JSON, niet jouw velden.</p><p><b>Function calling</b>: je beschrijft functies (naam, beschrijving, parameters als JSON schema). Het model beslist wanneer een functie nodig is en geeft de <b>argumenten</b> terug. <b>Jouw code voert de functie uit</b> en stuurt het resultaat terug, waarna het model het eindantwoord maakt.</p>",
+when:["Downstream systeem parseert de output → <b>structured outputs</b> met schema.","Entiteiten/velden uit tekst halen als JSON → structured outputs.","Model moet live data ophalen of een actie doen in je eigen code → <b>function calling</b>."],
+code:[{l:"Structured output (Responses API)",src:"response = openai.responses.create(\n    model=\"gpt-41\",\n    input=\"Ticket: 'Mijn factuur klopt niet, ik betaalde dubbel.'\",\n    text={\"format\": {\n        \"type\": \"json_schema\",\n        \"name\": \"ticket\",\n        \"strict\": True,\n        \"schema\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"categorie\": {\"type\": \"string\", \"enum\": [\"billing\", \"technisch\", \"account\"]},\n                \"urgent\": {\"type\": \"boolean\"},\n            },\n            \"required\": [\"categorie\", \"urgent\"],\n            \"additionalProperties\": False,\n        },\n    }},\n    temperature=0,\n)\nprint(response.output_text)   # {\"categorie\":\"billing\",\"urgent\":false}"},
+{l:"Function calling (stroom)",src:"tools = [{\n    \"type\": \"function\",\n    \"name\": \"get_order_status\",\n    \"description\": \"Haal de actuele status van een order op\",\n    \"parameters\": {\"type\": \"object\",\n                   \"properties\": {\"order_id\": {\"type\": \"string\"}},\n                   \"required\": [\"order_id\"]},\n}]\nr = openai.responses.create(model=\"gpt-41\", input=\"Waar is order 48213?\", tools=tools)\n\nfor item in r.output:\n    if item.type == \"function_call\":\n        args = json.loads(item.arguments)          # {\"order_id\": \"48213\"}\n        result = get_order_status(**args)          # JOUW code\n        r = openai.responses.create(\n            model=\"gpt-41\", previous_response_id=r.id,\n            input=[{\"type\": \"function_call_output\",\n                    \"call_id\": item.call_id,\n                    \"output\": json.dumps(result)}],\n            tools=tools)\nprint(r.output_text)"}],
+cfg:["<code>strict: true</code> + <code>additionalProperties: false</code> + alle velden in <code>required</code>.","<code>enum</code> om toegestane waarden vast te leggen.","Combineer met <b>temperature 0</b> voor consistentie."],
+traps:["'Respond in JSON' in de prompt is een verzoek, geen garantie.","Bij function calling voert het <b>model</b> niets uit. Het geeft alleen aan wát er uitgevoerd moet worden."],
+rel:["parameters","tools","llmtekst"]},
+
+{id:"rag",p:"genai",t:"RAG (retrieval-augmented generation)",s:"Eigen data ophalen en het antwoord daarop baseren",d:[2,5],
+what:"<p><b>RAG</b>: vóór het antwoord eerst relevante stukken uit je eigen data ophalen en die meesturen. Het model baseert zijn antwoord daarop (<b>grounding</b>), met bronvermelding.</p><p><b>Twee fases:</b></p><ol><li><b>Ingestie</b> (vooraf): documenten binnenhalen → tekst eruit (OCR/layout) → in stukken knippen (<b>chunking</b>) → <b>embeddings</b> maken → opslaan in een <b>index</b>.</li><li><b>Query</b> (per vraag): vraag → zoeken in de index (bij voorkeur <b>hybrid + semantic ranker</b>) → top-chunks in de prompt → model antwoordt met bronnen.</li></ol><p><b>In Foundry kan dat op drie manieren:</b> zelf bouwen met Azure AI Search + SDK; een agent met de <b>Azure AI Search-tool</b> of <b>file search</b>; of <b>agentic retrieval</b> via een knowledge base (Foundry IQ).</p>",
+when:["Eigen/actuele/bedrijfsdata + verzonnen antwoorden → <b>RAG</b>.","Data verandert vaak → RAG (index bijwerken), geen fine-tuning.","Antwoorden moeten bronnen noemen → RAG met citations."],
+code:[{l:"Minimale RAG-flow",src:"# 1. Ophalen\nresults = search_client.search(search_text=vraag, vector_queries=[vq],\n                                query_type=\"semantic\",\n                                semantic_configuration_name=\"default\", top=5)\ncontext = \"\\n\\n\".join(f\"[{r['title']}] {r['content']}\" for r in results)\n\n# 2. Genereren met grounding-instructie\nresponse = openai.responses.create(\n    model=\"gpt-41\",\n    instructions=\"Antwoord alleen op basis van de bronnen. Noem de bron tussen []. \"\n                 \"Staat het er niet in, zeg dan dat je het niet weet.\",\n    input=f\"Bronnen:\\n{context}\\n\\nVraag: {vraag}\",\n    temperature=0,\n)"}],
+cfg:["<b>Chunkgrootte</b>: vaak 500-1000 tokens met 10-20% <b>overlap</b>, zodat context niet midden in een zin breekt.","<b>top / k</b>: hoeveel chunks meesturen (meer = duurder, niet altijd beter).","<b>Embeddingmodel</b> bij indexeren = embeddingmodel bij zoeken (zelfde dimensies)."],
+traps:["Fine-tuning leert geen actuele feiten. Daarvoor is RAG.","Slechte antwoorden komen vaak door slechte <b>retrieval</b>, niet door het model. Meet beide (retrieval- en groundedness-evaluatie)."],
+rel:["searchquery","index","embeddings","toolsknowledge","agenticretrieval"]},
+
+{id:"embeddings",p:"genai",t:"Embeddings & vectoren",s:"Betekenis als getallen, cosine similarity, dimensies",d:[2,5],
+what:"<p>Een <b>embedding</b> is een lijst getallen (een <b>vector</b>) die de betekenis van tekst (of een beeld) vastlegt. Teksten met een vergelijkbare betekenis krijgen vectoren die dicht bij elkaar liggen. 'Afstand' wordt meestal gemeten met <b>cosine similarity</b>.</p><p>Modellen: <b>text-embedding-3-small</b> (1536 dimensies, goedkoop) en <b>text-embedding-3-large</b> (3072 dimensies, nauwkeuriger). De dimensies kun je bij deze modellen verkleinen met de parameter <code>dimensions</code>.</p>",
+when:["Zoeken op betekenis, aanbevelingen, clusteren, duplicaten vinden → embeddings.","Beelden en tekst in dezelfde zoekruimte → multimodale embeddings."],
+code:[{l:"Embedding maken",src:"emb = openai.embeddings.create(model=\"text-embedding-3-small\",\n                               input=\"Hoe reset ik het apparaat?\")\nvector = emb.data[0].embedding   # lijst van 1536 getallen"}],
+cfg:["Vectorveld in de index: <b>dimensions</b> = exact het aantal van je model (bijv. 1536)."],
+traps:["Index met 1536 dimensies + model dat 3072 geeft = fout. Dimensies moeten overeenkomen.","Embeddings zijn geen chatmodel. Ze genereren geen tekst."],
+rel:["index","searchquery","rag"]},
+
+{id:"reflection",p:"genai",t:"Workflows, reflectie & orchestratie",s:"Meerstaps-pipelines, self-critique, meerdere modellen, LLM + regels",d:[2],
+what:"<ul><li><b>Multistep reasoning pipeline</b>: een taak opdelen in stappen (classificeren → ophalen → antwoorden → controleren), elk met een eigen prompt of model.</li><li><b>Reflection / self-critique loop</b>: het model (of een tweede model) beoordeelt het eigen antwoord tegen criteria en verbetert het. 'Controleer of elk feit in de bronnen staat. Herschrijf als dat niet zo is.'</li><li><b>Chain-of-thought-evaluatie</b>: de redenering zelf laten beoordelen, niet alleen de uitkomst.</li><li><b>Meerdere modellen orchestreren</b>: goedkoop model voor routering/classificatie, zwaar model voor de moeilijke vraag. Of de <b>model router</b> laten kiezen.</li><li><b>Hybrid LLM + rules engine</b>: harde bedrijfsregels (bedragen, wetgeving, berekeningen) in gewone code. Het LLM doet taal en interpretatie.</li></ul>",
+when:["Antwoorden bevatten fouten die het model zelf zou kunnen zien → <b>self-critique loop</b>.","Deterministische regels (BTW berekenen, limieten) → <b>rules engine in code</b>, niet het LLM.","Kosten omlaag zonder kwaliteitsverlies → klein model routeert, groot model alleen waar nodig."],
+traps:["Rekenen en harde regels nooit aan het LLM overlaten als het betrouwbaar moet zijn."],
+rel:["multiagent","prompting","kosten"]},
+
+{id:"finetuning",p:"genai",t:"Fine-tuning",s:"SFT, DPO, RFT, distillation: wanneer wel en niet",d:[2,1],
+what:"<p><b>Fine-tuning</b> = een bestaand model bijtrainen met eigen voorbeelden. Het verandert <b>gedrag, stijl en format</b>, niet de kennis die actueel moet blijven.</p><ul><li><b>SFT</b> (supervised fine-tuning): voorbeelden van vraag + ideaal antwoord.</li><li><b>DPO</b> (direct preference optimization): voorbeelden van een beter en een slechter antwoord.</li><li><b>RFT</b> (reinforcement fine-tuning): een beoordelaar (grader) geeft punten, voor redeneermodellen.</li><li><b>Distillation</b>: een klein model trainen op de antwoorden van een groot model, zodat het klein + goedkoop + goed genoeg wordt.</li></ul>",
+when:["Vaste schrijfstijl, toon of complex format dat prompts niet goed afdwingen → fine-tuning.","Kosten omlaag: klein model laten leren van groot model → <b>distillation</b>.","Actuele feiten of documenten → <b>niet</b> fine-tunen, maar RAG."],
+cfg:["Trainingsdata in <b>JSONL</b> (chatformaat: messages met system/user/assistant).","Getraind model deployen: Standard, Global Standard of <b>Developer</b> (om te testen)."],
+traps:["Volgorde op het examen: prompt engineering → RAG → fine-tuning."],
+rel:["rag","modelkeuze","prompting"]}
+);
+
+// ===== Agents =====
+N.push(
+{id:"agentservice",p:"agents",t:"Foundry Agent Service",s:"Prompt agents, versies, conversations, responses",d:[2],
+what:"<p>De <b>Foundry Agent Service</b> host en draait agents voor je. Een agent bestaat uit: <b>model</b> + <b>instructions</b> (rol, doel, regels) + <b>tools</b> + gespreksgeschiedenis.</p><ul><li><b>Prompt agent</b>: declaratief gedefinieerd (model, instructies, tools). De dienst draait de lus van redeneren en tools aanroepen.</li><li><b>Hosted agent</b>: je eigen agentcode (bijv. Microsoft Agent Framework of LangGraph) in een container, gehost door Foundry.</li><li><b>Workflow</b>: meerdere agents en stappen in een vaste of dynamische volgorde (zie Multi-agent).</li></ul><p>Elke wijziging maakt een nieuwe <b>versie</b> (<code>create_version</code>). Een <b>conversation</b> bewaart de geschiedenis van een gesprek over meerdere beurten.</p><p><b>Classic</b> (SDK 1.x, nog in oude materialen): <code>create_agent</code> → <b>thread</b> → <b>message</b> → <b>run</b>.</p>",
+when:["Assistent die zelf tools kiest en meerdere stappen zet → <b>agent</b>.","Eén vaste vraag-antwoordstap zonder tools → gewoon een modelaanroep is genoeg.","Bestaande agentcode (LangGraph, Agent Framework) hosten → <b>hosted agent</b>."],
+code:[{l:"Agent maken en ermee chatten (SDK 2.x)",src:"from azure.ai.projects.models import PromptAgentDefinition\n\nagent = project.agents.create_version(\n    agent_name=\"hr-assistent\",\n    definition=PromptAgentDefinition(\n        model=\"gpt-5-mini\",\n        instructions=\"Je beantwoordt HR-vragen op basis van het handboek. \"\n                     \"Weet je het niet, verwijs dan naar hr@bedrijf.nl.\",\n        tools=[],            # zie Tools\n    ),\n)\n\n# OpenAI-client die vastzit aan deze agent\nopenai = project.get_openai_client(agent_name=\"hr-assistent\")\nconversation = openai.conversations.create()   # geheugen voor dit gesprek\n\nr1 = openai.responses.create(conversation=conversation.id,\n                             input=\"Hoeveel vakantiedagen heb ik?\")\nr2 = openai.responses.create(conversation=conversation.id,\n                             input=\"En mag ik die meenemen naar volgend jaar?\")\nprint(r2.output_text)"},
+{l:"Classic (SDK 1.x): threads en runs",src:"agent = project_client.agents.create_agent(model=\"gpt-4o\", name=\"hr\",\n                                          instructions=\"...\")\nthread = project_client.agents.threads.create()\nproject_client.agents.messages.create(thread_id=thread.id, role=\"user\",\n                                      content=\"Hoeveel vakantiedagen?\")\nrun = project_client.agents.runs.create_and_process(thread_id=thread.id,\n                                                    agent_id=agent.id)"}],
+cfg:["<b>Basic setup</b>: Microsoft beheert de opslag (snel starten).","<b>Standard setup</b>: je koppelt eigen <b>Cosmos DB</b> (gesprekken), <b>Storage</b> (bestanden) en <b>AI Search</b> (vector stores). Voor data-isolatie, compliance en eigen netwerk.","Agent-instructies: rol, doel, grenzen, wanneer welke tool, wat te doen bij twijfel."],
+traps:["Instructies zijn geen beveiliging. Grenzen die echt moeten gelden → approvals en tool-rechten."],
+rel:["tools","memory","multiagent","hitl","agentsetup"]},
+
+{id:"agentsetup",p:"agents",t:"Agent-setup: basic vs. standard",s:"Waar staan gesprekken, bestanden en vectoren?",d:[1,2],
+what:"<table><tr><th></th><th>Basic</th><th>Standard</th></tr><tr><td>Gesprekken/threads</td><td>Door Microsoft beheerd</td><td>Jouw <b>Cosmos DB</b></td></tr><tr><td>Bestanden</td><td>Door Microsoft beheerd</td><td>Jouw <b>Storage account</b></td></tr><tr><td>Vector stores</td><td>Door Microsoft beheerd</td><td>Jouw <b>Azure AI Search</b></td></tr><tr><td>Netwerk</td><td>Publiek</td><td>Kan in je eigen <b>VNet</b> (BYO VNet)</td></tr></table>",
+when:["'Data moet in onze eigen resources staan' / 'compliance' / 'private networking voor agents' → <b>standard setup</b>.","Snel prototypen → basic."],
+rel:["agentservice","security"]},
+
+{id:"tools",p:"agents",t:"Agent-tools",s:"Overzicht: kennis-tools, actie-tools, eigen tools",d:[2],
+what:"<p>Tools geven een agent kennis of actiemogelijkheden. Het model kiest zelf wanneer het een tool gebruikt (<b>tool calling</b>). Drie families:</p><ul><li><b>Kennis</b>: file search, Azure AI Search, web search / Bing grounding, SharePoint, Fabric IQ / Fabric data agent, Work IQ.</li><li><b>Acties en rekenen</b>: code interpreter, browser automation, computer use, image generation.</li><li><b>Eigen koppelingen</b>: function calling, OpenAPI, MCP, Azure Functions, A2A (agent-to-agent).</li></ul><p><b>Toolbox</b> (nieuw): tools centraal beheren en via één MCP-endpoint delen tussen agents, met centrale authenticatie en guardrails.</p>",
+when:["Zie de drie subonderwerpen hieronder voor de keuze per situatie."],
+rel:["toolsknowledge","toolsactions","toolscustom"]},
+
+{id:"toolsknowledge",p:"tools",t:"Kennis-tools",s:"File search, Azure AI Search, Bing/web search, SharePoint, Fabric",d:[2,5],
+what:"<table><tr><th>Tool</th><th>Wat</th><th>Kies als</th></tr><tr><td><b>File search</b></td><td>Je uploadt bestanden; de dienst knipt, embedt en zoekt erin (vector store)</td><td>Een handvol documenten, snel opzetten, weinig beheer</td></tr><tr><td><b>Azure AI Search</b></td><td>Agent zoekt in een <b>bestaande</b> AI Search-index</td><td>Grote of bedrijfsbrede content, eigen indexering, hybrid/semantic, filters, security trimming</td></tr><tr><td><b>Web search / Grounding with Bing</b></td><td>Actuele info van het openbare internet, met bronnen</td><td>Nieuws, publieke actuele feiten</td></tr><tr><td><b>Bing Custom Search</b></td><td>Alleen zoeken op door jou gekozen websites</td><td>Openbaar web, maar alleen betrouwbare domeinen</td></tr><tr><td><b>SharePoint</b></td><td>Zoekt in SharePoint met de rechten van de gebruiker</td><td>Interne Microsoft 365-documenten</td></tr><tr><td><b>Fabric data agent / Fabric IQ</b></td><td>Vragen over data in Microsoft Fabric</td><td>Gestructureerde bedrijfsdata (lakehouse, warehouse)</td></tr></table>",
+when:["Vaste documenten, klein → <b>file search</b>.","Grote bestaande index → <b>Azure AI Search-tool</b>.","Actueel openbaar internet → <b>Bing / web search</b>.","Interne SharePoint met gebruikersrechten → <b>SharePoint-tool</b>."],
+code:[{l:"File search (schets)",src:"from azure.ai.projects.models import FileSearchTool\n\nvs = openai.vector_stores.create(name=\"hr-handboek\")\nopenai.vector_stores.files.upload_and_poll(vector_store_id=vs.id,\n                                          file=open(\"handboek.pdf\", \"rb\"))\n\ntool = FileSearchTool(vector_store_ids=[vs.id])   # aan agent toevoegen via tools=[tool]"}],
+traps:["File search voor live data (orderstatus) is fout: de data is direct verouderd. Live data → OpenAPI/function.","Bing = openbaar internet. Nooit voor interne documenten."],
+rel:["rag","searchquery","toolscustom"]},
+
+{id:"toolsactions",p:"tools",t:"Actie- & reken-tools",s:"Code interpreter, browser automation, computer use, image generation",d:[2],
+what:"<table><tr><th>Tool</th><th>Wat</th><th>Kies als</th></tr><tr><td><b>Code interpreter</b></td><td>Agent schrijft en draait Python in een sandbox. Kan bestanden lezen en grafieken maken</td><td>Rekenen, data-analyse (CSV/Excel), grafieken, bestandsconversie</td></tr><tr><td><b>Browser automation</b></td><td>Agent bedient een echte browser (klikken, formulieren)</td><td>Taken op websites zonder API</td></tr><tr><td><b>Computer use</b></td><td>Agent bedient een desktop via screenshots</td><td>Oude desktopapplicaties zonder API</td></tr><tr><td><b>Image generation</b></td><td>Agent maakt afbeeldingen</td><td>Beeld genereren binnen een gesprek</td></tr></table>",
+when:["'Calculate', 'analyze this spreadsheet', 'create a chart' → <b>code interpreter</b>.","Geen API, alleen een website → <b>browser automation</b>."],
+traps:["LLM's rekenen slecht in hun hoofd. Precieze berekeningen → code interpreter."],
+rel:["tools","toolscustom"]},
+
+{id:"toolscustom",p:"tools",t:"Eigen tools: function, OpenAPI, MCP, Functions, A2A",s:"Je eigen systemen en API's aan een agent koppelen",d:[2],
+what:"<table><tr><th>Tool</th><th>Waar draait de code?</th><th>Kies als</th></tr><tr><td><b>Function calling</b></td><td>In <b>jouw app</b> (client-side). Agent geeft argumenten, jouw code voert uit</td><td>Logica die in je eigen app zit, volledige controle</td></tr><tr><td><b>OpenAPI</b></td><td>De dienst roept <b>jouw REST API</b> aan op basis van een OpenAPI-spec</td><td>Bestaande REST API met spec, live data of acties</td></tr><tr><td><b>MCP</b> (Model Context Protocol)</td><td>Een <b>MCP-server</b> (eigen of van derden) die tools aanbiedt</td><td>Standaard koppeling, herbruikbaar tussen agents en frameworks</td></tr><tr><td><b>Azure Functions</b></td><td>Serverless functie in Azure, vaak via een queue</td><td>Langlopende of asynchrone taken</td></tr><tr><td><b>A2A</b> (agent-to-agent)</td><td>Een andere agent, ook buiten Foundry</td><td>Taak delegeren aan een gespecialiseerde agent</td></tr></table>",
+when:["Interne REST API met OpenAPI-spec, actuele data → <b>OpenAPI tool</b>.","Herbruikbare tool-server, open standaard → <b>MCP</b>.","Functie in je eigen applicatie → <b>function calling</b>."],
+code:[{l:"MCP-tool met verplichte goedkeuring (actuele docs)",src:"from azure.ai.projects.models import PromptAgentDefinition, MCPTool\n\ntool = MCPTool(\n    server_label=\"api-specs\",\n    server_url=\"https://api.githubcopilot.com/mcp\",\n    require_approval=\"always\",            # elke aanroep eerst goedkeuren\n    project_connection_id=\"my-mcp-connection\",  # sleutel staat in een connection\n)\nagent = project.agents.create_version(\n    agent_name=\"dev-helper\",\n    definition=PromptAgentDefinition(model=\"gpt-5-mini\",\n                                     instructions=\"Use MCP tools as needed\",\n                                     tools=[tool]))"}],
+cfg:["OpenAPI: de <b>spec</b> (JSON/YAML) + authenticatie: anoniem, <b>API key via connection</b> of <b>managed identity</b>.","MCP: <code>server_url</code>, <code>server_label</code>, <code>require_approval</code> (<code>always</code> / <code>never</code>), <code>project_connection_id</code> voor de sleutel.","Goede tool-<b>beschrijvingen</b> zijn cruciaal: het model kiest op basis daarvan."],
+traps:["OpenAPI ≠ OpenAI. OpenAPI = standaardformaat om een REST API te beschrijven.","API-URL of sleutel in de instructies zetten is fout."],
+rel:["structured","hitl","connections"]},
+
+{id:"memory",p:"agents",t:"Geheugen & gesprekken",s:"Conversations, previous_response_id, memory, context window",d:[2],
+what:"<ul><li><b>Kortetermijngeheugen</b>: de geschiedenis van het huidige gesprek. Via een <b>conversation</b> (opgeslagen door de dienst) of door <b>previous_response_id</b> mee te geven.</li><li><b>Langetermijngeheugen</b> (<b>memory</b>): feiten over de gebruiker die bewaard blijven tussen gesprekken (voorkeuren, eerdere afspraken).</li><li><b>Context window</b>: hoeveel tokens het model in één keer kan verwerken. Lange gesprekken worden ingekort of samengevat (<b>truncation</b>).</li><li><b>Conversation-tracking approach</b> (studiegids): kies bewust tussen stateful (de dienst bewaart) en stateless (jouw app stuurt de geschiedenis mee).</li></ul>",
+when:["Vervolgvragen moeten werken → <b>conversation</b> of <b>previous_response_id</b>.","Agent moet voorkeuren onthouden over sessies heen → <b>memory</b>.","Zelf volledige controle over opslag en privacy → stateless, geschiedenis in je eigen database."],
+traps:["Een model onthoudt uit zichzelf niets tussen aanroepen. Geheugen = geschiedenis meesturen of door de dienst laten bewaren."],
+rel:["agentservice","sdk"]},
+
+{id:"multiagent",p:"agents",t:"Multi-agent & orchestratie",s:"Workflows, patronen, Agent Framework, A2A",d:[2],
+what:"<p>Meerdere gespecialiseerde agents laten samenwerken, elk met een eigen rol en eigen tools.</p><p><b>Orchestratiepatronen:</b></p><ul><li><b>Sequential</b>: A → B → C, vaste volgorde (bijv. onderzoeken → schrijven → controleren).</li><li><b>Concurrent</b>: meerdere agents tegelijk, resultaten samenvoegen.</li><li><b>Handoff</b>: een agent geeft het gesprek door aan de juiste specialist (triage).</li><li><b>Group chat</b>: agents overleggen onder leiding van een manager.</li><li><b>Magentic</b>: een manager-agent plant dynamisch en verdeelt taken.</li><li><b>Human-in-the-loop</b>: een mens als stap in de workflow.</li></ul><p><b>Waar bouw je het?</b> <b>Workflows</b> in Foundry (visueel/YAML), <b>Microsoft Agent Framework</b> (de opvolger van Semantic Kernel + AutoGen, in code), of agents koppelen via <b>A2A</b>. In classic Foundry bestonden <b>connected agents</b> (een agent als tool van een hoofdagent).</p>",
+when:["Eén agent wordt te complex (te veel tools, verschillende rollen) → <b>opsplitsen in specialisten</b>.","Klantvraag naar de juiste afdeling-agent → <b>handoff / triage</b>.","Vaste stappen met controle tussendoor → <b>sequential workflow</b> + approval-stap."],
+traps:["Meer agents = meer kosten en latency. Alleen opsplitsen als het de kwaliteit of het beheer echt verbetert."],
+rel:["agentservice","hitl","reflection","agenteval"]},
+
+{id:"hitl",p:"agents",t:"Human-in-the-loop & approvals",s:"Semi-autonome agents met goedkeuring vóór uitvoering",d:[2,1],
+what:"<p><b>Human-in-the-loop</b>: een mens keurt een stap goed voordat die wordt uitgevoerd. <b>Semi-autonoom</b>: de agent doet kleine dingen zelf en vraagt toestemming voor risicovolle acties.</p><p>Bij MCP-tools: <code>require_approval=\"always\"</code>. De response bevat dan een <code>mcp_approval_request</code>. Jouw app laat het aan een mens zien en stuurt een <code>mcp_approval_response</code> (approve true/false) terug. Bij function calling bouw je de goedkeuring zelf in, vóórdat jouw code de functie uitvoert. In workflows: een <b>approval-stap</b>.</p>",
+when:["Geld, verwijderen, versturen, contracten → <b>approval vóór uitvoering</b>.","Drempels (bijv. boven €500) → regel in <b>code</b>, plus approval boven de drempel."],
+code:[{l:"Goedkeuring afhandelen (actuele docs)",src:"from openai.types.responses.response_input_param import McpApprovalResponse\n\nresponse = openai.responses.create(\n    conversation=conversation.id, input=\"Maak een issue aan voor bug 12\",\n    extra_body={\"agent_reference\": {\"name\": agent.name, \"type\": \"agent_reference\"}})\n\nantwoorden = []\nfor item in response.output:\n    if item.type == \"mcp_approval_request\":\n        ok = mens_keurt_goed(item.server_label, item.name, item.arguments)\n        antwoorden.append(McpApprovalResponse(type=\"mcp_approval_response\",\n                                              approve=ok,\n                                              approval_request_id=item.id))\n\nresponse = openai.responses.create(\n    input=antwoorden, previous_response_id=response.id,\n    extra_body={\"agent_reference\": {\"name\": agent.name, \"type\": \"agent_reference\"}})"}],
+traps:["System prompt of lage temperature is geen betrouwbare handhaving."],
+rel:["governance","toolscustom","multiagent"]},
+
+{id:"agenteval",p:"agents",t:"Agents monitoren & evalueren",s:"Intent resolution, task adherence, tool call accuracy, error analysis",d:[2,1],
+what:"<p>Agents beoordeel je op meer dan het eindantwoord:</p><ul><li><b>Intent resolution</b>: begreep de agent wat de gebruiker wilde?</li><li><b>Task adherence</b>: deed hij wat de instructies vroegen, binnen de grenzen?</li><li><b>Tool call accuracy</b>: koos hij de juiste tool met de juiste argumenten?</li><li>Plus groundedness, relevance en veiligheidsevaluators.</li></ul><p><b>Error analysis</b>: in de <b>traces</b> zoeken waar het misging (verkeerde tool, lege zoekresultaten, time-out) en dat oplossen met betere instructies, tool-beschrijvingen of data.</p>",
+when:["Agent gebruikt verkeerde tool → tool call accuracy meten + tool-beschrijvingen verbeteren.","Live kwaliteit bewaken → tracing + <b>continuous evaluation</b>."],
+rel:["evaluaties","tracing","monitoring"]},
+
+{id:"agentidentity",p:"agents",t:"Agent identity",s:"Eigen Entra-identiteit per agent",d:[1,2],
+what:"Agents in Foundry kunnen een eigen <b>Entra ID-identiteit</b> krijgen (<b>agent identity</b>). Daarmee roepen ze tools en API's aan met hun <b>eigen</b> rechten (RBAC), en zie je in logs welke agent wat deed. Alternatief: de <b>managed identity van het project</b>, of <b>on-behalf-of</b> (met de rechten van de ingelogde gebruiker, bijv. bij SharePoint).",
+when:["Agent moet bij een Azure-resource zonder sleutels → <b>agent identity of project managed identity + RBAC-rol</b>.","Agent mag alleen zien wat de gebruiker zelf mag zien → <b>on-behalf-of / identity passthrough</b>."],
+rel:["security","governance"]}
+);
+
+// ===== Azure AI Search =====
+N.push(
+{id:"index",p:"search",t:"Index & velden",s:"Velden, attributen, vectorvelden, HNSW",d:[5],
+what:"<p>Een <b>index</b> is de doorzoekbare opslag, vergelijkbaar met een tabel. Elk <b>document</b> (rij) heeft <b>velden</b> (kolommen). Per veld stel je <b>attributen</b> in:</p><table><tr><th>Attribuut</th><th>Betekent</th></tr><tr><td><b>key</b></td><td>Unieke ID van het document (precies één veld, type string)</td></tr><tr><td><b>searchable</b></td><td>Doorzoekbaar met full-text (woorden)</td></tr><tr><td><b>filterable</b></td><td>Bruikbaar in <code>$filter</code> (bijv. categorie eq 'HR')</td></tr><tr><td><b>sortable</b></td><td>Sorteren op dit veld</td></tr><tr><td><b>facetable</b></td><td>Tellingen per waarde (filters in een zoek-UI)</td></tr><tr><td><b>retrievable</b></td><td>Komt terug in de resultaten</td></tr></table><p><b>Vectorveld</b>: type <code>Collection(Edm.Single)</code> met <b>dimensions</b> (bijv. 1536) en een <b>vector search profile</b> met algoritme <b>HNSW</b> (snel, benaderend, standaard) of <b>exhaustive KNN</b> (exact, traag, voor kleine sets of testen).</p>",
+when:["Filteren op afdeling of datum → veld <b>filterable</b>.","Alleen tonen, niet zoeken → <b>retrievable</b> maar niet searchable (spaart ruimte).","Zoeken op betekenis → <b>vectorveld</b> + embeddingmodel."],
+code:[{l:"Index met vectorveld (Python)",src:"from azure.search.documents.indexes.models import (\n    SearchIndex, SimpleField, SearchableField, SearchField, SearchFieldDataType,\n    VectorSearch, HnswAlgorithmConfiguration, VectorSearchProfile)\n\nfields = [\n    SimpleField(name=\"id\", type=SearchFieldDataType.String, key=True),\n    SearchableField(name=\"content\"),\n    SimpleField(name=\"category\", type=SearchFieldDataType.String, filterable=True),\n    SearchField(name=\"contentVector\",\n                type=SearchFieldDataType.Collection(SearchFieldDataType.Single),\n                searchable=True, vector_search_dimensions=1536,\n                vector_search_profile_name=\"hnsw-profiel\"),\n]\nvector_search = VectorSearch(\n    algorithms=[HnswAlgorithmConfiguration(name=\"hnsw\")],\n    profiles=[VectorSearchProfile(name=\"hnsw-profiel\",\n                                  algorithm_configuration_name=\"hnsw\")])\nindex_client.create_or_update_index(\n    SearchIndex(name=\"handleidingen\", fields=fields, vector_search=vector_search))"}],
+cfg:["<b>Analyzer</b> per tekstveld: taal (bijv. <code>nl.microsoft</code>) voor betere woordherkenning.","Tiers: Free, Basic, Standard (S1-S3), Storage Optimized. Semantic ranker heeft minimaal Basic nodig.","Schalen: <b>replicas</b> (meer queries per seconde, hoge beschikbaarheid) en <b>partitions</b> (meer opslag, snellere indexering)."],
+traps:["Replicas = meer query-capaciteit en beschikbaarheid (≥ 2 voor leesbeschikbaarheid, ≥ 3 voor lezen + schrijven). Partitions = meer opslag.","Attributen van een bestaand veld kun je vaak niet wijzigen zonder te herindexeren."],
+rel:["indexers","searchquery","embeddings"]},
+
+{id:"indexers",p:"search",t:"Indexers & data sources",s:"Automatisch content binnenhalen uit Blob, SQL, Cosmos DB",d:[5],
+what:"<p>Een <b>indexer</b> is een crawler die automatisch content uit een <b>data source</b> haalt en in de index zet. Bronnen: Azure Blob Storage, Data Lake, SQL Database, Cosmos DB, Table Storage, SharePoint (preview), OneLake.</p><p>Flow: <b>data source → (skillset) → index</b>. Met <b>field mappings</b> koppel je bronvelden aan indexvelden, met <b>output field mappings</b> verrijkte velden uit de skillset.</p>",
+when:["Bestanden in Blob automatisch doorzoekbaar maken → <b>indexer</b> met Blob als data source.","Alleen nieuwe/gewijzigde bestanden verwerken → <b>change detection</b> (standaard bij Blob via LastModified) en <b>schedule</b>.","Content die niet in een ondersteunde bron staat → zelf pushen met de <b>push API</b> (<code>upload_documents</code>)."],
+code:[{l:"Indexer uitvoeren / status bekijken",src:"indexer_client.run_indexer(\"handleidingen-indexer\")\nstatus = indexer_client.get_indexer_status(\"handleidingen-indexer\")\nprint(status.last_result.status, status.last_result.error_message)"}],
+cfg:["Indexer leest de bron het liefst met de <b>managed identity van de Search-service</b> + rol <b>Storage Blob Data Reader</b>.","<b>Schedule</b>: bijv. elk uur.","<b>Deletion detection</b>: verwijderde bronbestanden ook uit de index halen (soft delete).","<code>dataToExtract</code>: <code>contentAndMetadata</code>; <code>imageAction</code>: <code>generateNormalizedImages</code> (nodig voor OCR)."],
+traps:["OCR op afbeeldingen in PDF's werkt alleen als <code>imageAction</code> is ingesteld én er een OCR-skill is."],
+rel:["index","skillsets"]},
+
+{id:"skillsets",p:"search",t:"Skillsets & enrichment",s:"Built-in skills, custom skills, knowledge store",d:[5,3,4],
+what:"<p>Een <b>skillset</b> verrijkt content tijdens het indexeren met AI (<b>AI enrichment</b>). Elke <b>skill</b> leest velden en schrijft nieuwe velden.</p><p><b>Built-in skills</b> (selectie):</p><ul><li>Tekst: <b>Text Split</b> (chunking), <b>Language Detection</b>, <b>Entity Recognition</b>, <b>Key Phrase Extraction</b>, <b>PII Detection</b>, <b>Sentiment</b>, <b>Text Translation</b>, Merge.</li><li>Beeld: <b>OCR</b>, <b>Image Analysis</b> (tags, captions).</li><li>Layout: <b>Document Layout</b> (structuur, koppen, tabellen, markdown-chunks).</li><li>Vectoren: <b>Azure OpenAI Embedding</b>.</li><li>Generatief: <b>GenAI Prompt</b> (een LLM laten samenvatten of beschrijven tijdens indexeren).</li></ul><p><b>Custom skill</b>: je eigen logica als <b>Web API</b> (vaak een Azure Function) die de indexer aanroept.</p><p><b>Knowledge store</b>: verrijkte output ook opslaan in Storage (tabellen/blobs) via <b>projections</b>, voor analyse buiten Search (bijv. Power BI).</p>",
+when:["Gescande PDF's doorzoekbaar → <b>OCR</b> (+ Merge).","Chunken + embedden tijdens indexeren → <b>Text Split</b> + <b>Azure OpenAI Embedding</b> (<b>integrated vectorization</b>).","Eigen classificatie of externe API tijdens indexeren → <b>custom skill</b> (Web API).","Verrijkte data analyseren in Power BI → <b>knowledge store</b>."],
+cfg:["Text Split: <code>textSplitMode</code> (pages/sentences), <code>maximumPageLength</code>, <code>pageOverlapLength</code>.","Built-in skills die Foundry Tools gebruiken hebben een gekoppelde <b>Foundry/AI-services resource</b> nodig (voor facturering boven het gratis aantal).","Custom skill: input/output als JSON met <code>values</code>-array en <code>recordId</code>."],
+traps:["Custom skill = Web API-contract (<code>values</code> met <code>recordId</code> en <code>data</code>). Antwoorden moeten dezelfde recordId's teruggeven."],
+rel:["indexers","integratedvec","docsextract"]},
+
+{id:"integratedvec",p:"search",t:"Integrated vectorization",s:"Chunken en embedden door Search zelf, bij indexeren én zoeken",d:[5],
+what:"Met <b>integrated vectorization</b> doet Azure AI Search het chunken en embedden zelf: bij het <b>indexeren</b> (Text Split + Embedding-skill) en bij het <b>zoeken</b> (een <b>vectorizer</b> op de index zet de zoektekst om in een vector). Je app stuurt dan gewoon tekst, geen vectoren.",
+when:["Minimale eigen code voor vector search → <b>integrated vectorization</b> + <code>VectorizableTextQuery</code>.","Zelf vectoren berekenen in je app → <code>VectorizedQuery</code> met je eigen vector."],
+code:[{l:"Zoeken met tekst; Search maakt de vector",src:"from azure.search.documents.models import VectorizableTextQuery\n\nvq = VectorizableTextQuery(text=\"reset na stroomuitval\",\n                           k_nearest_neighbors=5, fields=\"contentVector\")\nresults = search_client.search(search_text=None, vector_queries=[vq])"}],
+cfg:["<b>Vectorizer</b> in het vector search profile: verwijst naar je Azure OpenAI/Foundry embedding-deployment.","Zelfde embeddingmodel als bij het indexeren."],
+rel:["skillsets","searchquery","embeddings"]},
+
+{id:"searchquery",p:"search",t:"Zoektypes",s:"Keyword (BM25), vector, hybrid + RRF, semantic ranker, filters",d:[5,2],
+what:"<table><tr><th>Type</th><th>Hoe</th><th>Sterk in</th></tr><tr><td><b>Keyword / full-text</b></td><td>Woorden matchen, ranking met <b>BM25</b></td><td>Exacte termen, codes, namen</td></tr><tr><td><b>Vector</b></td><td>Dichtstbijzijnde embeddings</td><td>Betekenis, synoniemen, andere talen</td></tr><tr><td><b>Hybrid</b></td><td>Keyword + vector tegelijk, samengevoegd met <b>RRF</b></td><td>Beide soorten vragen. Standaardadvies voor RAG</td></tr><tr><td><b>Semantic ranker</b></td><td>Taalmodel <b>herordent</b> de top-50 (L2 reranking), geeft captions en answers</td><td>Beste resultaat bovenaan</td></tr></table><p><b>RRF</b> (Reciprocal Rank Fusion) = formule die twee ranglijsten samenvoegt. De <b>semantic ranker</b> is een apart model daarbovenop.</p><p>Verder: <b>filters</b> (<code>$filter</code>, OData-syntax), <b>scoring profiles</b> (velden of versheid zwaarder laten wegen), <b>facets</b>, <b>synonym maps</b>, <b>security trimming</b> (filter op groeps-ID's zodat gebruikers alleen hun documenten zien).</p>",
+when:["Exacte productcodes worden gemist bij vector search → <b>hybrid</b>.","Juiste document staat in top-10 maar niet bovenaan → <b>semantic ranker</b>.","Gebruiker mag alleen eigen afdeling zien → <b>security filter</b> op groeps-ID.","Recente documenten belangrijker → <b>scoring profile</b> met freshness."],
+code:[{l:"Hybrid + semantic + filter",src:"from azure.search.documents import SearchClient\nfrom azure.search.documents.models import VectorizableTextQuery\n\nclient = SearchClient(endpoint=\"https://mijn-search.search.windows.net\",\n                      index_name=\"handleidingen\",\n                      credential=DefaultAzureCredential())\nresults = client.search(\n    search_text=\"handleiding XK-2210-B\",                       # keyword-deel\n    vector_queries=[VectorizableTextQuery(text=\"handleiding XK-2210-B\",\n                    k_nearest_neighbors=50, fields=\"contentVector\")],  # vector-deel\n    query_type=\"semantic\",                                       # semantic ranker\n    semantic_configuration_name=\"default\",\n    filter=\"category eq 'manual'\",\n    select=[\"title\", \"content\"], top=5)\nfor r in results:\n    print(r[\"@search.reranker_score\"], r[\"title\"])"}],
+cfg:["Semantic ranker: een <b>semantic configuration</b> op de index (title-, content- en keywords-velden).","<code>query_type=\"semantic\"</code> + <code>semantic_configuration_name</code>.","<code>queryType=full</code> = Lucene-syntax (wildcards, fuzzy <code>~</code>, boosts <code>^</code>)."],
+traps:["RRF ≠ semantic ranker.","Semantic ranker herordent alleen; het vindt niets wat de eerste zoekstap miste."],
+rel:["index","rag","agenticretrieval"]},
+
+{id:"agenticretrieval",p:"search",t:"Agentic retrieval & knowledge bases",s:"Foundry IQ: LLM plant de zoekvragen",d:[5,2],
+what:"<p>Bij <b>agentic retrieval</b> splitst een LLM een complexe vraag op in meerdere deelvragen, zoekt die parallel (over één of meer bronnen) en voegt de resultaten samen. Dat heet <b>query planning</b>. Je stelt dit in als <b>knowledge base</b> in Azure AI Search (in Foundry: <b>Foundry IQ</b>).</p><p>Agents gebruiken een knowledge base via een <b>MCP-endpoint</b> (de tool <code>knowledge_base_retrieve</code>).</p>",
+when:["Complexe vragen met meerdere onderdelen of over meerdere bronnen → <b>agentic retrieval</b>.","Eenvoudige vraag-antwoord → gewone hybrid + semantic query is genoeg (goedkoper, sneller)."],
+traps:["Agentic retrieval kost extra LLM-aanroepen, dus meer latency en kosten."],
+rel:["searchquery","toolsknowledge","rag"]}
+);
+
+// ===== Documenten =====
+N.push(
+{id:"cu",p:"docs",t:"Content Understanding",s:"Analyzers voor documenten, beeld, audio en video",d:[5,3],
+what:"<p><b>Azure Content Understanding</b> (een Foundry Tool) zet ongestructureerde content om in <b>markdown</b> en <b>gestructureerde velden</b>, voor <b>documenten, beeld, audio en video</b>.</p><p><b>Bouwstenen:</b></p><ul><li><b>Analyzer</b>: de configuratie: welke extractie, welk veldschema, welke modellen. <b>Prebuilt</b> analyzers (bijv. voor facturen, RAG-ingestie van documenten/beeld/audio/video, callcenter-analyse) of <b>custom</b>.</li><li><b>Content extraction</b>: OCR, layout (alinea's, tabellen, secties), barcodes, formules. Bij audio/video: transcriptie en visuele elementen.</li><li><b>Field schema</b>: jouw velden met een type en één van drie <b>methods</b>:<br><b>extract</b> = letterlijk overnemen (alleen documenten), <b>classify</b> = kiezen uit vaste categorieën, <b>generate</b> = vrij laten genereren (samenvatting, scènebeschrijving).</li><li><b>Segmentation</b> (<code>enableSegment</code>): document of video opdelen in logische stukken (per documenttype, per scène).</li><li><b>Confidence scores</b> (0-1) en <b>grounding</b> (waar in het bronbestand staat de waarde) via <code>estimateFieldSourceAndConfidence</code>.</li><li><b>Foundry models</b>: je koppelt eigen deployments van een LLM en een embeddingmodel.</li></ul><p><b>Modi:</b> standaard (één document, één taak) en <b>pro mode</b> (redeneren over meerdere documenten en referentiedata, bijv. factuur controleren tegen contract). Nieuwer in preview: <b>agentic mode</b>.</p>",
+when:["Velden uit documenten met wisselende layouts → <b>custom analyzer met field schema</b>.","Schone markdown van documenten voor RAG/agents → <b>Content Understanding</b> (prebuilt document search-analyzer).","Video opdelen in scènes met beschrijving en tijdstempel → <b>video-analyzer</b>.","Callcenter-opnames: samenvatting, sentiment, onderwerpen → <b>audio-analyzer</b>.","Factuur controleren tegen een contract → <b>pro mode</b>.","Automatisch verwerken alleen bij hoge zekerheid → <b>confidence scores</b> + drempel; anders menselijke review."],
+code:[{l:"Analyzer-definitie (JSON, REST)",src:"PUT {endpoint}/contentunderstanding/analyzers/factuur-analyzer?api-version=2025-11-01\n{\n  \"baseAnalyzerId\": \"prebuilt-document\",\n  \"config\": { \"estimateFieldSourceAndConfidence\": true },\n  \"fieldSchema\": {\n    \"fields\": {\n      \"VendorName\":  { \"type\": \"string\", \"method\": \"extract\",  \"description\": \"Naam leverancier\" },\n      \"InvoiceDate\": { \"type\": \"date\",   \"method\": \"extract\" },\n      \"Total\":       { \"type\": \"number\", \"method\": \"extract\" },\n      \"Category\":    { \"type\": \"string\", \"method\": \"classify\",\n                       \"enum\": [\"IT\", \"Facilitair\", \"Overig\"] },\n      \"Summary\":     { \"type\": \"string\", \"method\": \"generate\",\n                       \"description\": \"Eén zin over wat er gekocht is\" }\n    }\n  },\n  \"models\": { \"completion\": \"gpt-4.1\", \"embedding\": \"text-embedding-3-large\" }\n}"},
+{l:"Analyseren (REST, asynchroon)",src:"POST {endpoint}/contentunderstanding/analyzers/factuur-analyzer:analyze?api-version=2025-11-01\n{ \"inputs\": [ { \"url\": \"https://.../factuur-0042.pdf\" } ] }\n\n# → 202 Accepted + header Operation-Location\n# → GET die URL tot status = Succeeded\n# → result.contents[0].markdown en result.contents[0].fields"}],
+cfg:["API-versie GA: <b>2025-11-01</b>.","Content Understanding gebruikt <b>jouw</b> model-deployments: die moeten bestaan in de Foundry resource.","Guardrails van de gekoppelde deployment gelden ook hier."],
+traps:["<b>extract</b> werkt alleen op documenten. Voor audio/video gebruik je generate of classify.","OCR alleen geeft tekst, geen velden met betekenis."],
+rel:["docintel","docsextract","cuvisual","rag"]},
+
+{id:"docintel",p:"docs",t:"Document Intelligence",s:"Prebuilt modellen (invoice, receipt, ID, layout, read), custom models",d:[5],
+what:"<p><b>Azure Document Intelligence</b> (vroeger Form Recognizer) is de gespecialiseerde documentdienst.</p><ul><li><b>Read</b>: OCR (tekst, regels, woorden, talen, handschrift).</li><li><b>Layout</b>: tekst + tabellen + selectievakjes + structuur, ook als markdown.</li><li><b>Prebuilt</b>: invoice, receipt, ID document, business card, W-2, health insurance card, contract, bankafschrift, enz. Velden direct beschikbaar.</li><li><b>Custom template</b>: vaste layout (formulieren die er altijd hetzelfde uitzien). Weinig voorbeelden nodig (5+).</li><li><b>Custom neural</b>: wisselende layouts van hetzelfde soort document.</li><li><b>Composed model</b>: meerdere custom modellen samen, met automatische keuze per document.</li><li><b>Custom classifier</b>: eerst bepalen wat voor document het is.</li></ul>",
+when:["Standaarddocument (factuur, bon, ID) zonder training → <b>prebuilt model</b>.","Eigen formulier, altijd dezelfde layout → <b>custom template</b>.","Eigen documentsoort, wisselende layouts → <b>custom neural</b>.","Mix van documentsoorten in één stroom → <b>classifier</b> + <b>composed model</b>."],
+code:[{l:"Factuur analyseren (Python)",src:"from azure.ai.documentintelligence import DocumentIntelligenceClient\nfrom azure.ai.documentintelligence.models import AnalyzeDocumentRequest\n\nclient = DocumentIntelligenceClient(\"https://mijn-foundry.cognitiveservices.azure.com/\",\n                                    DefaultAzureCredential())\npoller = client.begin_analyze_document(\n    \"prebuilt-invoice\", AnalyzeDocumentRequest(url_source=\"https://.../factuur.pdf\"))\nresult = poller.result()\nfor doc in result.documents:\n    print(doc.fields[\"VendorName\"].content, doc.fields[\"InvoiceTotal\"].content)"}],
+cfg:["Model-ID's: <code>prebuilt-read</code>, <code>prebuilt-layout</code>, <code>prebuilt-invoice</code>, <code>prebuilt-receipt</code>, <code>prebuilt-idDocument</code>.","Output-format layout: <code>outputContentFormat=markdown</code> (handig voor RAG-chunking).","Trainingsdata voor custom modellen: in een Blob-container, gelabeld in Document Intelligence Studio / Content Understanding Studio."],
+traps:["<code>begin_...</code> = asynchroon (poller). Je moet <code>.result()</code> wachten.","Custom template bij wisselende layouts = fout. Dan neural."],
+rel:["cu","docsextract","containers"]},
+
+{id:"docsextract",p:"docs",t:"OCR, layout & RAG-ingestie",s:"Van scan naar schone, doorzoekbare chunks",d:[5],
+what:"<p>Pipeline om documenten klaar te maken voor RAG of agents:</p><ol><li><b>OCR</b>: tekst uit scans en afbeeldingen (Read / OCR-skill / Content Understanding).</li><li><b>Layout analysis</b>: koppen, alinea's, tabellen herkennen, zodat de structuur behouden blijft.</li><li><b>Field extraction</b> (optioneel): specifieke waarden eruit halen.</li><li><b>Chunking</b>: liefst op structuur (per sectie/kop, bijv. markdown-chunking van de Document Layout-skill) in plaats van een vast aantal tekens.</li><li><b>Embedding + indexering</b> in Azure AI Search.</li></ol>",
+when:["Tabellen moeten heel blijven in RAG → <b>layout-gebaseerd chunken</b> (Document Layout-skill / layout markdown).","Gescande PDF's in een Search-pipeline → indexer + <b>OCR-skill</b> (+ <code>imageAction</code>).","Grafieken en figuren ook doorzoekbaar → Content Understanding (figure descriptions) of GenAI Prompt-skill."],
+rel:["skillsets","cu","docintel","rag"]}
+);
+
+// ===== Computer vision =====
+N.push(
+{id:"multimodal",p:"vision",t:"Multimodale modellen",s:"Beeld begrijpen: captions, alt-text, vragen over beelden",d:[3],
+what:"<p>Een <b>multimodaal model</b> (zoals GPT-4.1, GPT-4o of GPT-5) kan tekst én afbeeldingen als input krijgen. Je stuurt een afbeelding (URL of base64) mee met een vraag. Daarmee kun je:</p><ul><li><b>Captions</b>: korte of uitgebreide beschrijvingen, van één of meerdere afbeeldingen.</li><li><b>Alt-text</b>: beschrijvingen voor schermlezers volgens toegankelijkheidsrichtlijnen (kort, functioneel, zonder 'afbeelding van').</li><li><b>Visual question answering</b>: vragen beantwoorden op basis van wat er te zien is (grounded in visual evidence).</li><li><b>Objecten, onderdelen of gebieden</b> aanwijzen of tellen, grafieken en schema's lezen.</li></ul>",
+when:["Flexibele beschrijving of vraag over een beeld → <b>multimodaal model</b> met prompt.","Vaste gestructureerde velden uit veel beelden/video → <b>Content Understanding</b>.","Alleen tekst lezen (OCR) → Read/OCR is goedkoper en nauwkeuriger."],
+code:[{l:"Alt-text genereren",src:"response = openai.responses.create(\n    model=\"gpt-41\",\n    input=[{\"role\": \"user\", \"content\": [\n        {\"type\": \"input_text\",\n         \"text\": \"Schrijf alt-text (max 125 tekens) volgens WCAG. \"\n                 \"Beschrijf wat relevant is, begin niet met 'afbeelding van'.\"},\n        {\"type\": \"input_image\",\n         \"image_url\": \"https://.../product-42.jpg\",\n         \"detail\": \"low\"},\n    ]}],\n)\nprint(response.output_text)"}],
+cfg:["<b>detail</b>: <code>low</code> (goedkoop, snel, overzicht), <code>high</code> (fijne details, meer tokens), <code>auto</code>.","Concise vs. detailed caption → stuur via de prompt (lengte, doelgroep).","Meerdere afbeeldingen in één bericht → meerdere <code>input_image</code>-items."],
+traps:["Tekst in een afbeelding kan een <b>indirect prompt injection</b> zijn. Zet Prompt Shields aan."],
+rel:["cuvisual","imageanalysis","visualrai"]},
+
+{id:"imagegen",p:"vision",t:"Beeld genereren",s:"gpt-image-1, FLUX: tekst (en referentiebeeld) naar afbeelding",d:[3],
+what:"<p>Beeldmodellen in Foundry: <b>gpt-image-1</b> (en opvolgers; sterk in tekst in beeld en het volgen van instructies), <b>FLUX</b>-modellen en het oudere <b>DALL-E 3</b>. Je maakt een afbeelding vanuit een <b>tekstprompt</b>, eventueel met <b>referentiebeelden</b> (stijl, product, persoon).</p>",
+when:["Nieuwe afbeelding vanuit een beschrijving → <b>generate</b>.","Bestaand beeld deels aanpassen → <b>edit</b> (zie Beeld bewerken).","Productfoto als basis + nieuwe scène → edit/generate met <b>referentiebeeld</b>."],
+code:[{l:"Afbeelding genereren",src:"img = client.images.generate(\n    model=\"gpt-image-1\",            # deploymentnaam\n    prompt=\"Minimalistische productfoto van een witte sneaker op beton, zacht daglicht\",\n    size=\"1024x1024\", quality=\"high\", n=1,\n)\nimport base64\nopen(\"sneaker.png\", \"wb\").write(base64.b64decode(img.data[0].b64_json))"}],
+cfg:["<b>size</b>: 1024x1024, 1536x1024 (liggend), 1024x1536 (staand).","<b>quality</b>: low / medium / high (prijs en snelheid).","<b>n</b>: aantal varianten.","<b>background</b>: <code>transparent</code> voor een transparante achtergrond (png/webp).","<b>output_format</b>: png, jpeg, webp."],
+traps:["Gegenereerde beelden krijgen <b>C2PA content credentials</b> (herkomstlabel). Die moet je niet verwijderen.","Guardrails gelden ook voor beeldprompts en gegenereerde beelden."],
+rel:["imageedit","videogen","visualrai"]},
+
+{id:"imageedit",p:"vision",t:"Beeld bewerken",s:"Inpainting met mask, prompt-gestuurde aanpassingen",d:[3],
+what:"<p><b>Image edit</b>: je geeft een bestaande afbeelding + prompt, en het model past hem aan.</p><ul><li><b>Mask-based edit / inpainting</b>: een <b>mask</b> (masker) is een afbeelding van hetzelfde formaat waarin het <b>transparante</b> deel aangeeft wat opnieuw gegenereerd mag worden. De rest blijft pixel voor pixel gelijk.</li><li><b>Prompt-driven edit</b>: zonder mask, het model past aan wat de prompt vraagt (bijv. 'maak het avond'). Minder controle.</li><li><b>Outpainting</b>: het beeld buiten de randen uitbreiden.</li></ul>",
+when:["Alleen de achtergrond vervangen, product onveranderd → <b>edit + mask</b> over de achtergrond.","Object verwijderen of toevoegen op één plek → <b>inpainting</b> met mask op die plek.","Algemene stijl of sfeer veranderen → prompt-driven edit."],
+code:[{l:"Inpainting met mask",src:"result = client.images.edit(\n    model=\"gpt-image-1\",\n    image=open(\"sneaker.png\", \"rb\"),\n    mask=open(\"mask-achtergrond.png\", \"rb\"),   # transparant = mag veranderen\n    prompt=\"Vervang de achtergrond door een zonnig strand\",\n    size=\"1024x1024\",\n)"}],
+cfg:["Mask: <b>zelfde afmetingen</b> als het origineel, PNG met <b>alfakanaal</b> (transparantie).","<b>input_fidelity</b>: hoog = details van het origineel (gezichten, logo's) beter behouden."],
+traps:["Een nieuw beeld genereren met 'sneaker op een strand' behoudt het originele product niet."],
+rel:["imagegen","videoedit"]},
+
+{id:"videogen",p:"vision",t:"Video genereren & bewerken",s:"Sora: tekst/beeld naar video, remix",d:[3],
+what:"<p>Met <b>Sora</b> (Sora 2) in Foundry maak je korte video's vanuit een <b>tekstprompt</b> of vanuit een <b>referentiebeeld</b> (image-to-video). Bewerken kan door een bestaande gegenereerde video te <b>remixen</b>: dezelfde video met een aangepaste prompt (andere stijl, ander detail). Video-generatie is <b>asynchroon</b>: je start een job en haalt het resultaat op als het klaar is.</p>",
+when:["Korte marketing- of uitlegvideo vanuit tekst → <b>text-to-video</b>.","Productfoto tot leven brengen → <b>image-to-video</b>.","Bestaande gegenereerde video aanpassen → <b>remix/edit</b>."],
+code:[{l:"Video-job starten (schets)",src:"video = client.videos.create(\n    model=\"sora-2\",\n    prompt=\"Drone-shot van een windmolenpark bij zonsopkomst\",\n    seconds=\"8\", size=\"1280x720\",\n)\n# pollen tot status == \"completed\", daarna de inhoud downloaden\nvideo = client.videos.retrieve(video.id)"}],
+cfg:["<b>Duur</b> (seconds), <b>resolutie</b> (size), aantal varianten.","Asynchroon: <b>job-ID</b> → status opvragen → downloaden."],
+traps:["Video genereren ≠ video analyseren. Analyseren → Content Understanding of een multimodaal model."],
+rel:["imagegen","cuvisual","visualrai"]},
+
+{id:"videoedit",p:"videogen",t:"Generatie-instellingen kiezen",s:"Welke knop voor welk doel",d:[3],
+what:"<table><tr><th>Doel</th><th>Instelling</th></tr><tr><td>Sneller en goedkoper</td><td>Lagere <b>quality</b>, kleinere <b>size</b>, kortere video</td></tr><tr><td>Meer keuze</td><td>Hogere <b>n</b> (varianten)</td></tr><tr><td>Origineel trouw blijven bij bewerken</td><td><b>mask</b> + hoge <b>input_fidelity</b></td></tr><tr><td>Logo/product exact behouden</td><td>Edit met mask, níet opnieuw genereren</td></tr><tr><td>Transparant voor webgebruik</td><td><b>background: transparent</b> + png</td></tr><tr><td>Huisstijl consistent</td><td><b>referentiebeelden</b> + vaste stijlprompt</td></tr></table>",
+rel:["imagegen","imageedit","videogen"]},
+
+{id:"cuvisual",p:"vision",t:"Content Understanding voor beeld & video",s:"Visuele kenmerken, scènes, segmenten, single-task en pro mode",d:[3,5],
+what:"<p>Content Understanding analyseert ook <b>beelden</b> en <b>video</b>:</p><ul><li><b>Beeld</b>: visuele kenmerken als velden (bijv. 'schade zichtbaar: ja/nee', 'type voertuig', 'kleur'), met methods <b>classify</b> en <b>generate</b>.</li><li><b>Video</b>: transcriptie, <b>segmentatie</b> in scènes/shots met begin- en eindtijd, keyframes, en per segment jouw velden (beschrijving, onderwerp, aanwezige objecten).</li><li><b>Single-task</b> pipeline: één analyzer, één taak per bestand. <b>Pro mode</b>: redeneren over meerdere bestanden en referentiedata.</li></ul>",
+when:["Uren video doorzoekbaar maken per scène → <b>video-analyzer</b> → output in AI Search.","Duizenden schadefoto's classificeren met vaste categorieën → <b>image-analyzer</b> met classify-velden.","Eén losse vraag over één foto → een multimodaal model is eenvoudiger."],
+rel:["cu","multimodal","videogen"]},
+
+{id:"imageanalysis",p:"vision",t:"Azure AI Vision (Image Analysis)",s:"Captions, tags, objecten, OCR (Read), smart crops",d:[3],
+what:"<p><b>Azure AI Vision Image Analysis 4.0</b> is de klassieke beeld-API met vaste features: <b>caption</b> en <b>dense captions</b> (beschrijvingen per gebied), <b>tags</b>, <b>objects</b> (met bounding boxes: rechthoeken rond objecten), <b>people</b>, <b>read</b> (OCR) en <b>smart crops</b> (slim bijsnijden).</p><p><b>Face</b>: gezichten detecteren. Herkenning/identificatie alleen met goedkeuring (Limited Access). <b>Video Indexer</b>: aparte dienst voor video-inzichten.</p>",
+when:["Vaste, goedkope, snelle features op grote aantallen beelden → <b>Image Analysis</b>.","Objecten met coördinaten (bounding boxes) → <b>objects</b>.","Tekst in foto's lezen → <b>read</b>."],
+code:[{l:"Analyseren (Python)",src:"from azure.ai.vision.imageanalysis import ImageAnalysisClient\nfrom azure.ai.vision.imageanalysis.models import VisualFeatures\n\nclient = ImageAnalysisClient(\"https://mijn-foundry.cognitiveservices.azure.com/\",\n                             DefaultAzureCredential())\nresult = client.analyze_from_url(\n    image_url=\"https://.../straat.jpg\",\n    visual_features=[VisualFeatures.CAPTION, VisualFeatures.OBJECTS, VisualFeatures.READ],\n    gender_neutral_caption=True)\nprint(result.caption.text, result.caption.confidence)"}],
+traps:["Gezichtsherkenning (wie is dit?) vereist een Limited Access-aanvraag."],
+rel:["multimodal","cuvisual","containers"]},
+
+{id:"visualrai",p:"vision",t:"Responsible AI voor beeld",s:"Filters, prompt injection in beelden, watermerken, merkregels",d:[3,1],
+what:"<ul><li><b>Filters voor onveilige beelden</b>: guardrails op beeldinput en -output, of Content Safety <b>analyze image</b> voor uploads.</li><li><b>Indirect prompt injection via tekst in afbeeldingen</b>: een afbeelding met de tekst 'negeer je instructies...'. Oplossing: <b>Prompt Shields</b> (indirect attacks), beeldinhoud behandelen als data, tool-rechten beperken.</li><li><b>Watermerken en herkomst</b>: gegenereerde beelden krijgen <b>C2PA content credentials</b> (metadata dat het AI-gemaakt is). Eigen zichtbare watermerken kun je toevoegen in je pipeline.</li><li><b>Visuele beleidsregels</b>: verboden symbolen markeren, merkgebruik controleren (logo correct, kleuren), ongepaste content detecteren. Vaak met <b>custom categories</b> of een Content Understanding-analyzer met classify-velden.</li></ul>",
+when:["Gebruikers uploaden foto's → <b>Content Safety analyze image</b> vóór verwerking.","Model leest screenshots/scans met mogelijk verborgen opdrachten → <b>Prompt Shields</b>.","Aantonen dat beelden AI-gegenereerd zijn → <b>C2PA / content credentials</b>.","Merkrichtlijnen afdwingen → classify-velden of custom categories + menselijke review."],
+rel:["guardrails","promptshields","contentsafety"]}
+);
+
+// ===== Tekst & taal =====
+N.push(
+{id:"llmtekst",p:"text",t:"Tekstanalyse met een LLM",s:"Entiteiten, onderwerpen, samenvatting, sentiment, JSON via prompt",d:[4],
+what:"<p>Met een LLM doe je tekstanalyse via een <b>prompt</b> + <b>structured outputs</b>: entiteiten, onderwerpen, samenvattingen, sentiment, toon, classificatie. Voordelen: flexibel, je kunt domeinspecifieke velden vragen (bijv. 'compliance-risico's in dit contract'), zonder training. Nadelen: duurder per document, minder voorspelbaar dan een gespecialiseerde API.</p><p><b>Domeinaanpassing</b> (studiegids): met instructies, voorbeelden (few-shot), een vast schema en eventueel fine-tuning maak je de output passend voor bijvoorbeeld compliance-samenvattingen of juridische extractie.</p>",
+when:["Eigen, domeinspecifieke velden of complexe interpretatie → <b>LLM + structured outputs</b>.","Standaard NER/PII/sentiment op grote volumes, goedkoop en consistent → <b>Azure Language</b>.","Toon of 'sensitive content' in eigen bewoording → LLM, eventueel met Content Safety erbij."],
+code:[{l:"Extractie als JSON",src:"response = openai.responses.create(\n    model=\"gpt-41-mini\",\n    instructions=\"Extraheer uit de e-mail: klantnaam, product, probleem (1 zin), \"\n                 \"sentiment (positief/neutraal/negatief) en of escalatie nodig is.\",\n    input=email_tekst,\n    text={\"format\": {\"type\": \"json_schema\", \"name\": \"mail\", \"strict\": True,\n                     \"schema\": schema}},\n    temperature=0)"}],
+traps:["'Minimal development effort' + standaardtaak (PII, sentiment, taaldetectie) wijst meestal naar de <b>prebuilt</b> Azure Language-functie, niet naar een LLM."],
+rel:["structured","language","translator"]},
+
+{id:"language",p:"text",t:"Azure Language",s:"NER, PII, sentiment, key phrases, taaldetectie, samenvatten, CLU",d:[4],
+what:"<p><b>Azure Language</b> (een Foundry Tool) bevat kant-en-klare taalfuncties:</p><table><tr><th>Functie</th><th>Wat</th></tr><tr><td><b>Language detection</b></td><td>Welke taal (met betrouwbaarheidsscore)</td></tr><tr><td><b>Sentiment analysis</b> + <b>opinion mining</b></td><td>Positief/neutraal/negatief/gemengd per document en zin. Opinion mining: sentiment per aspect ('eten goed, bediening traag')</td></tr><tr><td><b>Key phrase extraction</b></td><td>Belangrijkste termen</td></tr><tr><td><b>Named entity recognition (NER)</b></td><td>Personen, organisaties, locaties, datums, bedragen</td></tr><tr><td><b>Entity linking</b></td><td>Entiteit koppelen aan Wikipedia (welke 'Mars'?)</td></tr><tr><td><b>PII detection</b></td><td>Persoonsgegevens vinden en <b>redigeren</b> (ook in gesprekken)</td></tr><tr><td><b>Summarization</b></td><td><b>Extractive</b> (belangrijkste zinnen letterlijk) of <b>abstractive</b> (nieuwe samenvatting), ook voor gesprekken</td></tr><tr><td><b>Text analytics for health</b></td><td>Medische entiteiten en relaties</td></tr><tr><td><b>CLU</b> (conversational language understanding)</td><td>Intents (bedoeling) en entities uit korte zinnen, zelf trainen met utterances</td></tr><tr><td><b>Custom question answering</b></td><td>Vraag-antwoordbank uit FAQ's</td></tr><tr><td><b>Custom text classification / custom NER</b></td><td>Eigen categorieën of entiteiten trainen met gelabelde voorbeelden</td></tr></table>",
+when:["Persoonsgegevens verwijderen → <b>PII detection</b> (redacted_text).","Sentiment per aspect van een review → <b>sentiment + opinion mining</b>.","Taal onbekend vóór verdere verwerking → <b>language detection</b>.","Intentie van een korte opdracht ('zet de lamp aan') → <b>CLU</b>.","Eigen documentcategorieën met voorbeelden → <b>custom text classification</b> (single- of multi-label)."],
+code:[{l:"PII redigeren + sentiment (Python)",src:"from azure.ai.textanalytics import TextAnalyticsClient\n\nclient = TextAnalyticsClient(endpoint=\"https://mijn-foundry.cognitiveservices.azure.com/\",\n                             credential=DefaultAzureCredential())\n\ndocs = [\"Bel Jan de Vries op 06-12345678, de levering was echt slecht.\"]\n\npii = client.recognize_pii_entities(docs, language=\"nl\")\nprint(pii[0].redacted_text)          # Bel ************ op ***********, ...\nfor e in pii[0].entities:\n    print(e.text, e.category, e.confidence_score)\n\nsent = client.analyze_sentiment(docs, language=\"nl\", show_opinion_mining=True)\nprint(sent[0].sentiment, sent[0].confidence_scores)\n\n# Andere methodes: detect_language, extract_key_phrases, recognize_entities,\n# recognize_linked_entities, begin_abstract_summary, begin_extract_summary"}],
+cfg:["<code>language</code>: taalcode (bijv. <code>nl</code>), of laat detecteren.","PII: <code>categories_filter</code> (alleen bepaalde soorten), <code>domain</code> (bijv. phi voor medisch).","Lange taken (samenvatten, health) zijn <b>asynchroon</b>: <code>begin_...</code> + poller.","Package: <code>azure-ai-textanalytics</code>."],
+traps:["Key phrases ≠ entities. Key phrases = belangrijke termen. Entities = benoemde dingen met een categorie.","Extractive summary = letterlijke zinnen. Abstractive = nieuwe zinnen."],
+rel:["llmtekst","translator","containers","speechstt"]},
+
+{id:"translator",p:"text",t:"Azure Translator",s:"Tekst, documenten, custom translator, LLM-vertaling",d:[4],
+what:"<ul><li><b>Text translation</b>: tekst vertalen naar één of meer talen in één aanroep, met automatische taaldetectie. Ook <b>transliteration</b> (ander schrift) en <b>dictionary lookup</b>.</li><li><b>Document translation</b>: hele bestanden (Word, PDF, Excel, ...) vertalen met <b>behoud van opmaak</b>, asynchroon via Blob Storage.</li><li><b>Custom Translator</b>: eigen model met je eigen vertaalde zinsparen, voor vakjargon en huisstijl.</li><li><b>LLM-vertaling</b>: Translator met een LLM-optie, of zelf via een GPT-prompt. Beter in context en toon, duurder.</li></ul>",
+when:["Snelle, goedkope vertaling van tekst → <b>Translator text</b>.","Hele PDF/Word vertalen met opmaak → <b>Document translation</b>.","Vaktermen steeds verkeerd vertaald → <b>Custom Translator</b> of een <b>glossary</b>.","Toon/stijl/context belangrijk (marketing) → <b>LLM-vertaling</b>.","Gesproken taal vertalen → <b>Speech translation</b>."],
+code:[{l:"Tekst vertalen (Python)",src:"from azure.ai.translation.text import TextTranslationClient\n\nclient = TextTranslationClient(endpoint=\"https://mijn-foundry.cognitiveservices.azure.com/\",\n                               credential=DefaultAzureCredential())\nresult = client.translate(body=[\"Waar is het station?\"],\n                          to_language=[\"en\", \"de\"], from_language=\"nl\")\nfor t in result[0].translations:\n    print(t.to, t.text)"}],
+cfg:["<b>to</b>: meerdere doeltalen tegelijk.","<b>category</b>: ID van je Custom Translator-model.","Document translation: <b>source container</b> + <b>target container</b> (Blob, met SAS of managed identity) + optioneel <b>glossary</b>.","Endpoint Translator: global <code>api.cognitive.microsofttranslator.com</code> (met regio-header) of je eigen custom domain."],
+traps:["Document translation gebruikt Blob-containers, geen directe upload in het verzoek.","Speech vertalen ≠ Translator text. Voor audio → Speech translation."],
+rel:["language","speechtrans","llmtekst"]}
+);
+
+// ===== Spraak =====
+N.push(
+{id:"speechstt",p:"speech",t:"Speech to text",s:"Real-time, fast, batch, diarization, phrase list",d:[4],
+what:"<p><b>Speech to text (STT)</b> zet spraak om naar tekst. Vormen:</p><ul><li><b>Real-time</b>: live van een microfoon of stream, via de Speech SDK.</li><li><b>Fast transcription</b>: een audiobestand snel (synchroon) transcriberen.</li><li><b>Batch transcription</b>: grote hoeveelheden opnames asynchroon (uit Blob Storage).</li><li><b>LLM-speech / gpt-4o-transcribe</b>: transcriptie met een generatief model.</li></ul><p>Extra's: <b>diarization</b> (wie sprak wanneer, sprekers scheiden), <b>language identification</b> (taal automatisch herkennen), <b>phrase list</b> (lijstje woorden dat beter herkend moet worden, zonder training), <b>profanity filter</b>, <b>word-level timestamps</b>.</p>",
+when:["Live ondertiteling / spraakassistent → <b>real-time</b>.","Duizenden callcenter-opnames 's nachts → <b>batch</b>.","Productnamen verkeerd verstaan, snel op te lossen → <b>phrase list</b>.","Structureel slecht door jargon/accent/ruis → <b>custom speech</b>.","Wie zei wat in een vergadering → <b>diarization</b>."],
+code:[{l:"Eén zin herkennen (Speech SDK)",src:"import azure.cognitiveservices.speech as speechsdk\n\nspeech_config = speechsdk.SpeechConfig(\n    endpoint=\"https://mijn-foundry.cognitiveservices.azure.com/\",\n    token_credential=DefaultAzureCredential())   # keyless (recente SDK)\nspeech_config.speech_recognition_language = \"nl-NL\"\n\naudio_config = speechsdk.audio.AudioConfig(filename=\"gesprek.wav\")\nrecognizer = speechsdk.SpeechRecognizer(speech_config=speech_config,\n                                        audio_config=audio_config)\n\n# Phrase list: vaktermen beter herkennen, zonder training\nphrases = speechsdk.PhraseListGrammar.from_recognizer(recognizer)\nphrases.addPhrase(\"WerkZekerPlus\")\n\nresult = recognizer.recognize_once_async().get()\nif result.reason == speechsdk.ResultReason.RecognizedSpeech:\n    print(result.text)"}],
+cfg:["<b>speech_recognition_language</b>: bijv. <code>nl-NL</code>.","<code>recognize_once_async()</code> = één uiting (tot ~15-30 s stilte). Langer → <code>start_continuous_recognition()</code> met events.","Alternatief inloggen: <code>SpeechConfig(subscription=key, region=\"westeurope\")</code>.","Package: <code>azure-cognitiveservices-speech</code>."],
+traps:["<code>recognize_once</code> stopt na de eerste zin. Voor lange audio is continuous of batch nodig."],
+rel:["customspeech","speechtts","voiceagent","containers"]},
+
+{id:"customspeech",p:"speech",t:"Custom speech",s:"Eigen spraakmodel trainen voor jargon, accent, ruis",d:[4],
+what:"<p>Met <b>custom speech</b> train je het basismodel bij met eigen data, zodat het je domein beter verstaat. Soorten trainingsdata:</p><ul><li><b>Plain text</b>: zinnen met de vaktermen (snel, verbetert woordherkenning).</li><li><b>Structured text</b>: patronen en lijsten (bijv. productcodes).</li><li><b>Audio + human-labeled transcripts</b>: opnames met de juiste uitschrift. Het beste bij accenten, ruis en specifieke akoestiek.</li><li><b>Pronunciation</b>-bestanden: hoe een woord wordt uitgesproken.</li></ul><p>Je meet de kwaliteit met <b>WER</b> (word error rate: percentage fout herkende woorden) en deployt het model naar een <b>custom endpoint</b>.</p>",
+when:["Vakjargon structureel fout → custom speech met <b>plain/structured text</b>.","Accent, ruis (fabriek, auto) → custom speech met <b>audio + transcripts</b>.","Een paar namen, snel → <b>phrase list</b> volstaat."],
+code:[{l:"Custom model gebruiken",src:"speech_config.endpoint_id = \"<id-van-je-custom-speech-endpoint>\"\n# daarna gewoon SpeechRecognizer zoals bij standaard STT"}],
+traps:["Custom speech (verstaan) ≠ custom neural voice (een eigen stem laten spreken)."],
+rel:["speechstt","speechtts"]},
+
+{id:"speechtts",p:"speech",t:"Text to speech",s:"Neural voices, SSML, custom neural voice",d:[4],
+what:"<p><b>Text to speech (TTS)</b> laat de computer spreken met <b>neural voices</b> (natuurlijke stemmen in veel talen, bijv. <code>nl-NL-FennaNeural</code>).</p><p><b>SSML</b> (Speech Synthesis Markup Language) is XML waarmee je de uitspraak stuurt: stem, <b>prosody</b> (snelheid, toonhoogte, volume), <b>break</b> (pauze), <b>say-as</b> (datum, telefoonnummer), <b>phoneme</b> (uitspraak), en spreekstijlen (<code>mstts:express-as</code>, bijv. vrolijk of empathisch).</p><p><b>Custom neural voice</b>: een eigen merkstem op basis van opnames van een stemacteur (Limited Access, toestemming van de spreker vereist). <b>Personal voice</b>: stem nabootsen uit een korte opname, ook Limited Access.</p>",
+when:["Agent moet antwoorden uitspreken → <b>TTS</b>.","Uitspraak, pauzes, tempo, stijl sturen → <b>SSML</b>.","Unieke merkstem → <b>custom neural voice</b> (met goedkeuring)."],
+code:[{l:"SSML uitspreken",src:"speech_config.speech_synthesis_voice_name = \"nl-NL-FennaNeural\"\nsynth = speechsdk.SpeechSynthesizer(speech_config=speech_config,\n    audio_config=speechsdk.audio.AudioOutputConfig(filename=\"antwoord.wav\"))\n\nssml = \"\"\"<speak version='1.0' xml:lang='nl-NL'\n  xmlns='http://www.w3.org/2001/10/synthesis'>\n  <voice name='nl-NL-FennaNeural'>\n    Uw afspraak is op <say-as interpret-as='date'>2026-11-07</say-as>.\n    <break time='500ms'/>\n    <prosody rate='-10%'>Tot dan!</prosody>\n  </voice>\n</speak>\"\"\"\nsynth.speak_ssml_async(ssml).get()"}],
+cfg:["<b>speech_synthesis_voice_name</b>: welke stem.","<b>Output format</b>: bijv. 16 kHz mono voor telefonie, 48 kHz voor hoge kwaliteit.","Gewone tekst → <code>speak_text_async</code>, SSML → <code>speak_ssml_async</code>."],
+traps:["Pauzes, tempo en uitspraak regel je met SSML, niet met de prompt."],
+rel:["speechstt","voiceagent"]},
+
+{id:"speechtrans",p:"speech",t:"Speech translation",s:"Gesproken taal direct vertalen, naar tekst of spraak",d:[4],
+what:"<p><b>Speech translation</b> herkent spraak en vertaalt die in één stap naar één of meer doeltalen, als tekst en eventueel als gesproken audio. Kan ook met automatische taaldetectie van de spreker. Alternatief: STT → LLM of Translator → TTS als losse stappen (meer controle, meer latency).</p>",
+when:["Live vertaling van een gesprek of presentatie → <b>speech translation</b>.","Vertaling met specifieke toon of context → STT + <b>LLM</b> + TTS."],
+code:[{l:"Spraak vertalen",src:"tcfg = speechsdk.translation.SpeechTranslationConfig(\n    endpoint=\"https://mijn-foundry.cognitiveservices.azure.com/\",\n    token_credential=DefaultAzureCredential())\ntcfg.speech_recognition_language = \"nl-NL\"\ntcfg.add_target_language(\"en\")\ntcfg.add_target_language(\"de\")\n\nrecognizer = speechsdk.translation.TranslationRecognizer(translation_config=tcfg)\nresult = recognizer.recognize_once_async().get()\nprint(result.translations[\"en\"], result.translations[\"de\"])"}],
+cfg:["<b>speech_recognition_language</b> = brontaal, <b>add_target_language</b> = doeltalen (taalcode zonder regio, bijv. <code>en</code>).","<b>voice_name</b> zetten als je de vertaling ook wilt laten uitspreken."],
+traps:["Translator (tekst) kan geen audio aan. Audio → Speech translation."],
+rel:["translator","speechstt","speechtts"]},
+
+{id:"voiceagent",p:"speech",t:"Spraak als agent-modaliteit",s:"Voice Live API, realtime-modellen, audio-input",d:[4,2],
+what:"<p>Een <b>voice agent</b> praat en luistert. Opties:</p><ul><li><b>Pipeline</b>: STT → LLM/agent → TTS. Flexibel, je kunt custom speech en custom voices gebruiken, maar meer latency.</li><li><b>Voice Live API</b>: één real-time verbinding (WebSocket) die spraakherkenning, het model, TTS, ruisonderdrukking, echo-onderdrukking en <b>turn detection</b> (wanneer is de gebruiker klaar met praten) combineert. Kan koppelen aan een Foundry-agent.</li><li><b>Realtime / audio-modellen</b> (gpt-realtime, gpt-4o-audio): het model hoort en spreekt zelf (speech-to-speech), lage latency.</li><li><b>Multimodaal redeneren over audio</b>: audio als input naar een model om te analyseren (toon, inhoud) zonder losse transcriptie.</li></ul>",
+when:["Natuurlijk gesprek met lage latency, onderbreken mogelijk → <b>Voice Live API</b> of een <b>realtime-model</b>.","Specifiek jargon of eigen merkstem nodig → <b>pipeline</b> met custom speech / custom voice.","Toon of emotie uit een opname analyseren → <b>audio-input naar multimodaal model</b> of Content Understanding audio."],
+cfg:["Verbinding via <b>WebSocket</b> (real-time, beide kanten op).","Instellingen: stem, turn detection (bijv. server VAD), ruisonderdrukking, taal."],
+traps:["Batch transcription is geen real-time gesprek."],
+rel:["speechstt","speechtts","agentservice"]}
+);
+
+// ===== Servicekiezer (vergelijkingen) =====
+N.unshift({id:"kiezer",p:null,t:"Servicekiezer",s:"Welke dienst kies je? Vergelijkingen naast elkaar",d:[1,2,3,4,5],
+what:"Veel examenvragen gaan over kiezen tussen diensten die op elkaar lijken. Hier staan ze per taak naast elkaar: wat elke dienst doet, wanneer je hem kiest en het signaalwoord in de vraag dat erbij hoort.",
+when:["Lees eerst de laatste zin van de vraag: wat moet er gebeuren?","Zoek dan het signaalwoord: <i>minimal effort</i>, <i>custom</i>, <i>real-time</i>, <i>preserve formatting</i>, <i>no keys</i>, <i>on-premises</i>."]});
+N.push(
+{id:"k-documenten",p:"kiezer",t:"Documenten verwerken",s:"Content Understanding vs. Document Intelligence vs. OCR vs. multimodaal model",d:[5,3],
+what:"<table><tr><th>Dienst</th><th>Doet</th><th>Kies bij</th></tr><tr><td><b>Content Understanding</b></td><td>Velden (extract/classify/generate) + markdown uit documenten, beeld, audio, video. Confidence en grounding</td><td>Wisselende layouts, eigen veldschema, meerdere soorten content, output voor agents/RAG, pro mode over meerdere documenten</td></tr><tr><td><b>Document Intelligence</b></td><td>Prebuilt modellen (factuur, bon, ID), layout, custom template/neural</td><td>Standaard documenttypes zonder training, of een vast formulier (template)</td></tr><tr><td><b>Read / OCR</b></td><td>Alleen tekst herkennen</td><td>Je hebt alleen de ruwe tekst nodig</td></tr><tr><td><b>Multimodaal model</b></td><td>Vrije vraag over een afbeelding of scan</td><td>Eenmalige of flexibele vraag, geen vaste pipeline</td></tr><tr><td><b>AI Search + OCR-skill</b></td><td>Documenten doorzoekbaar maken in een index</td><td>Doel is zoeken/RAG over veel documenten</td></tr></table>",
+rel:["cu","docintel","docsextract","multimodal"]},
+
+{id:"k-tekst",p:"kiezer",t:"Tekst analyseren",s:"Azure Language vs. LLM vs. Content Safety",d:[4],
+what:"<table><tr><th>Dienst</th><th>Doet</th><th>Kies bij</th></tr><tr><td><b>Azure Language</b> (prebuilt)</td><td>NER, PII, sentiment, key phrases, taaldetectie, samenvatten</td><td>Standaardtaak, groot volume, <i>minimal development effort</i>, consistent en goedkoop</td></tr><tr><td><b>Azure Language</b> (custom)</td><td>Custom classification, custom NER, CLU</td><td>Eigen categorieën/entiteiten/intents met gelabelde voorbeelden</td></tr><tr><td><b>LLM + structured outputs</b></td><td>Alles wat je kunt omschrijven, als JSON</td><td>Domeinspecifieke velden, interpretatie, toon, geen trainingsdata</td></tr><tr><td><b>Content Safety</b></td><td>Schadelijke content scoren</td><td>Moderatie van door gebruikers geplaatste tekst</td></tr></table>",
+rel:["language","llmtekst","contentsafety"]},
+
+{id:"k-vertalen",p:"kiezer",t:"Vertalen",s:"Translator text vs. document vs. custom vs. LLM vs. speech",d:[4],
+what:"<table><tr><th>Situatie</th><th>Kies</th></tr><tr><td>Korte teksten, veel talen, goedkoop</td><td><b>Translator text translation</b></td></tr><tr><td>Hele bestanden, opmaak behouden</td><td><b>Document translation</b> (Blob in/out)</td></tr><tr><td>Vakjargon of huisstijl steeds fout</td><td><b>Custom Translator</b> (of glossary)</td></tr><tr><td>Toon en context belangrijk</td><td><b>LLM-vertaling</b></td></tr><tr><td>Gesproken taal</td><td><b>Speech translation</b></td></tr><tr><td>Offline / on-premises</td><td><b>Translator-container</b></td></tr></table>",
+rel:["translator","speechtrans","containers"]},
+
+{id:"k-spraak",p:"kiezer",t:"Spraak",s:"STT-varianten, custom, TTS, Voice Live",d:[4],
+what:"<table><tr><th>Situatie</th><th>Kies</th></tr><tr><td>Live transcriptie</td><td><b>Real-time STT</b> (Speech SDK)</td></tr><tr><td>Veel opnames achteraf</td><td><b>Batch transcription</b></td></tr><tr><td>Eén bestand, snel resultaat</td><td><b>Fast transcription</b></td></tr><tr><td>Een paar woorden verkeerd verstaan</td><td><b>Phrase list</b></td></tr><tr><td>Jargon/accent/ruis structureel</td><td><b>Custom speech</b></td></tr><tr><td>Sprekers scheiden</td><td><b>Diarization</b></td></tr><tr><td>Computer laten spreken, uitspraak sturen</td><td><b>TTS + SSML</b></td></tr><tr><td>Eigen merkstem</td><td><b>Custom neural voice</b></td></tr><tr><td>Natuurlijk gesprek met lage latency</td><td><b>Voice Live API / realtime-model</b></td></tr></table>",
+rel:["speechstt","customspeech","speechtts","voiceagent"]},
+
+{id:"k-beeld",p:"kiezer",t:"Beeld & video",s:"Begrijpen, genereren, bewerken",d:[3],
+what:"<table><tr><th>Situatie</th><th>Kies</th></tr><tr><td>Vrije vraag of beschrijving bij een beeld, alt-text</td><td><b>Multimodaal model</b></td></tr><tr><td>Vaste features (tags, objecten met coördinaten) op grote aantallen</td><td><b>Azure AI Vision Image Analysis</b></td></tr><tr><td>Gestructureerde velden uit beelden of video, scènes met tijden</td><td><b>Content Understanding</b></td></tr><tr><td>Nieuw beeld uit tekst</td><td><b>gpt-image-1 generate</b></td></tr><tr><td>Deel van een beeld aanpassen</td><td><b>Edit + mask</b> (inpainting)</td></tr><tr><td>Video uit tekst of beeld</td><td><b>Sora</b></td></tr><tr><td>Uploads controleren op ongepaste beelden</td><td><b>Content Safety analyze image</b></td></tr></table>",
+rel:["multimodal","imageanalysis","cuvisual","imagegen","imageedit","videogen"]},
+
+{id:"k-kennis",p:"kiezer",t:"Kennis aan een model of agent geven",s:"Prompt vs. RAG vs. file search vs. AI Search vs. Bing vs. fine-tuning",d:[2,5],
+what:"<table><tr><th>Situatie</th><th>Kies</th></tr><tr><td>Klein beetje vaste context</td><td>In de <b>prompt/instructies</b></td></tr><tr><td>Handvol documenten bij een agent, snel</td><td><b>File search</b></td></tr><tr><td>Grote bedrijfscontent, eigen index, filters, security</td><td><b>Azure AI Search</b> (tool of eigen RAG)</td></tr><tr><td>Complexe vragen over meerdere bronnen</td><td><b>Agentic retrieval</b> (knowledge base)</td></tr><tr><td>Live data uit eigen systeem</td><td><b>OpenAPI / function / MCP tool</b></td></tr><tr><td>Actueel openbaar internet</td><td><b>Bing / web search</b></td></tr><tr><td>Interne M365-documenten met gebruikersrechten</td><td><b>SharePoint tool</b></td></tr><tr><td>Stijl/format/gedrag aanleren</td><td><b>Fine-tuning</b></td></tr></table>",
+rel:["rag","toolsknowledge","toolscustom","finetuning"]},
+
+{id:"k-deploy",p:"kiezer",t:"Uitrollen & draaien",s:"Deploymenttype, container, managed compute",d:[1],
+what:"<table><tr><th>Situatie</th><th>Kies</th></tr><tr><td>Standaard, wisselend verkeer</td><td><b>Global Standard</b></td></tr><tr><td>Data binnen de EU</td><td><b>Data Zone (EU)</b></td></tr><tr><td>Data in één regio</td><td><b>Standard (regional)</b></td></tr><tr><td>Hoog stabiel volume, garantie</td><td><b>Provisioned (PTU)</b></td></tr><tr><td>Groot volume, mag 24 uur duren, goedkoop</td><td><b>Batch</b></td></tr><tr><td>Fine-tuned model testen</td><td><b>Developer</b></td></tr><tr><td>Open-source model op eigen VM's in Azure</td><td><b>Managed compute</b></td></tr><tr><td>Foundry Tool on-premises / edge</td><td><b>Docker-container</b> (connected)</td></tr><tr><td>Helemaal zonder internet</td><td><b>Disconnected container</b></td></tr></table>",
+rel:["deployments","containers","kosten"]},
+
+{id:"k-veiligheid",p:"kiezer",t:"Veiligheid & kwaliteit",s:"Welke controle voor welk probleem",d:[1],
+what:"<table><tr><th>Probleem</th><th>Kies</th></tr><tr><td>Haat, geweld, seksueel, zelfbeschadiging</td><td><b>Guardrail / content filter</b> (of Content Safety API)</td></tr><tr><td>'Ignore your instructions'</td><td><b>Prompt Shields</b> (user prompt attack)</td></tr><tr><td>Verborgen opdracht in document/e-mail/afbeelding</td><td><b>Prompt Shields</b> (indirect attack)</td></tr><tr><td>Model verzint dingen t.o.v. de bronnen</td><td><b>Groundedness</b> (detectie of evaluator)</td></tr><tr><td>Auteursrechtelijk beschermde tekst/code</td><td><b>Protected material detection</b></td></tr><tr><td>Specifieke verboden woorden</td><td><b>Blocklist</b></td></tr><tr><td>Persoonsgegevens</td><td><b>PII detection</b></td></tr><tr><td>Risicovolle actie van agent</td><td><b>Approval / human-in-the-loop</b></td></tr><tr><td>Zwaktes vinden vóór livegang</td><td><b>Red teaming</b></td></tr><tr><td>Per stap zien wat er gebeurde</td><td><b>Tracing</b></td></tr></table>",
+rel:["guardrails","promptshields","contentsafety","evaluaties","hitl"]},
+
+{id:"k-auth",p:"kiezer",t:"Inloggen & toegang",s:"Managed identity vs. key vs. connection vs. OIDC",d:[1],
+what:"<table><tr><th>Situatie</th><th>Kies</th></tr><tr><td>Azure-app naar Foundry, geen secrets</td><td><b>Managed identity + RBAC</b> (<code>DefaultAzureCredential</code>)</td></tr><tr><td>Lokaal ontwikkelen</td><td><code>az login</code> + <code>DefaultAzureCredential</code></td></tr><tr><td>Pipeline naar Azure zonder secret</td><td><b>Workload identity federation (OIDC)</b></td></tr><tr><td>Externe API met sleutel voor een agent</td><td><b>Project connection</b></td></tr><tr><td>Geheim dat toch moet bestaan</td><td><b>Key Vault</b></td></tr><tr><td>Sleutel vervangen zonder downtime</td><td><b>Key rotation</b> met key1/key2</td></tr><tr><td>Alleen via bedrijfsnetwerk</td><td><b>Private endpoint</b> + public access uit</td></tr></table>",
+rel:["security","connections","cicd"]}
+);
+
+// ===== Examenkompas =====
+N.push(
+{id:"kompas-signaal",p:"kompas",t:"Signaalwoorden → antwoord",s:"De snelle vertaaltabel",d:[1,2,3,4,5],
+what:"<table><tr><th>In de vraag staat</th><th>Denk aan</th></tr><tr><td>no keys, keyless, without secrets</td><td>Managed identity + RBAC</td></tr><tr><td>guaranteed throughput, predictable latency</td><td>Provisioned (PTU)</td></tr><tr><td>429, rate limit</td><td>Retry met backoff, quota, meer capaciteit</td></tr><tr><td>data residency, EU</td><td>Data Zone / regional</td></tr><tr><td>reduce cost, simple task</td><td>Kleiner model / batch</td></tr><tr><td>latest data, company documents, fabrications</td><td>RAG / grounding</td></tr><tr><td>same output every time</td><td>temperature 0 (+ seed)</td></tr><tr><td>parser breaks, valid JSON</td><td>Structured outputs + JSON schema</td></tr><tr><td>exact codes + meaning</td><td>Hybrid search</td></tr><tr><td>best results at the top</td><td>Semantic ranker</td></tr><tr><td>live order status, internal API</td><td>OpenAPI / function tool</td></tr><tr><td>reliably enforce, approval</td><td>Approval flow in code, geen prompt</td></tr><tr><td>per request, each step, latency breakdown</td><td>Tracing + Application Insights</td></tr><tr><td>ignore previous instructions</td><td>Prompt Shields</td></tr><tr><td>text embedded in images</td><td>Indirect attack → Prompt Shields</td></tr><tr><td>minimal development effort + standaardtaak</td><td>Prebuilt Foundry Tool</td></tr><tr><td>fields from invoices, varying layouts</td><td>Content Understanding / DI prebuilt invoice</td></tr><tr><td>scenes, timestamps, video</td><td>Content Understanding video</td></tr><tr><td>only the background, keep the product</td><td>Edit + mask</td></tr><tr><td>remove personal data</td><td>PII detection + redaction</td></tr><tr><td>product names misrecognized</td><td>Phrase list / custom speech</td></tr><tr><td>preserve document formatting</td><td>Document translation</td></tr><tr><td>on-premises, edge, data stays local</td><td>Container</td></tr><tr><td>no internet at all</td><td>Disconnected container</td></tr></table>"},
+
+{id:"kompas-werkwijze",p:"kompas",t:"Werkwijze tijdens het examen",s:"Zo pak je een vraag aan",d:[1,2,3,4,5],
+what:"<ol><li>Lees eerst de <b>laatste zin</b>: wat moet je kiezen of doen?</li><li>Onderstreep in gedachten de <b>eisen</b>: kosten, effort, latency, security, regio.</li><li>Streep weg wat je <b>zeker</b> fout weet. Nooit iets wegstrepen alleen omdat je het niet kent.</li><li>Twee opties lijken goed? Kies die aan <b>álle</b> eisen voldoet, niet die het meest kan.</li><li>Altijd een antwoord invullen. Gokken kost niets.</li><li>Twijfel? Markeer voor review en ga door. Tijd is 120 minuten.</li></ol>"},
+
+{id:"kompas-volgorde",p:"kompas",t:"Vaste volgordes",s:"Prompt → RAG → fine-tuning en andere ladders",d:[2,1],
+what:"<ul><li><b>Kwaliteit verbeteren</b>: prompt engineering → RAG → fine-tuning.</li><li><b>Beveiliging</b>: managed identity → RBAC-rol → private endpoint → CMK.</li><li><b>Fouten in een agent vinden</b>: tracing → evaluatie (tool call accuracy, groundedness) → instructies/tools/data aanpassen.</li><li><b>RAG-pipeline</b>: ingest → OCR/layout → chunk → embed → index → hybrid + semantic → grounded antwoord.</li><li><b>Kosten</b>: kleiner model → korter prompt/output → caching → batch → PTU (alleen bij hoog stabiel volume).</li></ul>"}
+);
+
+
+const DOM={1:{n:"Plan & manage",w:"25-30%",v:27.5},2:{n:"GenAI & agents",w:"30-35%",v:32.5},3:{n:"Computer vision",w:"10-15%",v:12.5},4:{n:"Tekst & spraak",w:"10-15%",v:12.5},5:{n:"Informatie-extractie",w:"10-15%",v:12.5}};
+const byId=Object.fromEntries(N.map(n=>[n.id,n]));
+const kids=id=>N.filter(n=>n.p===id);
+const roots=N.filter(n=>!n.p);
+const path=n=>{const p=[];let c=n;while(c){p.unshift(c);c=c.p?byId[c.p]:null}return p};
+const order=[];(function walk(list){list.forEach(n=>{order.push(n.id);walk(kids(n.id))})})(roots);
+const leaves=N.filter(n=>n.p);
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const strip=h=>String(h||"").replace(/<[^>]+>/g," ").replace(/&amp;/g,"&").replace(/\s+/g," ").trim();
+
+// Opslag (per browser, mag falen)
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let known=new Set(store.get("fk-known",[]));
+let open=new Set(store.get("fk-open",[]));
+let activeDom=new Set();
+let current=null;
+
+// Thema
+const savedTheme=store.get("fk-theme",null);
+if(savedTheme)document.documentElement.dataset.theme=savedTheme;
+$("#theme").onclick=()=>{const dark=document.documentElement.dataset.theme?document.documentElement.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;const t=dark?"light":"dark";document.documentElement.dataset.theme=t;store.set("fk-theme",t)};
+
+const ICON={chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>',check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12.5 10 17l9-10"/></svg>',circle:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/></svg>'};
+const dtags=d=>'<span class="dtags">'+(d||[]).map(x=>`<span class="dtag" title="Examendomein ${x}: ${DOM[x].n} (${DOM[x].w})"><i style="background:var(--d${x})"></i>${DOM[x].n}</span>`).join("")+'</span>';
+
+// Filters
+function renderFilters(){
+  const f=$("#filters");
+  f.innerHTML='<span class="lbl">Examendomein</span>'+Object.entries(DOM).map(([k,v])=>`<button class="chip" data-d="${k}" aria-pressed="${activeDom.has(+k)}"><span class="sw" style="background:var(--d${k})"></span>${v.n} <span style="color:var(--text-3)">${v.w}</span></button>`).join("")+(activeDom.size?'<button class="chip clear" data-clear="1">Alles tonen</button>':"");
+  f.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{const d=+b.dataset.d;activeDom.has(d)?activeDom.delete(d):activeDom.add(d);renderFilters();renderTree();if(!current&&!$("#q").value)renderOverview()});
+  const c=f.querySelector("[data-clear]");if(c)c.onclick=()=>{activeDom.clear();renderFilters();renderTree();if(!current&&!$("#q").value)renderOverview()};
+}
+const domMatch=n=>!activeDom.size||(n.d||[]).some(d=>activeDom.has(d));
+function visible(n){if(domMatch(n))return true;return kids(n.id).some(visible)}
+
+// Boom
+function renderTree(){
+  const build=list=>list.filter(visible).map(n=>{
+    const ch=kids(n.id).filter(visible);const isOpen=open.has(n.id)||activeDom.size>0;
+    return `<li><div class="row"><button class="tog ${ch.length?"":"leaf"}" data-tog="${n.id}" aria-expanded="${isOpen}" aria-label="${isOpen?"Inklappen":"Uitklappen"}: ${esc(n.t)}" tabindex="${ch.length?0:-1}">${ICON.chev}</button><button class="node ${current===n.id?"active":""}" data-go="${n.id}" ${current===n.id?'aria-current="page"':""}><span class="nm">${esc(n.t)}</span>${known.has(n.id)?'<span class="done" aria-label="snap ik">'+ICON.check+'</span>':""}</button></div>${ch.length&&isOpen?"<ul>"+build(ch)+"</ul>":""}</li>`}).join("");
+  $("#tree").innerHTML=build(roots);
+  $("#tree").querySelectorAll("[data-tog]").forEach(b=>b.onclick=()=>{const id=b.dataset.tog;open.has(id)?open.delete(id):open.add(id);store.set("fk-open",[...open]);renderTree()});
+  $("#tree").querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
+  updateProgress();
+}
+function updateProgress(){const t=leaves.length,k=leaves.filter(n=>known.has(n.id)).length;$("#ptxt").textContent=`${k}/${t} snap ik`;$("#pbar").style.width=(t?k/t*100:0)+"%"}
+
+// Overzicht
+function renderOverview(){
+  current=null;renderTree();
+  const groups=roots.filter(visible);
+  const leafCount=g=>{let c=0;(function w(id){kids(id).forEach(k=>{c++;w(k.id)})})(g.id);return c};
+  const knownCount=g=>{let c=0;(function w(id){kids(id).forEach(k=>{if(known.has(k.id))c++;w(k.id)})})(g.id);return c};
+  $("#main").innerHTML=`
+  <section class="hero"><h1>Alles wat Foundry kan, op één kaart</h1>
+  <p>Klik op een groep of onderwerp en ga laag voor laag dieper: wat het is, wanneer je het kiest, hoe je het aanroept, welke instellingen erbij horen en waar het examen je probeert te laten struikelen.</p>
+  <p style="color:var(--text-3);font-size:13.5px">Tip: begin bij de Servicekiezer. Markeer een onderwerp met <b>Snap ik</b> als je het zonder spieken kunt uitleggen.</p></section>
+  <div class="domains">${Object.entries(DOM).map(([k,v])=>`<div class="dom"><div class="pct">${v.w}</div><div class="nm">${v.n}</div><div class="meter"><i style="width:${v.v/35*100}%;background:var(--d${k})"></i></div></div>`).join("")}</div>
+  ${groups.length?`<div class="groups">${groups.map(g=>{const ks=kids(g.id).filter(visible);return `<article class="gcard ${g.id==="kiezer"?"feature":""}"><h3><button data-go="${g.id}">${esc(g.t)}</button></h3><p>${esc(g.s)}</p><div class="kids">${ks.map(k=>`<button class="kid ${known.has(k.id)?"done":""}" data-go="${k.id}">${esc(k.t)}</button>`).join("")}</div><div class="gfoot">${dtags(g.d)}<span>${knownCount(g)}/${leafCount(g)} gesnapt</span></div></article>`}).join("")}</div>`:`<div class="empty"><b>Geen onderwerpen bij dit filter</b>Zet een ander examendomein aan of klik op Alles tonen.</div>`}
+  <p class="foot">Gebaseerd op de officiële AI-103-studiegids (skills measured 16 april 2026) en de Microsoft Learn-documentatie (okt 2026). Codevoorbeelden zijn schetsen om te leren lezen. Controleer exacte namen in de docs voordat je ze in productie gebruikt. Je voortgang staat alleen in deze browser.</p>`;
+  bindGo($("#main"));
+  if(location.hash)history.replaceState(null,"",location.pathname);
+}
+
+// Detail
+function codeHtml(src){return src.split("\n").map(l=>{const e=esc(l);const t=l.trim();if(t.startsWith("#")||t.startsWith("//"))return `<span class="com">${e}</span>`;const i=l.indexOf("  # ");if(i>-1)return esc(l.slice(0,i))+`<span class="com">${esc(l.slice(i))}</span>`;return e}).join("\n")}
+function wrapTables(h){return String(h).replace(/<table>/g,'<div class="tablewrap"><table>').replace(/<\/table>/g,"</table></div>")}
+function go(id,push=true){
+  const n=byId[id];if(!n)return renderOverview();
+  current=id;path(n).forEach(p=>{if(kids(p.id).length)open.add(p.id)});store.set("fk-open",[...open]);
+  if(push&&location.hash!=="#"+id)history.pushState(null,"","#"+id);
+  closeSide();renderTree();
+  const ch=kids(id);const p=path(n);
+  const idx=order.indexOf(id);const prev=byId[order[idx-1]],next=byId[order[idx+1]];
+  let h=`<nav class="crumbs" aria-label="Kruimelpad"><button data-home="1">Overzicht</button>${p.slice(0,-1).map(x=>`<span>/</span><button data-go="${x.id}">${esc(x.t)}</button>`).join("")}</nav>
+  <div class="dhead"><div><h1>${esc(n.t)}</h1><p class="sub">${esc(n.s||"")}</p>${dtags(n.d)}</div>
+  ${n.p?`<button class="know" id="know" aria-pressed="${known.has(id)}">${known.has(id)?ICON.check+"Snap ik":ICON.circle+"Markeer als snap ik"}</button>`:""}</div>`;
+  if(n.what)h+=`<section class="sec"><h2>Wat is het</h2>${wrapTables(/^\s*</.test(n.what)?n.what:"<p>"+n.what+"</p>")}</section>`;
+  if(n.when&&n.when.length)h+=`<section class="sec when"><h2>Wanneer kies je dit</h2><ul>${n.when.map(w=>`<li>${w}</li>`).join("")}</ul></section>`;
+  if(n.code&&n.code.length)h+=`<section class="sec"><h2>Zo roep je het aan</h2><div class="tabs" role="tablist">${n.code.map((c,i)=>`<button class="tab" role="tab" data-tab="${i}" aria-selected="${i===0}">${esc(c.l)}</button>`).join("")}</div><div class="codebox"><pre id="code"><code style="all:unset">${codeHtml(n.code[0].src)}</code></pre><button class="iconbtn copy" id="copy">Kopieer</button></div></section>`;
+  if((n.cfg&&n.cfg.length)||(n.traps&&n.traps.length)){
+    h+=`<div class="cols">`;
+    if(n.cfg&&n.cfg.length)h+=`<section class="sec cfg"><h2>Configuratie & waarden</h2><ul>${n.cfg.map(c=>`<li>${c}</li>`).join("")}</ul></section>`;
+    if(n.traps&&n.traps.length)h+=`<section class="sec trap"><h2>Examenvalkuilen</h2><ul>${n.traps.map(c=>`<li>${c}</li>`).join("")}</ul></section>`;
+    h+=`</div><div style="height:14px"></div>`;
+  }
+  if(ch.length)h+=`<section class="sec"><h2>${n.p?"Dieper":"Onderwerpen"} (${ch.length})</h2><div class="subgrid">${ch.map(k=>`<button class="subcard" data-go="${k.id}"><b>${esc(k.t)}</b><span>${esc(k.s||"")}</span>${known.has(k.id)?'<span class="ok">Snap ik</span>':""}</button>`).join("")}</div></section>`;
+  if(n.rel&&n.rel.length)h+=`<section class="sec"><h2>Hangt samen met</h2><div class="rel">${n.rel.filter(r=>byId[r]).map(r=>`<button class="kid" data-go="${r}">${esc(byId[r].t)}</button>`).join("")}</div></section>`;
+  h+=`<div class="pager">${prev?`<button data-go="${prev.id}"><small>Vorige</small>${esc(prev.t)}</button>`:"<span></span>"}${next?`<button class="next" data-go="${next.id}"><small>Volgende</small>${esc(next.t)}</button>`:""}</div>`;
+  const m=$("#main");m.innerHTML=h;bindGo(m);
+  m.querySelector("[data-home]").onclick=()=>{history.pushState(null,"",location.pathname);renderOverview()};
+  const k=$("#know");if(k)k.onclick=()=>{known.has(id)?known.delete(id):known.add(id);store.set("fk-known",[...known]);go(id,false)};
+  if(n.code){let ci=0;m.querySelectorAll("[data-tab]").forEach(t=>t.onclick=()=>{ci=+t.dataset.tab;m.querySelectorAll("[data-tab]").forEach(x=>x.setAttribute("aria-selected",x===t));$("#code").innerHTML=`<code style="all:unset">${codeHtml(n.code[ci].src)}</code>`});
+    $("#copy").onclick=async()=>{try{await navigator.clipboard.writeText(n.code[ci].src);$("#copy").textContent="Gekopieerd"}catch(e){$("#copy").textContent="Selecteer en kopieer"}setTimeout(()=>{const c=$("#copy");if(c)c.textContent="Kopieer"},1500)}}
+  window.scrollTo({top:0});m.focus({preventScroll:true});
+}
+function bindGo(root){root.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{$("#q").value="";go(b.dataset.go)})}
+
+// Zoeken
+function search(q){
+  q=q.trim().toLowerCase();if(!q){current?go(current,false):renderOverview();return}
+  const hay=n=>[n.t,n.s,strip(n.what),...(n.when||[]).map(strip),...(n.cfg||[]).map(strip),...(n.traps||[]).map(strip),...(n.code||[]).map(c=>c.src)].join(" \u2002 ");
+  const terms=q.split(/\s+/).filter(Boolean);
+  const res=N.filter(domMatch).map(n=>{const h=hay(n).toLowerCase();if(!terms.every(t=>h.includes(t)))return null;const score=(n.t.toLowerCase().includes(terms[0])?10:0)+((n.s||"").toLowerCase().includes(terms[0])?4:0);return{n,score,h:hay(n)}}).filter(Boolean).sort((a,b)=>b.score-a.score);
+  const hl=s=>{let e=esc(s);terms.forEach(t=>{e=e.replace(new RegExp("("+t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi"),"<mark>$1</mark>")});return e};
+  const snip=h=>{const i=h.toLowerCase().indexOf(terms[0]);const s=Math.max(0,i-60);return (s?"... ":"")+h.slice(s,s+170)+"..."};
+  $("#main").innerHTML=`<section class="results"><h1>${res.length} ${res.length===1?"resultaat":"resultaten"} voor “${esc(q)}”</h1>${res.length?res.map(r=>`<button class="res" data-go="${r.n.id}"><div class="path">${path(r.n).slice(0,-1).map(p=>esc(p.t)).join(" / ")||"Groep"}</div><b>${hl(r.n.t)}</b><p>${hl(snip(r.h))}</p></button>`).join(""):`<div class="empty"><b>Niets gevonden</b>Probeer een Engelse term (bijv. <i>throughput</i>, <i>redaction</i>) of een kortere zoekterm.</div>`}</section>`;
+  bindGo($("#main"));
+}
+let st;$("#q").addEventListener("input",e=>{clearTimeout(st);st=setTimeout(()=>search(e.target.value),120)});
+$("#q").addEventListener("keydown",e=>{if(e.key==="Escape"){e.target.value="";search("");e.target.blur()}if(e.key==="Enter"){const f=$("#main .res");if(f)f.click()}});
+document.addEventListener("keydown",e=>{if(e.key==="/"&&document.activeElement.tagName!=="INPUT"){e.preventDefault();$("#q").focus()}});
+
+// Mobiel menu
+const side=$("#side"),scrim=$("#scrim");
+function closeSide(){side.classList.remove("open");scrim.classList.remove("open")}
+$("#menuBtn").onclick=()=>{side.classList.add("open");scrim.classList.add("open")};scrim.onclick=closeSide;
+$("#home").onclick=()=>{$("#q").value="";history.pushState(null,"",location.pathname);renderOverview()};
+window.addEventListener("popstate",()=>{const id=location.hash.slice(1);id&&byId[id]?go(id,false):renderOverview()});
+
+renderFilters();
+const start=location.hash.slice(1);start&&byId[start]?go(start,false):renderOverview();
+</script>
+</body>
+</html>
