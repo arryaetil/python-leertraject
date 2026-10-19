@@ -183,8 +183,38 @@ mark{background:color-mix(in srgb,var(--d3) 30%,transparent);color:inherit;borde
 .empty b{display:block;color:var(--text);margin-bottom:4px}
 .foot{color:var(--text-3);font-size:12px;margin-top:40px;border-top:1px solid var(--line);padding-top:14px}
 
+
+/* Plaat */
+.flows{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.plaatgrid{display:grid;grid-template-columns:1fr;gap:14px}
+.plaat{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:var(--shadow);min-width:0}
+.plaatscroll{overflow-x:auto}
+.plaat svg{display:block;width:100%;min-width:880px;height:auto;color:var(--text);font-family:var(--font)}
+.plaat figcaption{font-size:12.5px;color:var(--text-3);padding:8px 4px 0}
+.pr rect{fill:var(--surface-2);stroke:var(--line);stroke-width:1}
+.pr text{font-size:12px;font-weight:600;fill:var(--text-3);letter-spacing:.04em;text-transform:uppercase}
+.pe path{fill:none;stroke:var(--line-strong);stroke-width:1.2}
+.pe.hi path{stroke:var(--accent);stroke-width:2.2}
+.pe text{font-size:11.5px;fill:var(--accent-text);font-weight:600;paint-order:stroke;stroke:var(--surface);stroke-width:4px;stroke-linejoin:round}
+.mk-m{fill:var(--line-strong)} .mk-h{fill:var(--accent)}
+.pn{cursor:pointer}
+.pn rect{fill:var(--surface);stroke:var(--line-strong);stroke-width:1.2}
+.pn text{font-size:13px;fill:var(--text-2);font-weight:500}
+.pn.on rect{stroke:var(--accent);stroke-width:1.8;fill:var(--accent-soft)}
+.pn.on text{fill:var(--accent-text);font-weight:600}
+.pn.sel rect{stroke-width:3}
+.pn:hover rect{stroke:var(--accent)}
+.pn:focus-visible{outline:none}.pn:focus-visible rect{stroke:var(--accent);stroke-width:3}
+.plaatcta{display:flex;flex-direction:column;gap:2px;text-align:left;width:100%;border:1px solid var(--accent);background:var(--accent-soft);color:var(--text);border-radius:12px;padding:12px 16px;margin-top:18px;cursor:pointer}
+.plaatcta b{color:var(--accent-text)}
+.plaatcta span{font-size:13.5px;color:var(--text-2)}
+.plaatside{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;align-items:start}
+.plaatside .sec{margin-bottom:0}
+.plaatside .iconbtn{margin-top:6px}
+.navlink{white-space:nowrap}
 @media (max-width:1100px){.domains{grid-template-columns:repeat(3,minmax(0,1fr))}.cols{grid-template-columns:1fr}}
 @media (max-width:860px){
+  .navlink span{display:none}
   .layout{grid-template-columns:1fr}
   .menu-btn{display:inline-flex}
   .side{position:fixed;inset:0 auto 0 0;width:min(320px,86vw);max-height:none;top:0;z-index:40;background:var(--surface);transform:translateX(-100%);transition:transform .2s;box-shadow:var(--shadow);padding-top:calc(18px + env(safe-area-inset-top,0px));padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));overflow:auto}
@@ -211,6 +241,7 @@ mark{background:color-mix(in srgb,var(--d3) 30%,transparent);color:inherit;borde
       <kbd>/</kbd>
     </div>
     <div class="progress" title="Onderwerpen die je als 'snap ik' hebt gemarkeerd"><div class="bar"><i id="pbar"></i></div><span id="ptxt">0/0</span></div>
+    <button class="iconbtn navlink" id="plaatBtn" aria-label="Plaat met verbindingen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="6" height="5" rx="1"/><rect x="15" y="4" width="6" height="5" rx="1"/><rect x="9" y="15" width="6" height="5" rx="1"/><path d="M9 6.5h6M6 9v3.5h6V15M18 9v3.5h-6"/></svg><span>Plaat</span></button>
     <button class="iconbtn" id="theme" aria-label="Licht of donker thema"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
   </div>
   <div class="filters" id="filters" role="group" aria-label="Filter op examendomein"></div>
@@ -848,10 +879,12 @@ function renderOverview(){
   <section class="hero"><h1>Alles wat Foundry kan, op één kaart</h1>
   <p>Klik op een groep of onderwerp en ga laag voor laag dieper: wat het is, wanneer je het kiest, hoe je het aanroept, welke instellingen erbij horen en waar het examen je probeert te laten struikelen.</p>
   <p style="color:var(--text-3);font-size:13.5px">Tip: begin bij de Servicekiezer. Markeer een onderwerp met <b>Snap ik</b> als je het zonder spieken kunt uitleggen.</p></section>
+  <button class="plaatcta" id="plaatCta"><b>Bekijk de plaat</b><span>Hoe app, project, agent, tools, Search en Foundry Tools met elkaar verbonden zijn, met flows zoals RAG en documenten inlezen.</span></button>
   <div class="domains">${Object.entries(DOM).map(([k,v])=>`<div class="dom"><div class="pct">${v.w}</div><div class="nm">${v.n}</div><div class="meter"><i style="width:${v.v/35*100}%;background:var(--d${k})"></i></div></div>`).join("")}</div>
   ${groups.length?`<div class="groups">${groups.map(g=>{const ks=kids(g.id).filter(visible);return `<article class="gcard ${g.id==="kiezer"?"feature":""}"><h3><button data-go="${g.id}">${esc(g.t)}</button></h3><p>${esc(g.s)}</p><div class="kids">${ks.map(k=>`<button class="kid ${known.has(k.id)?"done":""}" data-go="${k.id}">${esc(k.t)}</button>`).join("")}</div><div class="gfoot">${dtags(g.d)}<span>${knownCount(g)}/${leafCount(g)} gesnapt</span></div></article>`}).join("")}</div>`:`<div class="empty"><b>Geen onderwerpen bij dit filter</b>Zet een ander examendomein aan of klik op Alles tonen.</div>`}
   <p class="foot">Gebaseerd op de officiële AI-103-studiegids (skills measured 16 april 2026) en de Microsoft Learn-documentatie (okt 2026). Codevoorbeelden zijn schetsen om te leren lezen. Controleer exacte namen in de docs voordat je ze in productie gebruikt. Je voortgang staat alleen in deze browser.</p>`;
   bindGo($("#main"));
+  $("#plaatCta").onclick=()=>renderPlaat();
   if(location.hash)histR(location.pathname);
 }
 
@@ -909,9 +942,125 @@ const side=$("#side"),scrim=$("#scrim");
 function closeSide(){side.classList.remove("open");scrim.classList.remove("open")}
 $("#menuBtn").onclick=()=>{side.classList.add("open");scrim.classList.add("open")};scrim.onclick=closeSide;
 $("#home").onclick=()=>{$("#q").value="";hist(location.pathname);renderOverview()};
-window.addEventListener("popstate",()=>{const id=location.hash.slice(1);id&&byId[id]?go(id,false):renderOverview()});
+window.addEventListener("popstate",()=>{const id=location.hash.slice(1);id==="plaat"?renderPlaat(false):id&&byId[id]?go(id,false):renderOverview()});
+$("#plaatBtn").onclick=()=>{$("#q").value="";closeSide();renderPlaat()};
+// ===== Plaat: architectuurtekening met flows =====
+const PW=1280, PH=780, NW=196, NH=46;
+const REG=[
+  {l:"Jouw kant",x:16,y:26,w:232,h:730},
+  {l:"Foundry project",x:270,y:170,w:232,h:586},
+  {l:"Agent-tools",x:524,y:26,w:232,h:430},
+  {l:"Observability",x:524,y:500,w:232,h:256},
+  {l:"Data & kennis",x:778,y:26,w:486,h:340},
+  {l:"Foundry Tools",x:778,y:400,w:486,h:356}
+];
+const PN=[
+  {id:"user",l:"Gebruiker",x:34,y:60,to:null,info:"Stelt de vraag, keurt risicovolle acties goed."},
+  {id:"app",l:"Jouw app",x:34,y:200,to:"sdk",info:"Python-app met de Foundry SDK. Draait bijv. op App Service met een managed identity."},
+  {id:"entra",l:"Entra ID + RBAC",x:34,y:380,to:"security",info:"Geeft tokens uit (keyless). De RBAC-rol bepaalt wat de identiteit mag."},
+  {id:"kv",l:"Connections / Key Vault",x:34,y:470,to:"connections",info:"Bewaart sleutels voor externe API's en MCP-servers."},
+  {id:"pipe",l:"CI/CD-pipeline",x:34,y:640,to:"cicd",info:"Rolt infra, deployments en agentversies uit; evaluatie als poort."},
+  {id:"proj",l:"Foundry project",x:288,y:200,to:"resource",info:"Project-endpoint. Bevat agents, connections, evaluaties en traces."},
+  {id:"agent",l:"Agent Service",x:288,y:300,to:"agentservice",info:"Draait de agent: instructies + model + tools + conversation."},
+  {id:"models",l:"Model-deployments",x:288,y:420,to:"deployments",info:"GPT/SLM/reasoning en embeddings. Deploymenttype bepaalt kosten en quota."},
+  {id:"guard",l:"Guardrails",x:288,y:520,to:"guardrails",info:"Content filters + Prompt Shields op input en output van elke deployment."},
+  {id:"eval",l:"Evaluaties",x:288,y:640,to:"evaluaties",info:"Groundedness, relevance, tool call accuracy, safety."},
+  {id:"fs",l:"File search",x:542,y:60,to:"toolsknowledge",info:"Agent zoekt in geüploade bestanden (vector store)."},
+  {id:"aist",l:"AI Search-tool",x:542,y:140,to:"toolsknowledge",info:"Agent zoekt in je bestaande Azure AI Search-index."},
+  {id:"api",l:"OpenAPI / MCP / function",x:542,y:220,to:"toolscustom",info:"Live data en acties in je eigen systemen."},
+  {id:"bing",l:"Bing / web search",x:542,y:300,to:"toolsknowledge",info:"Actuele informatie van het openbare internet."},
+  {id:"ci",l:"Code interpreter",x:542,y:380,to:"toolsactions",info:"Python in een sandbox: rekenen, data-analyse, grafieken."},
+  {id:"appi",l:"Application Insights",x:542,y:560,to:"tracing",info:"Traces per request: stappen, tool calls, tokens, latency."},
+  {id:"mon",l:"Azure Monitor",x:542,y:660,to:"monitoring",info:"Metrics (tokens, 429's), alerts, diagnostic logs."},
+  {id:"search",l:"Azure AI Search",x:796,y:140,to:"searchquery",info:"Index met tekst + vectoren. Hybrid + semantic ranker."},
+  {id:"ext",l:"Eigen API / systeem",x:796,y:220,to:"toolscustom",info:"Je ERP, ordersysteem of database achter een REST API of MCP-server."},
+  {id:"web",l:"Internet",x:796,y:300,to:null,info:"Openbare websites."},
+  {id:"emb",l:"Embeddingmodel",x:796,y:60,to:"embeddings",info:"Zet tekst om in vectoren, bij indexeren én bij zoeken."},
+  {id:"blob",l:"Blob Storage",x:1050,y:60,to:"indexers",info:"Bronbestanden: PDF's, scans, audio, video."},
+  {id:"indexer",l:"Indexer + skillset",x:1050,y:140,to:"skillsets",info:"Haalt bestanden op, OCR, chunking, embeddings, vult de index."},
+  {id:"cu",l:"Content Understanding",x:1050,y:220,to:"cu",info:"Velden + markdown uit documenten, beeld, audio, video."},
+  {id:"di",l:"Document Intelligence",x:1050,y:300,to:"docintel",info:"Prebuilt modellen (factuur, bon, ID) en layout."},
+  {id:"speech",l:"Speech",x:796,y:440,to:"speechstt",info:"STT, TTS, custom speech, speech translation, Voice Live."},
+  {id:"lang",l:"Azure Language",x:796,y:520,to:"language",info:"PII, sentiment, NER, key phrases, samenvatten, CLU."},
+  {id:"trans",l:"Translator",x:796,y:600,to:"translator",info:"Tekst- en documentvertaling, custom translator."},
+  {id:"vision",l:"Vision / beeldmodellen",x:1050,y:440,to:"imageanalysis",info:"Image Analysis, gpt-image-1 (generate/edit), Sora."},
+  {id:"csafety",l:"Content Safety",x:1050,y:520,to:"contentsafety",info:"Losse moderatie-API voor tekst en beeld, Prompt Shields."},
+  {id:"cont",l:"Container (on-prem)",x:1050,y:600,to:"containers",info:"Language, Speech, Translator, DI lokaal in Docker. Billing naar Azure."},
+  {id:"router",l:"Model router",x:288,y:700,to:"modelkeuze",info:"Kiest per verzoek een passend model."}
+];
+const PE=[
+  ["user","app","vraag"],["app","entra","token (managed identity)"],["entra","proj","RBAC-rol"],
+  ["app","proj","SDK: responses.create"],["proj","agent","agent draaien"],["agent","models","redeneren"],
+  ["proj","models","model aanroepen"],["guard","models","filtert in/uit"],
+  ["agent","fs","tool call"],["agent","aist","tool call"],["agent","api","tool call"],["agent","bing","tool call"],["agent","ci","tool call"],
+  ["aist","search","hybrid query"],["api","ext","REST / MCP"],["bing","web","zoekt"],["kv","api","sleutel"],
+  ["app","search","zoek (eigen RAG)"],
+  ["blob","indexer","leest bestanden"],["indexer","emb","chunks embedden"],["indexer","search","vult index"],
+  ["blob","cu","analyseert"],["cu","search","velden + markdown"],["indexer","di","OCR / layout"],
+  ["app","speech","audio"],["app","lang","tekst"],["app","trans","tekst"],["app","vision","beeld"],["app","csafety","moderatie"],["app","cont","lokaal endpoint"],
+  ["proj","appi","traces"],["appi","mon","logs + alerts"],["eval","models","beoordeelt"],["pipe","proj","deploy"],["pipe","eval","evaluatie-poort"],
+  ["agent","app","approval request"],["app","user","goedkeuren?"],["router","models","kiest model"]
+];
+const FLOWS=[
+  {id:"rag",l:"RAG-chat",edges:[["user","app"],["app","entra"],["app","search"],["app","proj"],["proj","models"],["guard","models"]],
+   steps:["Gebruiker stelt een vraag in je app.","App haalt keyless een token op via Entra ID.","App zoekt relevante chunks in Azure AI Search (hybrid + semantic).","App stuurt vraag + chunks naar het model via het project (responses.create).","Guardrails filteren input en output.","Model antwoordt met bronvermelding."]},
+  {id:"agent",l:"Agent met tools",edges:[["user","app"],["app","proj"],["proj","agent"],["agent","models"],["agent","aist"],["aist","search"],["agent","api"],["api","ext"],["kv","api"],["guard","models"]],
+   steps:["App stuurt de vraag naar de agent (conversation).","Agent laat het model bepalen welke tool nodig is.","AI Search-tool zoekt in de index voor kennis.","OpenAPI/MCP-tool haalt live data uit je eigen systeem, met de sleutel uit een connection.","Model maakt het eindantwoord; guardrails filteren."]},
+  {id:"ingest",l:"Documenten inlezen",edges:[["blob","indexer"],["indexer","di"],["indexer","emb"],["indexer","search"],["blob","cu"],["cu","search"]],
+   steps:["Bestanden staan in Blob Storage.","Indexer haalt ze op (managed identity + Storage Blob Data Reader).","Skillset: OCR/layout, chunking (Text Split), embeddings.","Of: Content Understanding maakt velden en markdown.","Resultaat komt in de index: tekst + vectoren."]},
+  {id:"keyless",l:"Keyless inloggen",edges:[["app","entra"],["entra","proj"],["app","proj"],["kv","api"]],
+   steps:["App heeft een managed identity (geen sleutel in code).","DefaultAzureCredential haalt een token bij Entra ID.","RBAC-rol (bijv. Azure AI User) geeft toegang tot het project.","Sleutels van externe API's staan in een project connection, niet in code."]},
+  {id:"hitl",l:"Goedkeuring (HITL)",edges:[["user","app"],["app","proj"],["proj","agent"],["agent","app"],["app","user"],["agent","api"],["api","ext"]],
+   steps:["Agent wil een risicovolle tool aanroepen (require_approval).","Response bevat een approval request.","App laat het de gebruiker zien.","Gebruiker keurt goed of af; app stuurt het antwoord terug.","Pas na goedkeuring roept de tool het systeem aan."]},
+  {id:"ops",l:"Monitoren & evalueren",edges:[["proj","appi"],["appi","mon"],["eval","models"],["pipe","eval"],["pipe","proj"]],
+   steps:["Elke request wordt een trace in Application Insights.","Azure Monitor: metrics, alerts, logs.","Evaluaties meten groundedness, relevance, safety.","Pipeline draait evaluaties als poort vóór uitrol."]},
+  {id:"tools",l:"Foundry Tools aanroepen",edges:[["app","entra"],["app","speech"],["app","lang"],["app","trans"],["app","vision"],["app","csafety"],["app","cont"]],
+   steps:["App roept een gespecialiseerde dienst rechtstreeks aan op het resource-endpoint.","Speech voor audio, Language voor tekstanalyse, Translator voor vertalen.","Vision voor beeld, Content Safety voor moderatie.","Data mag niet weg? Draai de dienst als container on-prem."]}
+];
+let flow="rag", selNode=null;
+const PNb=Object.fromEntries(PN.map(n=>[n.id,n]));
+function anchor(a,b){
+  const ax=a.x+NW/2, ay=a.y+NH/2, bx=b.x+NW/2, by=b.y+NH/2;
+  if(b.x>=a.x+NW-4) return [a.x+NW,ay,b.x,by,"h"];
+  if(b.x+NW<=a.x+4) return [a.x,ay,b.x+NW,by,"h"];
+  return by>ay?[ax,a.y+NH,bx,b.y,"v"]:[ax,a.y,bx,b.y+NH,"v"];
+}
+function edgePath(e){const a=PNb[e[0]],b=PNb[e[1]];const [x1,y1,x2,y2,o]=anchor(a,b);
+  if(o==="h"){const dx=Math.max(40,Math.abs(x2-x1)/2);const s=x2>x1?1:-1;return {d:`M${x1},${y1} C${x1+dx*s},${y1} ${x2-dx*s},${y2} ${x2},${y2}`,mx:(x1+x2)/2,my:(y1+y2)/2}}
+  const dy=Math.max(24,Math.abs(y2-y1)/2);const s=y2>y1?1:-1;return {d:`M${x1},${y1} C${x1},${y1+dy*s} ${x2},${y2-dy*s} ${x2},${y2}`,mx:(x1+x2)/2+(x1===x2?8:0),my:(y1+y2)/2}}
+function renderPlaat(push=true){
+  current=null;renderTree();
+  if(push)hist("#plaat");
+  const f=FLOWS.find(x=>x.id===flow);
+  const on=new Set(f?f.edges.map(e=>e.join(">")):[]);
+  const nodeOn=new Set();(f?f.edges:[]).forEach(e=>{nodeOn.add(e[0]);nodeOn.add(e[1])});
+  if(selNode){PE.forEach(e=>{if(e[0]===selNode||e[1]===selNode){on.add(e[0]+">"+e[1]);nodeOn.add(e[0]);nodeOn.add(e[1])}})}
+  const svgE=PE.map(e=>{const p=edgePath(e);const hi=on.has(e[0]+">"+e[1]);return `<g class="pe ${hi?"hi":""}"><path d="${p.d}" marker-end="url(#${hi?"ah":"am"})"/>${hi?`<text x="${p.mx}" y="${p.my-5}" text-anchor="middle">${esc(e[2])}</text>`:""}</g>`}).join("");
+  const svgR=REG.map(r=>`<g class="pr"><rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="12"/><text x="${r.x+12}" y="${r.y+18}">${esc(r.l)}</text></g>`).join("");
+  const svgN=PN.map(n=>`<g class="pn ${nodeOn.has(n.id)?"on":""} ${selNode===n.id?"sel":""}" data-pn="${n.id}" tabindex="0" role="button" aria-label="${esc(n.l)}"><rect x="${n.x}" y="${n.y}" width="${NW}" height="${NH}" rx="9"/><text x="${n.x+NW/2}" y="${n.y+NH/2+4.5}" text-anchor="middle">${esc(n.l)}</text></g>`).join("");
+  const sn=selNode?PNb[selNode]:null;
+  $("#main").innerHTML=`<nav class="crumbs" aria-label="Kruimelpad"><button data-home="1">Overzicht</button><span>/</span><span>Plaat</span></nav>
+  <div class="dhead"><div><h1>Hoe hangt alles samen</h1><p class="sub">Kies een flow om het pad te zien. Klik een blok voor de uitleg en open het onderwerp.</p></div></div>
+  <div class="flows" role="tablist" aria-label="Flows">${FLOWS.map(x=>`<button class="tab" role="tab" data-flow="${x.id}" aria-selected="${x.id===flow}">${esc(x.l)}</button>`).join("")}<button class="tab" data-flow="" aria-selected="${!flow}">Alle verbindingen</button></div>
+  <div class="plaatgrid">
+    <figure class="plaat"><div class="plaatscroll"><svg viewBox="0 0 ${PW} ${PH}" role="img" aria-label="Architectuur van een Foundry-oplossing: app, project, agent, tools, data en Foundry Tools met hun verbindingen${f?". Gemarkeerd: "+esc(f.l):""}">
+      <defs><marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-m"/></marker><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-h"/></marker></defs>
+      ${svgR}${svgE}${svgN}</svg></div>
+      <figcaption>${f?esc(f.l)+": de gemarkeerde pijlen tonen het pad, met per pijl wat er gebeurt.":"Alle verbindingen. Kies een flow om één pad te volgen."}</figcaption></figure>
+    <aside class="plaatside">
+      ${sn?`<section class="sec"><h2>Geselecteerd</h2><p><b>${esc(sn.l)}</b></p><p>${esc(sn.info)}</p>${sn.to?`<button class="iconbtn" data-go="${sn.to}">Open onderwerp</button>`:""} <button class="iconbtn" id="unsel">Selectie wissen</button></section>`:""}
+      ${f?`<section class="sec"><h2>${esc(f.l)} in stappen</h2><ol>${f.steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol></section>`:`<section class="sec"><h2>Lezen</h2><p>Grijze pijlen zijn alle mogelijke verbindingen. Klik een blok om zijn verbindingen te zien.</p></section>`}
+    </aside>
+  </div>`;
+  bindGo($("#main"));
+  $("#main").querySelector("[data-home]").onclick=()=>{hist(location.pathname);renderOverview()};
+  $("#main").querySelectorAll("[data-flow]").forEach(b=>b.onclick=()=>{flow=b.dataset.flow;selNode=null;renderPlaat(false)});
+  $("#main").querySelectorAll("[data-pn]").forEach(g=>{const act=()=>{selNode=selNode===g.dataset.pn?null:g.dataset.pn;renderPlaat(false)};g.onclick=act;g.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();act()}}});
+  const u=$("#unsel");if(u)u.onclick=()=>{selNode=null;renderPlaat(false)};
+}
+
 
 renderFilters();
-const start=location.hash.slice(1);start&&byId[start]?go(start,false):renderOverview();
+const start=location.hash.slice(1);start==="plaat"?renderPlaat(false):start&&byId[start]?go(start,false):renderOverview();
 </script>
 </html>
