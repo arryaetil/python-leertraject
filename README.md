@@ -2,14 +2,14 @@
 
 Mijn traject naar **AI solutions engineer**: van Python-basis naar AI-apps en agents bouwen op Azure en Microsoft Foundry. Deze repo laat eerlijk zien waar ik sta, wat ik heb gedaan en wat nog moet.
 
-**Gestart:** 6 oktober 2026 · **Bijgewerkt:** 17 oktober 2026
+**Gestart:** 6 oktober 2026 · **Bijgewerkt:** 19 oktober 2026
 
 ## In één oogopslag
 
 | Onderdeel | Stand | Volgende mijlpaal |
 |---|---|---|
 | **Python** | Fundament dag 1–10 van 30 af, dag 11 (functies) bezig | Niveautest opnieuw op 24 okt 2026 |
-| **AI-103** *Developing AI Apps and Agents on Azure* | Niveautest 13/15 (8 met zekerheid) | Examen op **7 nov 2026** |
+| **AI-103** *Developing AI Apps and Agents on Azure* | Officiële practice assessment: **63%** (doel 80%) | Examen op **7 nov 2026** |
 
 ## Huidig niveau
 
@@ -20,8 +20,8 @@ Mijn traject naar **AI solutions engineer**: van Python-basis naar AI-apps en ag
 
 **Waar ik nu aan werk**
 - Zelf Python schrijven: functies, modules, foutafhandeling, JSON en classes
-- Beheer van AI-oplossingen: deploymenttypes, quota, monitoring en tracing
-- Foundry SDK-code lezen en schrijven
+- Tekst- en spraakanalyse met Azure Language, Translator en Speech
+- Agents en RAG bouwen met de Foundry SDK (code lezen en schrijven)
 
 ## Progressie
 
@@ -32,6 +32,7 @@ Mijn traject naar **AI solutions engineer**: van Python-basis naar AI-apps en ag
 | 13 okt 2026 | Dictionaries af, inclusief geneste API-data (dag 8) |
 | 15 okt 2026 | Conditionals en loops af (dag 9–10), loop door API-data zelf geschreven en werkend |
 | 17 okt 2026 | AI-103-niveautest: 13/15. Studieplan tot het examen gemaakt |
+| 19 okt 2026 | Officiële AI-103-practice assessment: 63%. Sterk in vision en beheer, focus nu op tekstanalyse en agents |
 
 Volledig verslag per sessie, ook wat niet goed ging, staat in de logboeken.
 
