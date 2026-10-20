@@ -21,21 +21,21 @@ AI-103 (~58 u) = Learn-leerpad ~28 u + labs in Foundry ~18 u + oefenexamens en g
 
 | Datum | Onderwerp | Dag | Status |
 |---|---|---|---|
-| di 7 okt | Lists: les meetypen | 5 | ✅ |
-| wo 8 okt | Lists: oefeningen + tuples en sets snel lezen | 5–7 | ✅ |
-| do 9 – zo 12 okt | *(gemist, 4 dagen)* | – | ❌ |
-| ma 13 okt | Dictionaries: les + geneste API-response | 8 | ✅ |
-| di 14 okt | Dicts: SyntaxError fixen + oefeningen, daarna if/else | 8–9 | ❌ gemist (dicts al af op 13 okt) |
-| wo 15 okt | if/else + loops, ook door een list met dicts lopen | 9–10 | ✅ |
-| do 16 okt | Functies: parameters, return, defaults | 11 | ⬜ |
-| vr 17 okt | Imports en modules + try/except | 12, 17 | ⬜ |
-| za 18 okt | Bestanden (`with`) + JSON | 19 | ⬜ |
-| zo 19 okt | Classes en objecten | 21 | ⬜ |
-| ma 20 okt | Methodes (`client.iets.doe_iets()`) + `os.environ` | 21, extra | ⬜ |
-| di 21 okt | `async`/`await` leren lezen | extra | ⬜ |
-| wo 22 okt | Echte Foundry-voorbeeldcode lezen en uitleggen | extra | ⬜ |
-| do 23 okt | Foundry-code deel 2 | extra | ⬜ |
-| vr 24 okt | Niveautest opnieuw | extra | ⬜ |
+| wo 7 okt | Lists: les meetypen | 5 | ✅ |
+| do 8 okt | Lists: oefeningen + tuples en sets snel lezen | 5–7 | ✅ |
+| vr 9 – ma 12 okt | *(gemist, 4 dagen)* | – | ❌ |
+| di 13 okt | Dictionaries: les + geneste API-response | 8 | ✅ |
+| wo 14 okt | Dicts: SyntaxError fixen + oefeningen, daarna if/else | 8–9 | ❌ gemist (dicts al af op 13 okt) |
+| do 15 okt | if/else + loops, ook door een list met dicts lopen | 9–10 | ✅ |
+| vr 16 okt | Functies: parameters, return, defaults | 11 | ⬜ |
+| za 17 okt | Imports en modules + try/except | 12, 17 | ⬜ |
+| zo 18 okt | Bestanden (`with`) + JSON | 19 | ⬜ |
+| ma 19 okt | Classes en objecten | 21 | ⬜ |
+| di 20 okt | Methodes (`client.iets.doe_iets()`) + `os.environ` | 21, extra | ⬜ |
+| wo 21 okt | `async`/`await` leren lezen | extra | ⬜ |
+| do 22 okt | Echte Foundry-voorbeeldcode lezen en uitleggen | extra | ⬜ |
+| vr 23 okt | Foundry-code deel 2 | extra | ⬜ |
+| za 24 okt | Niveautest opnieuw | extra | ⬜ |
 
 Overgeslagen tot na het examen: dag 13–16, 18, 20, 22–30 (staan hieronder op ⬜, komen na 7 nov).
 

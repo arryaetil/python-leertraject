@@ -4,6 +4,23 @@ Nieuwste sessie bovenaan. Per sessie: wat gedaan, wat lastig was, volgende stap.
 
 ---
 
+## 20 oktober 2026: Toets tekst & spraak op examenniveau + nieuwe routine
+
+- **Gedaan:** 5 vragen op examenniveau (specifieke servicenamen, afleiders die bijna goed zijn). Uitslag: **1/4** gemeten, vraag 5 telt niet (gespiekt in de kaart). Ook bij vraag 4 gespiekt.
+  - 1 opinion mining ✅ (zekerheid niet genoemd)
+  - 2 conversational PII ❌ (koos gewone PII detection: werkt wel, maar is niet "designed for this input")
+  - 3 document translation + glossary ❌ **"heel zeker"** maar fout: eis "originele opmaak behouden" gemist
+  - 4 CLU: gespiekt, telt als niet geweten
+  - 5 SSML: gespiekt
+- **Patroon:** kiest op één signaalwoord en checkt de andere eisen niet. Nieuwe werkwijze: eisen opschrijven → elke optie tegen álle eisen → dan kiezen. Altijd zeker/twijfel/gok noemen.
+- **Inzicht van Arrya zelf:** eerst de kaart leren, dan toetsen. Terecht: bij ~13% meet toetsen vooral wat er nog niet is.
+- **Coach:** "ik ken alles op hoog niveau, alleen de termen nog" is deels waar (principes kloppen), maar de termen en use cases zíjn het examen. Afspraak: tempo bepaald door toetsscore (8/10 zonder spieken = door).
+- **Ook:** kaart vertaald naar het Engels (zoeken op "aspect" vindt opinion mining). Dagnamen in beide planningen rechtgezet: examen is **zaterdag** 7 november.
+- **Routine vanaf nu:** 's avonds ~1 uur kaart leren, de dag erna op werk ~1 uur toetsen, plus Python.
+- **Volgende stap:** vanavond Text & language + Service picker (tekst, vertalen). Morgen op werk 10 vragen tekstanalyse, kaart dicht.
+
+---
+
 ## 19 oktober 2026: Foundry-kaart gebouwd
 
 - **Aanleiding:** na de practice assessment zei ze zelf waar het misging: "veel vragen gingen over kiezen tussen services, maar ik wist niet goed wat ze inhielden en wanneer ik ze moest toepassen". Daarnaast vragen over Azure CLI-commands, Docker-containers en configuratiewaarden. Codevragen waren er minder dan verwacht.

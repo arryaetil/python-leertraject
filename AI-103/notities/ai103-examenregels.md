@@ -29,6 +29,11 @@ Vuistregels uit de niveautest van 17 oktober 2026. Elke dag 10 minuten doorlezen
 - Beeld of video begrijpen en gestructureerde velden eruit halen → **multimodaal model** of **Content Understanding**.
 
 ## Tekst en spraak
+- Sentiment per onderdeel/aspect van een tekst → **opinion mining** (aspect-based sentiment, `show_opinion_mining=True`). Key phrases + document-sentiment koppelt aspect en sentiment níet.
+- PII in een chat/transcript met rollen en beurten → **conversational PII**. PII in gewone tekst → PII detection. Categories filter = alleen bepaalde soorten redigeren.
+- Intent + waarden uit korte opdrachten → **CLU** (utterances, intents, entities, train + deploy). Alleen categorie → custom text classification. Alleen waarden → custom NER. FAQ-antwoorden → custom question answering.
+- Hele bestanden vertalen + opmaak behouden → **document translation** (Blob source + target container). Vaste termen nooit vertalen → **glossary** (document) of **dynamic dictionary** (text API). Custom Translator alleen mét trainingsdata (parallelle zinnen).
+- Uitspraak, pauze, tempo sturen → **SSML**: `say-as`, `break`, `prosody`. Andere stem verandert dat niet.
 - Persoonsgegevens verwijderen → **PII detection + redaction** (Azure Language).
 - Vaktermen verkeerd verstaan → **custom speech** of **phrase list**. Andere stem → **custom neural voice** (TTS).
 - STT = spraak → tekst. TTS = tekst → spraak.
