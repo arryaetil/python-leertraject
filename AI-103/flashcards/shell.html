@@ -1,0 +1,289 @@
+<title>AI-103 Flashcards</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Layout: one card in the centre for studying, overview with blocks around it; calm, focused, one accent */
+:root{
+  --bg:#f3f5f6; --surface:#ffffff; --surface-2:#e9edef; --line:#d7dee2;
+  --ink:#14202a; --ink-2:#45545f; --ink-3:#687781;
+  --accent:#0b6b74; --accent-soft:#dbeeee; --accent-ink:#095a62;
+  --ok:#1f7a4d; --ok-soft:#e2f2e8; --bad:#b23b3b; --bad-soft:#f8e4e2; --warn:#9a5b13; --warn-soft:#f6ecdf;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Figtree","Segoe UI",system-ui,sans-serif;
+  --shadow:0 1px 2px rgba(20,32,42,.05),0 10px 30px rgba(20,32,42,.07);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1519; --surface:#172129; --surface-2:#1e2b33; --line:#2a3943;
+  --ink:#e6edf0; --ink-2:#b4c1c8; --ink-3:#889aa3;
+  --accent:#4fc0c8; --accent-soft:#163538; --accent-ink:#7ad3d9;
+  --ok:#5cc28d; --ok-soft:#173326; --bad:#ec8a84; --bad-soft:#3a1f1e; --warn:#e0a35a; --warn-soft:#33261a;
+  --shadow:0 1px 2px rgba(0,0,0,.35); color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0f1519; --surface:#172129; --surface-2:#1e2b33; --line:#2a3943;
+  --ink:#e6edf0; --ink-2:#b4c1c8; --ink-3:#889aa3;
+  --accent:#4fc0c8; --accent-soft:#163538; --accent-ink:#7ad3d9;
+  --ok:#5cc28d; --ok-soft:#173326; --bad:#ec8a84; --bad-soft:#3a1f1e; --warn:#e0a35a; --warn-soft:#33261a;
+  --shadow:0 1px 2px rgba(0,0,0,.35); color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 var(--body);-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));padding-block:32px 64px}
+h1,h2,h3{font-family:var(--display);letter-spacing:-.015em;text-wrap:balance;margin:0}
+h1{font-size:clamp(28px,4.5vw,38px);line-height:1.1}
+h2{font-size:22px}
+p{margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:8px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.top p{color:var(--ink-2);margin-top:6px}
+.count{font-family:var(--display);font-weight:700;font-size:15px;color:var(--accent-ink);background:var(--accent-soft);border-radius:99px;padding:6px 14px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.sync{font-size:13px;color:var(--ink-3);margin-top:8px}
+
+.blocks{display:grid;gap:10px;margin-top:24px}
+.blk{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);cursor:pointer}
+.blk input{width:20px;height:20px;accent-color:var(--accent)}
+.blk b{font-family:var(--display);font-size:17px}
+.blk .d{font-size:13.5px;color:var(--ink-3)}
+.stats{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.st{font-size:12.5px;border-radius:99px;padding:2px 9px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap;font-variant-numeric:tabular-nums}
+.st.due{background:var(--warn-soft);color:var(--warn)} .st.ok{background:var(--ok-soft);color:var(--ok)}
+.bar{height:6px;border-radius:6px;background:var(--surface-2);overflow:hidden;grid-column:1/-1}
+.bar i{display:block;height:100%;background:var(--ok);transition:width .3s}
+
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;align-items:center}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:11px 18px;font-weight:600;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.btn.primary:disabled{opacity:.5;cursor:not-allowed}
+.hint{font-size:13.5px;color:var(--ink-3)}
+
+details.science{margin-top:28px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px}
+details.science summary{cursor:pointer;font-weight:600}
+details.science ul{margin:10px 0 0;padding-left:18px;color:var(--ink-2);display:grid;gap:6px;font-size:15px}
+
+/* Studie */
+.studyhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.prog{flex:1;height:6px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .25s}
+.small{font-size:13.5px;color:var(--ink-3);white-space:nowrap;font-variant-numeric:tabular-nums}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:26px 26px 22px;display:grid;gap:16px;min-height:280px}
+.meta{display:flex;gap:8px;flex-wrap:wrap}
+.tag{font-size:12.5px;font-weight:600;border-radius:99px;padding:3px 10px;background:var(--surface-2);color:var(--ink-2)}
+.tag.c{background:var(--accent-soft);color:var(--accent-ink)}
+.front{font-family:var(--display);font-size:clamp(19px,2.6vw,23px);line-height:1.35;font-weight:600}
+.think{font-size:14px;color:var(--ink-3)}
+.conf{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.conf .btn{padding:12px 8px;font-size:14.5px}
+.back{display:grid;gap:12px;border-top:1px solid var(--line);padding-top:16px}
+.ans{font-family:var(--display);font-size:20px;font-weight:700;color:var(--accent-ink)}
+.why,.trap{font-size:15.5px;color:var(--ink-2)}
+.what{background:var(--accent-soft);border-radius:10px;padding:12px 14px;font-size:15.5px;color:var(--ink);display:grid;gap:4px}
+.what b{color:var(--accent-ink);font-size:13px;text-transform:uppercase;letter-spacing:.05em}
+.lbl{font-size:13px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.trap{background:var(--warn-soft);border-radius:10px;padding:10px 14px;color:var(--ink)}
+.trap b{color:var(--warn)}
+.grade{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grade .ok{background:var(--ok-soft);border-color:transparent;color:var(--ok)}
+.grade .bad{background:var(--bad-soft);border-color:transparent;color:var(--bad)}
+.alert{background:var(--bad-soft);color:var(--ink);border-radius:10px;padding:10px 14px;font-size:14.5px}
+.alert b{color:var(--bad)}
+.keys{font-size:12.5px;color:var(--ink-3);text-align:center;margin-top:12px}
+kbd{font:12px ui-monospace,Consolas,monospace;border:1px solid var(--line);border-radius:4px;padding:0 5px;background:var(--surface-2)}
+
+.sum{display:grid;gap:14px}
+.sumgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.sbox{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:2px}
+.sbox .n{font-family:var(--display);font-size:30px;font-weight:700;font-variant-numeric:tabular-nums}
+.sbox.ok .n{color:var(--ok)} .sbox.bad .n{color:var(--bad)} .sbox.hc .n{color:var(--warn)}
+.sbox span{font-size:13.5px;color:var(--ink-2)}
+.list{display:grid;gap:8px}
+.li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:4px}
+.li .q{font-size:14.5px;color:var(--ink-2)}
+.li .a{font-weight:600}
+.empty{border:1px dashed var(--line);border-radius:14px;padding:22px;text-align:center;color:var(--ink-2)}
+.foot{margin-top:40px;font-size:13px;color:var(--ink-3);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.foot button{background:none;border:1px solid var(--line);border-radius:8px;padding:3px 10px;cursor:pointer;color:var(--ink-2)}
+@media (max-width:560px){.conf{grid-template-columns:1fr 1fr}.sumgrid{grid-template-columns:1fr}.blk{grid-template-columns:auto minmax(0,1fr)}.stats{grid-column:1/-1;justify-content:flex-start}.card{padding:20px 18px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap" id="app"></div>
+
+<script>
+/*CARDS*/
+/*EXPLAIN*/
+const EXAM=new Date(2026,10,7);
+const INTERVALS=[0,1,2,4,7]; // days per box 1..5
+const KEY="ai103fc-v1";
+const CONFL={zeker:"sure",twijfel:"unsure",gok:"guess",geen:"no idea"};
+const byId=Object.fromEntries(CARDS.map(c=>[c.id,c]));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const today=()=>{const d=new Date();d.setHours(0,0,0,0);return d.getTime()};
+const DAY=86400000;
+
+// ---- storage: always local, per person in db when available ----
+let P={cards:{},blocks:["text"]};
+try{const s=localStorage.getItem(KEY);if(s)P=Object.assign(P,JSON.parse(s))}catch(e){}
+let dbRef=null, syncState="Saved in this browser";
+function saveLocal(){try{localStorage.setItem(KEY,JSON.stringify(P))}catch(e){}}
+let writing=false, pending=false, timer=null;
+function save(){
+  saveLocal();
+  if(!dbRef)return;
+  clearTimeout(timer);timer=setTimeout(flush,1200);
+}
+async function flush(){
+  if(!dbRef)return;
+  if(writing){pending=true;return}
+  writing=true;
+  try{await dbRef.set({cards:P.cards,blocks:P.blocks,updatedAt:Date.now()});syncState="Synced with your account"}
+  catch(e){if(e&&e.code==="invalid_argument"){dbRef=null;syncState="Saved in this browser"}else syncState="Saving failed, will retry later"}
+  writing=false;
+  if(pending){pending=false;flush()}
+  if(view==="home")renderHome();
+}
+function merge(remote){
+  const rc=(remote&&remote.cards)||{};
+  for(const id in rc){const l=P.cards[id];if(!l||(rc[id].u||0)>(l.u||0))P.cards[id]=rc[id]}
+  if(remote&&Array.isArray(remote.blocks)&&remote.blocks.length)P.blocks=remote.blocks;
+}
+(async()=>{
+  try{
+    if(!window.claude||!claude.use)return;
+    const [db,user]=await Promise.all([claude.use("db"),claude.use("user")]);
+    if(!db||!user)return;
+    const uid=await user.id();
+    if(!uid)return;
+    dbRef=db.doc("data/users/"+uid+"/flashcards");
+    const snap=await dbRef.get();
+    if(snap.exists)merge(snap.data());
+    saveLocal();
+    syncState="Synced with your account";
+    if(view==="home")renderHome();
+    flush();
+  }catch(e){}
+})();
+
+// ---- scheduling (Leitner + confidence) ----
+const st=id=>P.cards[id];
+function isDue(id){const s=st(id);return !!s&&s.due<=Date.now()}
+function isNew(id){return !st(id)}
+function mastered(id){const s=st(id);return !!s&&s.box>=4}
+function schedule(id,conf,correct){
+  const s=st(id)||{box:1,due:0,n:0,w:0,hc:0};
+  s.n++;s.u=Date.now();
+  if(!correct){s.w++;if(conf==="zeker")s.hc++;s.box=1;s.due=Date.now();}
+  else if(conf==="gok"||conf==="geen"){s.box=Math.max(1,s.box);s.due=today()+DAY;}
+  else{const step=conf==="zeker"?1:1;s.box=Math.min(5,s.box+step);if(conf==="twijfel")s.box=Math.min(s.box,3);s.due=today()+INTERVALS[s.box-1]*DAY;}
+  P.cards[id]=s;save();
+}
+
+// ---- session ----
+let view="home", Q=[], idx=0, phase="front", conf=null, S=null;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function buildQueue(blocks,limit=20){
+  const pool=CARDS.filter(c=>blocks.includes(c.b));
+  const due=shuffle(pool.filter(c=>isDue(c.id)).map(c=>c.id));
+  const fresh=pool.filter(c=>isNew(c.id)).map(c=>c.id); // new cards in order
+  let q=due.slice(0,limit);
+  for(const id of fresh){if(q.length>=limit)break;q.push(id)}
+  return blocks.length>1?shuffle(q):q;
+}
+function start(blocks){
+  Q=buildQueue(blocks);idx=0;phase="front";conf=null;
+  S={ok:0,bad:0,hc:[],wrong:[],done:new Set()};
+  if(!Q.length){renderHome("Nothing to review in these blocks right now. Cards you know come back at their scheduled time. Pick another block or come back tomorrow.");return}
+  view="study";renderStudy();
+}
+function answer(c){conf=c;phase="back";renderStudy()}
+function grade(correct){
+  const id=Q[idx];schedule(id,conf,correct);
+  if(correct){S.ok++;S.done.add(id)}
+  else{S.bad++;if(!S.wrong.includes(id))S.wrong.push(id);if(conf==="zeker"&&!S.hc.includes(id))S.hc.push(id);
+    const pos=Math.min(Q.length,idx+4);Q.splice(pos,0,id);} // successive relearning: back in the same session
+  idx++;phase="front";conf=null;
+  if(idx>=Q.length){view="summary";renderSummary()}else renderStudy();
+}
+
+// ---- render ----
+const app=document.getElementById("app");
+function daysLeft(){return Math.max(0,Math.round((EXAM.getTime()-today())/DAY))}
+function blockStats(b){const ids=CARDS.filter(c=>c.b===b).map(c=>c.id);return{total:ids.length,nw:ids.filter(isNew).length,due:ids.filter(isDue).length,ok:ids.filter(mastered).length}}
+function renderHome(msg){
+  view="home";
+  app.innerHTML=`
+  <div class="top"><div><h1>AI-103 flashcards</h1><p>Think of the answer first, choose how sure you are, then flip the card.</p><p class="sync">${esc(syncState)}</p></div><span class="count">${daysLeft()} days until the exam</span></div>
+  <div class="blocks">${BLOCKS.map(b=>{const s=blockStats(b.id);return `
+    <label class="blk"><input type="checkbox" data-b="${b.id}" ${P.blocks.includes(b.id)?"checked":""} aria-label="Include ${esc(b.n)}">
+      <span><b>${esc(b.n)}</b><br><span class="d">${esc(b.d)}</span></span>
+      <span class="stats"><span class="st">${s.nw} new</span><span class="st due">${s.due} to review</span><span class="st ok">${s.ok}/${s.total} mastered</span></span>
+      <span class="bar" aria-hidden="true"><i style="width:${s.total?s.ok/s.total*100:0}%"></i></span></label>`}).join("")}</div>
+  <div class="actions"><button class="btn primary" id="go" ${P.blocks.length?"":"disabled"}>Start session</button><span class="hint">${P.blocks.length>1?"Several blocks: cards are mixed.":"Up to 20 cards per session."}</span></div>
+  ${msg?`<p class="empty" style="margin-top:16px">${esc(msg)}</p>`:""}
+  <details class="science"><summary>Why does it work this way?</summary><ul>
+    <li><b>Retrieval practice</b>: recalling the answer before you see it strengthens memory far more than rereading.</li>
+    <li><b>Spaced repetition</b>: cards you know come back after 1, 2, 4 or 7 days; cards you missed come back right away.</li>
+    <li><b>Relearning in the same session</b>: a missed card returns a few cards later until you get it right.</li>
+    <li><b>Confidence first</b>: mistakes you were sure about are remembered especially well once corrected (the hypercorrection effect). Lucky guesses do not count as mastered.</li>
+    <li><b>Interleaving</b>: select several blocks to practise choosing between services, which is exactly what the exam asks.</li>
+    <li><b>Comparison cards</b>: similar services side by side, so you learn to see the difference.</li></ul></details>
+  <div class="foot"><span>Mastered = answered correctly with confidence at least three times in a row.</span><button id="theme" type="button">Light / dark</button></div>`;
+  app.querySelectorAll("[data-b]").forEach(cb=>cb.onchange=()=>{P.blocks=BLOCKS.map(b=>b.id).filter(id=>app.querySelector(`[data-b="${id}"]`).checked);save();renderHome()});
+  document.getElementById("go").onclick=()=>start(P.blocks);
+  bindTheme();
+}
+function renderStudy(){
+  const c=byId[Q[idx]];const blk=BLOCKS.find(b=>b.id===c.b);
+  const pct=Math.round(idx/Q.length*100);
+  app.innerHTML=`
+  <div class="studyhead"><button class="btn" id="stop">Stop</button><div class="prog" aria-label="Session progress"><i style="width:${pct}%"></i></div><span class="small">${idx+1} / ${Q.length}</span></div>
+  <article class="card" aria-live="polite">
+    <div class="meta"><span class="tag">${esc(blk.n)}</span>${c.k==="c"?'<span class="tag c">Comparison</span>':""}</div>
+    <p class="front">${esc(c.f)}</p>
+    ${phase==="front"?`
+      <p class="think">Think of your answer. How sure are you?</p>
+      <div class="conf"><button class="btn" data-c="zeker">Sure <kbd>1</kbd></button><button class="btn" data-c="twijfel">Unsure <kbd>2</kbd></button><button class="btn" data-c="gok">Guess <kbd>3</kbd></button><button class="btn" data-c="geen">No idea <kbd>4</kbd></button></div>`:`
+      <div class="back">
+        <p class="ans">${esc(c.a)}</p>
+        ${c.x?`<div class="what"><b>What is it?</b><span>${esc(c.x)}</span></div>`:""}
+        <p class="why"><span class="lbl">Why here</span><br>${esc(c.w)}</p>
+        ${c.t?`<p class="trap"><b>Trap:</b> ${esc(c.t)}</p>`:""}
+        ${conf==="geen"?`<div class="grade"><button class="btn bad" data-g="0" style="grid-column:1/-1">Next <kbd>Enter</kbd></button></div>`:`
+        <p class="think">You said: <b>${esc(CONFL[conf])}</b>. Was this the answer you had in mind?</p>
+        <div class="grade"><button class="btn ok" data-g="1">Correct <kbd>J</kbd></button><button class="btn bad" data-g="0">Wrong <kbd>F</kbd></button></div>`}
+      </div>`}
+  </article>
+  <p class="keys">Keys: <kbd>1</kbd>-<kbd>4</kbd> confidence, <kbd>J</kbd> correct, <kbd>F</kbd> wrong</p>`;
+  document.getElementById("stop").onclick=()=>{view="summary";renderSummary()};
+  app.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>answer(b.dataset.c));
+  app.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>grade(b.dataset.g==="1"));
+  const first=app.querySelector("[data-c],[data-g]");if(first)first.focus({preventScroll:true});
+}
+function renderSummary(){
+  view="summary";
+  const total=S?S.ok+S.bad:0;
+  app.innerHTML=`
+  <div class="sum"><h1>Session complete</h1>
+    <div class="sumgrid"><div class="sbox ok"><span class="n">${S?S.ok:0}</span><span>correct</span></div><div class="sbox bad"><span class="n">${S?S.bad:0}</span><span>wrong (came back)</span></div><div class="sbox hc"><span class="n">${S?S.hc.length:0}</span><span>wrong while you were sure</span></div></div>
+    ${S&&S.hc.length?`<h2>Sure, but wrong: study these closely</h2><div class="list">${S.hc.map(id=>`<div class="li"><span class="q">${esc(byId[id].f)}</span><span class="a">${esc(byId[id].a)}</span></div>`).join("")}</div>`:""}
+    ${S&&S.wrong.length?`<h2>These came back today</h2><div class="list">${S.wrong.filter(id=>!S.hc.includes(id)).map(id=>`<div class="li"><span class="q">${esc(byId[id].f)}</span><span class="a">${esc(byId[id].a)}</span></div>`).join("")||'<p class="hint">Only the cards above.</p>'}</div>`:""}
+    ${!total?'<p class="empty">No cards answered.</p>':""}
+    <div class="actions"><button class="btn primary" id="again">Another session</button><button class="btn" id="home">Back to overview</button></div>
+  </div>`;
+  document.getElementById("again").onclick=()=>start(P.blocks);
+  document.getElementById("home").onclick=()=>renderHome();
+}
+function bindTheme(){const t=document.getElementById("theme");if(t)t.onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;r.dataset.theme=dark?"light":"dark"}}
+document.addEventListener("keydown",e=>{
+  if(view!=="study"||e.target.tagName==="INPUT")return;
+  if(phase==="front"){const m={"1":"zeker","2":"twijfel","3":"gok","4":"geen"}[e.key];if(m){e.preventDefault();answer(m)}}
+  else{if(conf==="geen"&&e.key==="Enter"){e.preventDefault();grade(false)}
+    else if(conf!=="geen"&&(e.key==="j"||e.key==="J")){e.preventDefault();grade(true)}
+    else if(conf!=="geen"&&(e.key==="f"||e.key==="F")){e.preventDefault();grade(false)}}
+});
+renderHome();
+</script>
