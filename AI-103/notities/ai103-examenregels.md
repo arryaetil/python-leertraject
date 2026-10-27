@@ -6,6 +6,10 @@ Vuistregels uit de niveautest van 17 oktober 2026. Elke dag 10 minuten doorlezen
 - Nooit een vraag open laten. Een gok heeft 25% kans, een open vraag 0%.
 - Streep alleen weg wat je **zeker** weet dat fout is, niet wat je niet kent.
 - Zoek het échte argument in de vraag: *actueel*, *keyless*, *minimal effort*, *reliably*, *guaranteed*.
+- Schrijf eisen op **in de woorden van de vraag**, niet in een eigen label ("key not in code" ≠ "keyless").
+- Ook de laatst overgebleven optie langs **alle** eisen leggen voordat je kiest of afwijst.
+- Onbekend woord dat in meerdere opties staat? Dan gaat de vraag daar niet over: beslis op het verschil tussen die opties. Een **bekende fout** weegt zwaarder dan een onbekend woord.
+- Codevraag: elke slot hoort bij één eis. Streep weg wat niet bestaat of een eis breekt. "Choose three/four" = alle vakjes invullen.
 
 ## Plan & manage
 - "No keys / keyless" → **managed identity + RBAC-rol**. Key Vault is nog steeds een sleutel (valkuil).
@@ -16,6 +20,8 @@ Vuistregels uit de niveautest van 17 oktober 2026. Elke dag 10 minuten doorlezen
 - Verzint het model iets t.o.v. de bronnen? → **groundedness**.
 - Auteursrechtelijke tekst/code in de output → **protected material detection**.
 - Eenvoudige taak, veel volume, te duur → **small language model** (Phi, mini/nano).
+- Data mag de EU niet uit → **Data Zone** (Standard of Batch). Global = overal ter wereld. Grote nachtjob, 24 uur ok, goedkoopst, eigen quota → **Batch**.
+- Azure AI-container: verplicht **E-B-A**: `Eula=accept`, `Billing=<endpoint>`, `ApiKey=<key>`. Tekst blijft lokaal, alleen verbruik gaat naar Azure. Zonder internet → **disconnected containers** (aanvragen + commitment plan).
 
 ## Generatieve AI & agents
 - Eigen of actuele data + verzonnen antwoorden → **RAG**. Fine-tuning = stijl/format/gedrag, niet feiten.
@@ -23,6 +29,8 @@ Vuistregels uit de niveautest van 17 oktober 2026. Elke dag 10 minuten doorlezen
 - Pas temperature **óf** top_p aan, niet allebei.
 - Agent-tools: vaste documenten → **file search** · veel eigen content → **Azure AI Search** · live data/acties in eigen systeem → **OpenAPI/function tool** · openbaar internet → **Bing grounding**.
 - Een prompt is een verzoek, code is een garantie. Geld of risico → **approval flow (human-in-the-loop)**.
+- MCP-tool met goedkeuring: `require_approval="always"` → output bevat `mcp_approval_request` → stuur `McpApprovalResponse` terug met `previous_response_id=response.id` (zelfde keten). `tool_choice="required"` dwingt alleen een toolaanroep af.
+- Sleutel van een tool niet in code of agent definition → **`project_connection_id`** (connection in het Foundry-project). Key Vault-secret in code ophalen = sleutel in code.
 
 ## Computer vision
 - Nieuw beeld → **generate**. Deel van een beeld veranderen → **edit + mask (inpainting)**.
@@ -32,8 +40,12 @@ Vuistregels uit de niveautest van 17 oktober 2026. Elke dag 10 minuten doorlezen
 - Sentiment per onderdeel/aspect van een tekst → **opinion mining** (aspect-based sentiment, `show_opinion_mining=True`). Key phrases + document-sentiment koppelt aspect en sentiment níet.
 - PII in een chat/transcript met rollen en beurten → **conversational PII**. PII in gewone tekst → PII detection. Categories filter = alleen bepaalde soorten redigeren.
 - Intent + waarden uit korte opdrachten → **CLU** (utterances, intents, entities, train + deploy). Alleen categorie → custom text classification. Alleen waarden → custom NER. FAQ-antwoorden → custom question answering.
-- Hele bestanden vertalen + opmaak behouden → **document translation** (Blob source + target container). Vaste termen nooit vertalen → **glossary** (document) of **dynamic dictionary** (text API). Custom Translator alleen mét trainingsdata (parallelle zinnen).
+- Eén endpoint, de **service** routeert tussen intents (CLU) en FAQ (question answering) → **orchestration workflow**.
+- Chat/gesprek samenvatten met probleem en oplossing apart → **conversation summarization** (aspects `issue`, `resolution`), niet document summarization.
+- Hele bestanden vertalen + opmaak behouden → **document translation** (Blob source + target container). Managed identity van Translator heeft **Storage Blob Data Contributor** nodig (Reader kan niet schrijven). Text translation API doet geen bestanden en geen Blob.
+- **Glossary** = bestand (`.tsv`/`.csv`/`.xlf`) met vaste termvertalingen, per targettaal meegegeven bij document translation. Niet vertalen = term op zichzelf zetten. Vaste termen nooit vertalen → **glossary** (document) of **dynamic dictionary** (text API). Custom Translator alleen mét trainingsdata (parallelle zinnen).
 - Uitspraak, pauze, tempo sturen → **SSML**: `say-as`, `break`, `prosody`. Andere stem verandert dat niet.
+- SSML per probleem: letter voor letter → `say-as interpret-as="characters"` · afkorting voluit → `sub alias` (zonder fonetiek) · uitspraak via fonetisch alfabet → `phoneme` · stilte → `break time` · sneller/langzamer → `prosody rate` · emotie/stijl → `mstts:express-as`.
 - Persoonsgegevens verwijderen → **PII detection + redaction** (Azure Language).
 - Vaktermen verkeerd verstaan → **custom speech** of **phrase list**. Andere stem → **custom neural voice** (TTS).
 - STT = spraak → tekst. TTS = tekst → spraak.

@@ -4,6 +4,30 @@ Nieuwste sessie bovenaan. Per sessie: wat gedaan, wat lastig was, volgende stap.
 
 ---
 
+## 27 oktober 2026: Tutoring op examenniveau (dag voor het controlemoment)
+
+- **Context:** tussen 21 en 26 okt niets gelogd; planning van die dagen staat nog open. Morgen 28 okt practice assessment (doel ≥ 70%).
+- **Afspraak:** vragen voortaan in het **Engels** (feedback NL), op echte examenhardheid: geen opmaak of sleutelwoorden die het antwoord verraden, alle opties echte Azure-keuzes.
+- **Uitslag: 2/7 gemeten** (Q1 telt niet: vraag verraadde het antwoord).
+  - Q2 opinion mining + PII-codefragment (3 slots) ❌: slot 1 `AnalyzeSentimentAction()` i.p.v. `show_opinion_mining=True`. Eis "each individual part" gemist. Slot 2 (categories filter) en 3 (`redacted_text`) goed.
+  - Q3 deployment types ✅: Data Zone Batch (nachtjob, EU, goedkoopst, eigen quota) en Data Zone Standard (chat, EU, per token).
+  - Q4 document translation ❌: koos text API (A) i.p.v. D. B, C en E goed weggestreept, maar D overgeslagen omdat **glossary** onbekend was.
+  - Q5 orchestration workflow (CLU + custom question answering) ✅, vond hem moeilijk, goed geëlimineerd.
+  - Q6 MCP-tool met approval (4 slots) ❌: `require_approval="always"` en `mcp_approval_request` goed; Key Vault-secret in code gekozen i.p.v. `project_connection_id`, `tool_choice` i.p.v. `previous_response_id`.
+  - Q7 Docker-container ❌: deel 2 goed (tekst blijft lokaal, alleen metering naar Azure), deel 1 (`Eula`, `Billing`, `ApiKey`) **open gelaten**.
+  - Q8 SSML choose four ❌: `say-as`, `sub`, `break` goed; vierde (`prosody rate`) niet gegeven.
+- **Patroon (hetzelfde als 20 okt, nu scherper):** de fouten zijn leesfouten, geen gebrek aan begrip.
+  1. Eén eis gemist (Q2).
+  2. Laatste overgebleven optie niet langs de eisen gelegd (Q4).
+  3. Eis samengevat in een eigen label ("keyless") dat de betekenis veranderde (Q6).
+  4. Delen open gelaten (Q7, Q8).
+  Eisen en zeker/twijfel/gok werden bijna nooit opgeschreven, ook niet na herhaald vragen.
+- **Gevoel:** codevragen voelen taai, "nog maar 2 weken". Bijgestuurd: het zijn 11 dagen, de practice assessment had weinig codevragen, en bij elke codevraag was minstens de helft van de slots goed. Codevragen = per slot één eis zoeken, wegstrepen wat niet bestaat of een eis breekt.
+- **Nieuwe examenregels** toegevoegd (glossary, onbekend ≠ fout bij gelijke opties, E-B-A containers, connections, `previous_response_id`, orchestration workflow, conversation summarization, Data Zone Batch).
+- **Volgende stap:** 28 okt 's avonds practice assessment in rust. Bij elke vraag de eisen in de woorden van de vraag opschrijven, niets open laten. Daarna 20 min per dag codefragmenten lezen.
+
+---
+
 ## 20 oktober 2026: Toets tekst & spraak op examenniveau + nieuwe routine
 
 - **Gedaan:** 5 vragen op examenniveau (specifieke servicenamen, afleiders die bijna goed zijn). Uitslag: **1/4** gemeten, vraag 5 telt niet (gespiekt in de kaart). Ook bij vraag 4 gespiekt.
