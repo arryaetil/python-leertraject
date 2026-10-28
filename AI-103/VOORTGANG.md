@@ -13,7 +13,7 @@
 | 17 okt | Coachtest (15 vragen) | 13/15 | 3/5 | 4/4 | 2/2 | 2/2 | 2/2 |
 | 19 okt | **Officiële practice assessment** | **63%** | ~75% | ~59% | ~82% | ~13% | ~71% |
 | 20 okt | Coachtest tekst & spraak, examenniveau (5 vragen) | 1/4 + 1 gespiekt | | | | 1/4 | |
-| 27 okt | Tutoring examenniveau, Engels (7 gemeten) | 2/7 | 0/1 | 2/3 | | 0/3 | |
+| 27-28 okt | Tutoring examenniveau, Engels (33 gemeten) | 17/33 (52%) | 5/11 | 5/7 | 1/1 | 2/8 | 4/6 |
 
 Percentages per domein zijn afgelezen uit de staafgrafiek (±5%). Zie [`niveautests/2026-10-19-practice-assessment.md`](niveautests/2026-10-19-practice-assessment.md).
 
@@ -34,7 +34,7 @@ Werkwijze per toetsvraag: eisen opschrijven → elke optie tegen álle eisen →
 | za 24 okt (2-3 u) | Agents rest + Azure AI Search + Documents + de plaat met flows | Agents (10) | ⬜ |
 | zo 25 okt (2-3 u) | Foundry platform + Responsible AI | Search & documenten (10) | ⬜ |
 | ma 26 okt | Computer vision | Platform & RAI (10) | ⬜ |
-| di 27 okt | Exam compass + alles wat nog niet op "Got it" staat | Vision (10) | ⚠️ in plaats daarvan tutoring: 2/7 (zie logboek) |
+| di 27 okt | Exam compass + alles wat nog niet op "Got it" staat | Vision (10) | ⚠️ in plaats daarvan tutoring: 17/33 (zie logboek) |
 | **wo 28 okt** | **Practice assessment opnieuw** ('s avonds, in rust, 120 min) | | ⬜ doel ≥ 70% |
 | do 29 okt - ma 2 nov | Gaten uit 28 okt, zwakste domein eerst; oefenvragen derden (Examinotion, Tutorials Dojo, ExamCert) | Gemengde toetsen | ⬜ |
 | **wo 4 nov** | **Proefexamen:** practice assessment | | ⬜ doel richting 80% |

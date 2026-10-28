@@ -4,27 +4,29 @@ Nieuwste sessie bovenaan. Per sessie: wat gedaan, wat lastig was, volgende stap.
 
 ---
 
-## 27 oktober 2026: Tutoring op examenniveau (dag voor het controlemoment)
+## 27–28 oktober 2026: Tutoring op examenniveau (avond voor het controlemoment)
 
-- **Context:** tussen 21 en 26 okt niets gelogd; planning van die dagen staat nog open. Morgen 28 okt practice assessment (doel ≥ 70%).
-- **Afspraak:** vragen voortaan in het **Engels** (feedback NL), op echte examenhardheid: geen opmaak of sleutelwoorden die het antwoord verraden, alle opties echte Azure-keuzes.
-- **Uitslag: 2/7 gemeten** (Q1 telt niet: vraag verraadde het antwoord).
-  - Q2 opinion mining + PII-codefragment (3 slots) ❌: slot 1 `AnalyzeSentimentAction()` i.p.v. `show_opinion_mining=True`. Eis "each individual part" gemist. Slot 2 (categories filter) en 3 (`redacted_text`) goed.
-  - Q3 deployment types ✅: Data Zone Batch (nachtjob, EU, goedkoopst, eigen quota) en Data Zone Standard (chat, EU, per token).
-  - Q4 document translation ❌: koos text API (A) i.p.v. D. B, C en E goed weggestreept, maar D overgeslagen omdat **glossary** onbekend was.
-  - Q5 orchestration workflow (CLU + custom question answering) ✅, vond hem moeilijk, goed geëlimineerd.
-  - Q6 MCP-tool met approval (4 slots) ❌: `require_approval="always"` en `mcp_approval_request` goed; Key Vault-secret in code gekozen i.p.v. `project_connection_id`, `tool_choice` i.p.v. `previous_response_id`.
-  - Q7 Docker-container ❌: deel 2 goed (tekst blijft lokaal, alleen metering naar Azure), deel 1 (`Eula`, `Billing`, `ApiKey`) **open gelaten**.
-  - Q8 SSML choose four ❌: `say-as`, `sub`, `break` goed; vierde (`prosody rate`) niet gegeven.
-- **Patroon (hetzelfde als 20 okt, nu scherper):** de fouten zijn leesfouten, geen gebrek aan begrip.
-  1. Eén eis gemist (Q2).
-  2. Laatste overgebleven optie niet langs de eisen gelegd (Q4).
-  3. Eis samengevat in een eigen label ("keyless") dat de betekenis veranderde (Q6).
-  4. Delen open gelaten (Q7, Q8).
-  Eisen en zeker/twijfel/gok werden bijna nooit opgeschreven, ook niet na herhaald vragen.
-- **Gevoel:** codevragen voelen taai, "nog maar 2 weken". Bijgestuurd: het zijn 11 dagen, de practice assessment had weinig codevragen, en bij elke codevraag was minstens de helft van de slots goed. Codevragen = per slot één eis zoeken, wegstrepen wat niet bestaat of een eis breekt.
-- **Nieuwe examenregels** toegevoegd (glossary, onbekend ≠ fout bij gelijke opties, E-B-A containers, connections, `previous_response_id`, orchestration workflow, conversation summarization, Data Zone Batch).
-- **Volgende stap:** 28 okt 's avonds practice assessment in rust. Bij elke vraag de eisen in de woorden van de vraag opschrijven, niets open laten. Daarna 20 min per dag codefragmenten lezen.
+- **Context:** tussen 21 en 26 okt niets gelogd; planning van die dagen staat nog open. 28 okt 's avonds practice assessment (doel ≥ 70%). Sessie liep door tot na middernacht, op eigen verzoek.
+- **Afspraken over de werkwijze:** vragen in het **Engels** (feedback NL), op echte examenhardheid (geen opmaak of sleutelwoorden die het antwoord verraden). Na elke uitleg eerst checken of het duidelijk is. Bij een kort of onduidelijk antwoord eerst vragen bij welke vraag het hoort.
+- **Fout van de coach:** "part 2 D" hoorde bij Q10 (en was goed), maar werd beoordeeld als fout antwoord op Q11 en als "weer open gelaten". Arrya gaf dat terecht aan.
+- **Uitslag: 17/33 gemeten (52%)** (Q1 telt niet: vraag verraadde het antwoord; Q27 telt niet: uitleg vooraf). Na de eerste 8 vragen: 15/26 (58%). Scenariovragen zonder code vanaf Q9: 13/19 (68%). Codevragen met meerdere slots vanaf Q15: 0/5 helemaal goed. Met deelpunten per slot/deel (zoals Microsoft meestal doet bij meervoudige antwoorden): ~25,6/33 (~77%). Echte stand ligt tussen 52% en 77%.
+
+| Domein | Score | Vragen |
+|---|---|---|
+| Plan & manage | 5/11 | deployment types ✅, Prompt Shields/groundedness ✅, monitoring ✅, private networking ✅, guardrails (herkansing) ✅ · containers ❌❌, RBAC ❌, CLI ❌, evaluators ❌, content filter ❌ |
+| GenAI & agents | 5/7 | structured outputs ✅, agent tools ✅, RAG/fine-tuning/SLM/reasoning ✅, standard setup ✅, orchestration ✅ · MCP approval ❌, auth per tool ❌ |
+| Vision | 1/1 | image edit + mask ✅ |
+| Tekst & spraak | 2/8 | orchestration workflow ✅, opinion mining + PII (herkansing) ✅ · opinion mining ❌, document translation ❌, SSML ❌, NER vs classification ❌, speech translation ❌, custom neural voice vs speaker recognition ❌ |
+| Info-extractie | 4/6 | index-attributen ✅, Content Understanding ✅, agentic retrieval ✅, Document Layout skill ✅ · vector query/semantic ❌, full vs semantic ❌ |
+
+- **Verloop:** begin 2/7, daarna duidelijk beter. Scenariovragen zonder code in het tweede deel ruim boven 70%. Twee herkansingen gehaald: API-sleutel via connection (Q20) en opinion mining + PII-categories (Q26).
+- **Wat misging, concreet:**
+  - Gemist (nieuw geleerd): custom neural voice (stem máken) vs speaker recognition (stem herkennen) · glossary · `project_connection_id` · `previous_response_id` · E-B-A bij containers · `--sku-capacity` = × 1.000 TPM / PTU's · Azure AI User + project-scope (niet Contributor) · `dimensions` = embeddingmodel · `nl-NL` als bron-locale, `TranslationRecognizer` · custom NER (label op woorden) vs custom text classification (label op document) · on-behalf-of vs agent identity · Retrieval vs Relevance evaluator · content filter-drempel Low = strengst · `az cognitiveservices account keys regenerate` · container: app praat met `host="ws://localhost:5000"` · `VectorizableTextQuery` (vectorizer op index) vs `VectorizedQuery` · `simple` / `full` (Lucene, fuzzy) / `semantic` (herordenen).
+  - **Patroon:** kiezen op één signaalwoord ("sentiment", "relevant", "gelabelde data", "keyless"), de laatste optie niet meer langs de eisen leggen, en het antwoord van een eerdere, vergelijkbare vraag herhalen terwijl de eisen anders waren (Q32).
+- **Wat goed ging:** wegstrepen met redenen (Q4, Q5, Q23), twijfel benoemen (Q31), eerlijk "gok" zeggen en toch invullen (Q27), goede doorvragen (Entra ID bij on-behalf-of, Cosmos DB vs SIP, simple/full/semantic).
+- **Gevoel:** codevragen en CLI voelen taai ("die code vragen nakken me"). Bijgestuurd met een methode: eisen → kernwoord per eis → optie met dat woord → regels rond het slot lezen → bij twijfel de eis zoeken die één optie breekt.
+- **Ook gedaan:** CLI-trucs toegevoegd aan de Foundry-kaart (onderwerp *Azure CLI & azd*). Examenregels flink aangevuld.
+- **Volgende stap:** 28 okt 's avonds practice assessment, uitgerust. Per vraag: eisen in de woorden van de vraag, elke optie (ook de laatste) langs alle eisen, niets open laten. Vóór de assessment 10 min examenregels + CLI-rijtje.
 
 ---
 
